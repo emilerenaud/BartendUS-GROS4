@@ -1,6 +1,8 @@
-# Projet BartendUS
-## Projet génie robotique S4 - Université de Sherbrooke
+# BartendUS 
+## GRO-S4H2022 - Université de Sherbrooke
 
-BartendUS est une plateforme surmontée d'un bras robotisé de type SCARA permettant le service de breuvages alcoolisés. Le robot est assisté dans ces fonctions par de la vision numérique, un interface humain-machine et un entrepôt vertical pour les bouteilles de boisson.  
+BartendUS is a second year academic project of the robotics engineering program at the Université de Sherbrooke.
 
-## Table des matières
+BartendUS is a platform surmounted by a SCARA type robotic arm allowing the service of alcoholic beverages. The robot is assisted by computer vision, a human-machine interface (HMI) and is equiped with a vertical warehouse for bottle storage. 
+
+## Table of content:
