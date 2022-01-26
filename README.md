@@ -6,3 +6,7 @@ BartendUS is a second year academic project of the robotics engineering program 
 BartendUS is a platform surmounted by a SCARA type robotic arm allowing the service of alcoholic beverages. The robot is assisted by computer vision, a human-machine interface (HMI) and is equiped with a vertical warehouse for bottle storage. 
 
 ## Table of content:
+- Hardware requirements
+- Installation
+- User guide
+- License
