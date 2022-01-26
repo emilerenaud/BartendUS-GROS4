@@ -22,10 +22,11 @@ class cncShield
         void disableMotor(void);
         bool areMotorEnabled(void);
 
-    private:
         Stepper* motorX;
         Stepper* motorY;
         Stepper* motorZ;
+
+    private:
         bool _enMotor;
 };
 
