@@ -6,8 +6,9 @@ Stepper::Stepper(){
 Stepper::Stepper(int dirPin, int stepPin,int microstep, float gearRatio)
 {
     _gearRatio = gearRatio;
+    _microstep = microstep;
     this->setpin(dirPin,stepPin);
-    this->setSpeed(50);
+    this->setSpeed(100);
     this->setDirection(1);
     digitalWrite(_dirPin,LOW);
     digitalWrite(_stepPin,LOW);
@@ -23,6 +24,8 @@ void Stepper::update()
         digitalWrite(_stepPin,HIGH);
         delayMicroseconds(_delaySpeed);
         digitalWrite(_stepPin,LOW);
+        delayMicroseconds(_delaySpeed);
+        // _currentPosition = _stepCount;
         _stepCount --;
     }
 };
@@ -37,10 +40,15 @@ bool Stepper::moveTo(float degree)
         digitalWrite(_dirPin,LOW);
     else
         digitalWrite(_dirPin,HIGH);
-    _stepCount = abs(degree) * _gearRatio * _microstep;
+    // Serial.println(degree);
+    if(degree == _currentPosition)
+        return EXIT_FAILURE;
+
+    _currentPosition = degree;
+    _stepCount = int((abs(degree) * _gearRatio * _microstep * 200.0) /360); 
+    // Serial.println("step count : " + String(_stepCount));
     
     return EXIT_SUCCESS;
-
 };
 
 bool Stepper::isMoving()
@@ -73,7 +81,8 @@ float Stepper::getCurrentPosition()
 void Stepper::setSpeed(int speed)
 {
     _speed = speed;
-    _delaySpeed = map(_speed,0,100,50,500);
+    _delaySpeed = map(_speed,0,100,800,100);
+    // Serial.println(_delaySpeed);
 };
 
 void Stepper::setMicroStep(int microstep)

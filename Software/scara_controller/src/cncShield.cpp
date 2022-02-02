@@ -2,9 +2,9 @@
 
 cncShield::cncShield()
 {
-    motorX = new Stepper(dirPinX,stepPinX,16,1);
-    motorY = new Stepper(dirPinY,stepPinY,16,1);
-    motorZ = new Stepper(dirPinZ,stepPinZ,16,1);
+    motorX = new Stepper(dirPinX,stepPinX,16,5);
+    // motorY = new Stepper(dirPinY,stepPinY,16,1);
+    // motorZ = new Stepper(dirPinZ,stepPinZ,16,1);
 
     pinMode(enPin,OUTPUT);
 
