@@ -16,6 +16,7 @@ class Stepper
         void setSpeed(int speed);
         void setMicroStep(int microStep);
         void setDirection(int direction);
+        void updateAccel(void);
     private:
         int _dirPin;
         int _direction;
@@ -26,6 +27,10 @@ class Stepper
         float _currentPosition;
         int _speed;
         int _delaySpeed;
+        long _timeAcc;
+        long _stepAccel;
+        int _calculStepAccel;
+        
 };
 
 #endif

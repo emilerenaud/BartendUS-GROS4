@@ -15,12 +15,15 @@ Stepper::Stepper(int dirPin, int stepPin,int microstep, float gearRatio)
 
     _currentPosition = 0;
     _stepCount = 0;
+    _timeAcc = millis();
+    _stepAccel = 0;
 };
 
 void Stepper::update()
 {
     if(_stepCount != 0)
     {
+        // updateAccel();
         digitalWrite(_stepPin,HIGH);
         delayMicroseconds(_delaySpeed);
         digitalWrite(_stepPin,LOW);
@@ -29,6 +32,30 @@ void Stepper::update()
         _stepCount --;
     }
 };
+
+void Stepper::updateAccel()
+{
+    if(_stepCount <= (_calculStepAccel *6) && _stepCount > (_calculStepAccel *5))
+    {
+        setSpeed(int(_speed * 0.33));
+    }
+    else if(_stepCount <= (_calculStepAccel *5) && _stepCount > (_calculStepAccel *4))
+    {
+        setSpeed(int(_speed * 0.66));
+    }
+    else if(_stepCount <= (_calculStepAccel *4) && _stepCount > (_calculStepAccel *2))
+    {
+        setSpeed(_speed);
+    }
+    else if(_stepCount <= (_calculStepAccel *2) && _stepCount > (_calculStepAccel *1))
+    {
+        setSpeed(int(_speed * 0.66));
+    }
+    else if(_stepCount <= (_calculStepAccel *1) && _stepCount > (_calculStepAccel *0))
+    {
+        setSpeed(int(_speed * 0.33));
+    }
+}
 
 bool Stepper::moveTo(float degree)
 {
@@ -46,6 +73,7 @@ bool Stepper::moveTo(float degree)
 
     _currentPosition = degree;
     _stepCount = int((abs(degree) * _gearRatio * _microstep * 200.0) /360); 
+    // _calculStepAccel = _stepCount / 6;
     // Serial.println("step count : " + String(_stepCount));
     
     return EXIT_SUCCESS;
@@ -81,7 +109,7 @@ float Stepper::getCurrentPosition()
 void Stepper::setSpeed(int speed)
 {
     _speed = speed;
-    _delaySpeed = map(_speed,0,100,800,100);
+    _delaySpeed = map(_speed,0,100,800,80);
     // Serial.println(_delaySpeed);
 };
 
