@@ -26,10 +26,12 @@ class Stepper
         int _microstep;
         float _currentPosition;
         int _speed;
+        int _maxSpeed;
         int _delaySpeed;
         long _timeAcc;
         long _stepAccel;
         int _calculStepAccel;
+        int _accelStep = 0;
         
 };
 
