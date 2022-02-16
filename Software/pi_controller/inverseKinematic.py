@@ -71,7 +71,7 @@ class scaraRobot():
         #gerer elbow down or Up avec le cadran
 
         B=(math.pow(x,2)+math.pow(y,2)-math.pow(self.A,2)-math.pow(self.B,2))/(2*self.A*self.B)
-        theta2=math.atan2(math.sqrt(1-math.pow(B,2)),B)
+        theta2=-math.atan2(math.sqrt(1-math.pow(B,2)),B)
         theta1=math.atan2(y,x)-math.atan2((self.B*math.sin(theta2)),(self.A+self.B*math.cos(theta2)))
         self.anglesActuel=[theta1,theta2]
         return self.anglesActuel
@@ -120,7 +120,7 @@ def positionSegment2d(r,target):
 
 if __name__ == '__main__':
 
-    target=[0,2]
+    target=[0.5,0.7]
     r = scaraRobot()
     print(r.inverseKinematic(target[0],target[1]))
     positionSegment2d(r,target)
