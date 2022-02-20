@@ -2,18 +2,15 @@
 
 import math
 #import serial
-import time
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 
 
 class scaraRobot():
 
 
     def __init__(self):
-        self.A=1
-        self.B=1
+        self.A=0.2
+        self.B=0.25
         self.origineX=0
         self.origineY=0
         self.theta01Init=0
@@ -60,21 +57,48 @@ class scaraRobot():
         self.theta02Init=theta02Init
         return
 
+    def isInEnvloppe(self, x, y):
+        if math.sqrt(math.pow(x, 2) + math.pow(y, 2)) <= (self.A + self.B) and math.sqrt(
+                math.pow(x, 2) + math.pow(y, 2)) >= (0.15):
+
+            return True
+        else:
+            return False
+
     def inverseKinematic(self,x,y):
         #TO DO
-        #gerer la plage de position acceptable
-        #gerer offset origine camera
-        #gerer position home robot
+        #gerer la plage de position acceptable en y neg
+
+
         x=x+self.origineX
         y=y+self.origineY
+        if self.isInEnvloppe(x,y):
 
-        #gerer elbow down or Up avec le cadran
+            B=(math.pow(x,2)+math.pow(y,2)-math.pow(self.A,2)-math.pow(self.B,2))/(2*self.A*self.B)
 
-        B=(math.pow(x,2)+math.pow(y,2)-math.pow(self.A,2)-math.pow(self.B,2))/(2*self.A*self.B)
-        theta2=-math.atan2(math.sqrt(1-math.pow(B,2)),B)
-        theta1=math.atan2(y,x)-math.atan2((self.B*math.sin(theta2)),(self.A+self.B*math.cos(theta2)))
-        self.anglesActuel=[theta1,theta2]
-        return self.anglesActuel
+            theta2=math.atan2(math.sqrt(1-math.pow(B,2)),B)
+            if x >= 0:
+               #config upper shoulder
+                theta2=-theta2
+            theta1=math.atan2(y,x)-math.atan2((self.B*math.sin(theta2)),(self.A+self.B*math.cos(theta2)))
+
+            self.anglesActuel=[theta1,theta2]
+
+            return  [math.degrees(theta1), math.degrees(theta2)]
+        else:
+            return False
+
+
+    def forwardKinematic(self):
+        x1=self.A*math.cos(self.anglesActuel[0])
+        x2=x1+self.B*math.cos(self.anglesActuel[0]+self.anglesActuel[1])
+
+        y1 = self.A * math.sin(self.anglesActuel[0])
+        y2 = y1 + self.B * math.sin(self.anglesActuel[0] + self.anglesActuel[1])
+
+        return [x2,y2]
+
+
 
 def positionSegment2d(r,target):
     """Segment generation"""
@@ -88,13 +112,12 @@ def positionSegment2d(r,target):
     bx, by, bz = r.getLongueurSegmentB() * math.cos(r.getAngleRad()[1]+r.getAngleRad()[0]), r.getLongueurSegmentA() * math.sin(r.getAngleRad()[1]+r.getAngleRad()[0]), 0
     ax.quiver(aX, aY, aZ, bx, by, bz, pivot="tail", color="red")
 
-    ax.plot(target[0],target[1], 1, 'bo', label='marker only')
-    ax.set_xlim(-3, 3)
-    ax.set_ylim(-3, 3)
-    ax.set_zlim(-3, 3)
+    ax.plot(target[0],target[1], 0, 'bo', label='marker only')
+    ax.set_xlim(-0.3, 0.3)
+    ax.set_ylim(-0.3, 0.3)
+    ax.set_zlim(-0.3, 0.3)
     ax.view_init(elev=-270, azim=-90)
 
-   # ani = animation.FuncAnimation(fig, data_gen, range(72), blit=False)
     plt.show()
     return
 
@@ -109,7 +132,7 @@ def positionSegment2d(r,target):
 # 	return data
 
 # def send_angle(self, robot):
-#     angles=robot.positionToAngleRad(input("Enter position in X :"), input("Enter position in X :"))
+#     angles=robot.positionToAngleRad(input("Enter position in X :"), input("Enter position in y :"))
 #     aAngle = angles[1]
 #     bAngle = angles[2]
 #     zHeigh = input("Enter a height for Z :")
@@ -119,9 +142,19 @@ def positionSegment2d(r,target):
 #     return 1
 
 if __name__ == '__main__':
-
-    target=[0.5,0.7]
+    target = [0.2, 0.2]
+    print("target= ", [0.2,0.2])
     r = scaraRobot()
-    print(r.inverseKinematic(target[0],target[1]))
+    angles=r.inverseKinematic(target[0],target[1])
+    print("theta 1 deg : ", angles[0],"\ntheta 2 deg : ",angles[1])
+    print("forward kinematic result ",r.forwardKinematic())
+
+    # for y in np.arange(0,0.45,0.01):
+    #     for x in np.arange(0,0.45,0.01):
+    #         if r.inverseKinematic(x,y) is not False:
+    #
     positionSegment2d(r,target)
+
+
+
 
