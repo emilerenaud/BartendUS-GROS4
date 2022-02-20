@@ -1,31 +1,32 @@
 # BartendUS 
 ## GRO-S4H2022 - Université de Sherbrooke
 
-BartendUS is a second year academic project of the robotics engineering program at the Université de Sherbrooke.
+BartendUS est un projet académique de 4e session du programme de génie robotique de l'Université de Sherbrooke.
 
-BartendUS is a platform surmounted by a SCARA type robotic arm allowing the service of alcoholic beverages. The robot is assisted by computer vision, a human-machine interface (HMI) and is equiped with a vertical warehouse for bottle storage. 
+BartendUS est une plateforme basé sur un bras robotisé de type SCARA qui permet de créer des brevages alcoolisée sur mesure. Le robot est assité par un algorithme de vision ainsi qu'une interface utilisateur graphique. Des supports sur mesure ont été fait pour accueillir les bouteilles.
 
 ## Table of content:
-- Hardware requirements
+- Requis matériel
 - Installation
-- User guide
+- Guide d'utilisation
 - License
 
 
-## Hardware requirements
-- SCARA robotic arm. A ReadMe file is available in the mechanical section.
-- Raspberry PI 4 and a LCD. You can find all the part in the [BOM](www.google.com).
-- Liquors dispenders
+## Requis matériel
+- Un bras robotisé SCARA. Les instructions d'assemblage sont disponible dans la secion Mécanique.
+- Raspberry PI 4 et une écran tactile. Les liens d'achats sont disponibles dans la liste de matériel[BOM](www.google.com).
+- Distributeur d'alcool et le support sur mesure. Les plans sont disponible dans la section Mécanique.
 - 
 
 ## Installation 
 - Installation du setup environ, avec le bras sur le base.
-- procedure pour flasher le arduino, et ouvrir le software sur python
+- procedure pour flasher le arduino
+- Installation de python + ouvrir le software avec script sur un ordi ou le Pi.
 
-## User guide
+## Guide d'utilisation
 - Guide de comment utiliser notre truc
 
 ## License
-MIT License
+BSD License
 
-See [LICENSE](LICENSE)
+Voir [LICENSE](LICENSE)
