@@ -3,7 +3,7 @@ import serial
 
 import time
 
-arduino = serial.Serial(port='COM4', baudrate=9600, timeout=.1)
+arduino = serial.Serial(port='COM5', baudrate=9600, timeout=.1)
 
 def write_read(x):
 	arduino.write(bytes(x, 'utf-8'))
@@ -29,11 +29,19 @@ def send_speed():
     print(value)
     return 1
     
+def send_homing():
+    testString = "G2:\r\n"
+    value = write_read(testString)
+    print(value)
+    return 1
+    
 while True:
     choix = input(" 1 : move motor, 2 : setSpeed :")
     if choix == '1':
         send_angle()
     elif choix == '2':
         send_speed()
+    elif choix == '3':
+        send_homing()
     
     

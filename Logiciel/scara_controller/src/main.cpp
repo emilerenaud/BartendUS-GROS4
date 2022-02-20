@@ -16,19 +16,14 @@ void setup() {
   setupSerial();
   shield = new cncShield;
   shield->enableMotor();
-  // shield->motorX->moveTo(300);
-  // shield->motorY->moveTo(-200);
-  // shield->motorX->setSpeed(100);
-  // shield->motorY->setSpeed(100);
-
 }
 
 void loop() {
   readSerial();
-  if(shield->motorX->isMoving())
-  {
-    shield->motorX->update();
-  }
+  shield->update();
+  // shield->motorX->update();
+  // shield->motorY->update();
+  // shield->motorZ->update();
   // else
   // {
   //   shield->motorX->moveTo(-300);
@@ -76,38 +71,39 @@ void readSerial()
         bValue = tempString.substring(bIndex+1,zIndex-1);
       if(zIndex != -1)
         zValue = tempString.substring(zIndex+1);
-
+//
       switch(operatorString.substring(1).toInt())
       {
         case 0:
-          shield->motorX->moveTo(aValue.toFloat());
-          // shield->motorY->moveTo(bValue.toFloat());
-          // shield->motorZ->moveTo(zValue.toFloat());
+          shield->motorA->moveTo(aValue.toFloat());
+          shield->motorB->moveTo(bValue.toFloat());
+          shield->motorZ->moveTo(zValue.toFloat());
           serialString = "Angle set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;
           Serial.println(serialString);
           break;
         case 1:
-          int speedA = aValue.toInt();
-          if(speedA <= 100 || speedA >= 0)
-            shield->motorX->setSpeed(speedA);
+          // int speedA = aValue.toInt();
+          if(aValue.toInt() <= 100 || aValue.toInt() >= 0)
+            shield->motorA->setMaxSpeed(aValue.toInt());
           else
-            shield->motorX->setSpeed(25);
-          int speedB = bValue.toInt();
-          if(speedB <= 100 || speedB >= 0)
-            shield->motorY->setSpeed(speedB);
+            shield->motorA->setMaxSpeed(75);
+          // int speedB = bValue.toInt();
+          if(bValue.toInt() <= 100 || bValue.toInt() >= 0)
+            shield->motorB->setMaxSpeed(bValue.toInt());
           else
-            shield->motorY->setSpeed(25);
-          int speedZ = zValue.toInt();
-          if(speedZ <= 100 || speedZ >= 0)
-            shield->motorZ->setSpeed(speedZ);
+            shield->motorB->setMaxSpeed(75);
+          // int speedZ = zValue.toInt();
+          if(zValue.toInt() <= 100 || zValue.toInt() >= 0)
+            shield->motorZ->setMaxSpeed(zValue.toInt());
           else
-            shield->motorZ->setSpeed(25);
+            shield->motorZ->setMaxSpeed(75);
           serialString = "Speed set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;
           Serial.println(serialString);
           break;
           
         case 2:
-          // code
+          shield->startHoming();
+          Serial.println("Homing");
           break;
       }
     }
