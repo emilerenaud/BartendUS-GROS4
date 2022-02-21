@@ -1,0 +1,53 @@
+from test_presentation import Ui_MainWindow
+
+from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtCore as qtc
+
+
+class PresentationWindow(qtw.QWidget, Ui_MainWindow):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        self.ui.bouton_GO.clicked.connect(self.depart_robot)
+        self.ui.bouton_ESTOP.clicked.connect(self.arret_robot)
+        self.ui.bouton_VERRE.clicked.connect(self.deplacement_au_verre)
+
+    def deplacement_au_verre(self):
+        #caller la fonction de depart
+
+        qtw.QMessageBox.information(self, 'Success', 'Le robot se déplace vers le verre selon les coordonnées obtenues par la caméra.')
+
+    def arret_robot(self):
+        qtw.QMessageBox.critical(self, 'Fail', 'Le ESTOP a été appuyé.')
+
+
+    def depart_robot(self):
+        string_position_X = self.ui.position_X.text()
+        string_position_Y = self.ui.position_Y.text()
+        string_position_Z = self.ui.position_Z.text()
+
+        if string_position_X.isdecimal() and string_position_Y.isdecimal() and string_position_Z.isdecimal():
+            position_X = int(string_position_X)
+            position_Y = int(string_position_Y)
+            position_Z = int(string_position_Z)
+        else:
+            print('''Les positions ne sont pas des chiffres ou certaines boites n'ont pas de valeur de rentré.''')
+
+        if (position_X and position_Y) <= 5 and position_Z <= 6:
+            qtw.QMessageBox.information(self, 'Success', 'Le robot peut aller à la position donnée.')
+
+        else:
+            qtw.QMessageBox.critical(self, 'Fail', 'Le robot ne peut pas se rendre à la position donnée.')
+
+
+if __name__ == '__main__':
+    app = qtw.QApplication([])
+
+    w = PresentationWindow()
+    w.show()
+
+    app.exec_()
