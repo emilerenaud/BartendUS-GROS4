@@ -1,8 +1,9 @@
+from PyQt5.QtWidgets import QRadioButton
+
 from test_presentation import Ui_MainWindow
 
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
-
 
 class PresentationWindow(qtw.QWidget, Ui_MainWindow):
 
@@ -14,7 +15,18 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
 
         self.ui.bouton_GO.clicked.connect(self.depart_robot)
         self.ui.bouton_ESTOP.clicked.connect(self.arret_robot)
+
         self.ui.bouton_VERRE.clicked.connect(self.deplacement_au_verre)
+        self.ui.HOME.clicked.connect(self.Home)
+
+        #radio bouton
+        self.ui.bouton_LINEAIRE.clicked.connect(self.activer_actionneur)
+        self.ui.lin_1.setChecked(True)
+
+    def Home(self):
+        #caller la fonction HOME
+
+        qtw.QMessageBox.information(self, 'Success', 'Le robot se déplace vers HOME.')
 
     def deplacement_au_verre(self):
         #caller la fonction de depart
@@ -22,6 +34,7 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
         qtw.QMessageBox.information(self, 'Success', 'Le robot se déplace vers le verre selon les coordonnées obtenues par la caméra.')
 
     def arret_robot(self):
+        # caller la fonction de ESTOP
         qtw.QMessageBox.critical(self, 'Fail', 'Le ESTOP a été appuyé.')
 
 
@@ -38,10 +51,32 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
             print('''Les positions ne sont pas des chiffres ou certaines boites n'ont pas de valeur de rentré.''')
 
         if (position_X and position_Y) <= 5 and position_Z <= 6:
+            #caller la fonction de déplacement avec les bonnes positions
+
             qtw.QMessageBox.information(self, 'Success', 'Le robot peut aller à la position donnée.')
 
         else:
             qtw.QMessageBox.critical(self, 'Fail', 'Le robot ne peut pas se rendre à la position donnée.')
+
+    def activer_actionneur(self):
+        self.indice_actionneur = 0
+
+        if self.ui.lin_1.isChecked() == True:
+            self.indice_actionneur = 1
+            # caller la fonction pour activer lin 1
+            print(self.indice_actionneur)
+        if self.ui.lin_2.isChecked() == True:
+            self.indice_actionneur = 2
+            # caller la fonction pour activer lin 2
+            print(self.indice_actionneur)
+        if self.ui.lin_3.isChecked() == True:
+            self.indice_actionneur = 3
+            # caller la fonction pour activer lin 3
+            print(self.indice_actionneur)
+        if self.ui.lin_4.isChecked() == True:
+            self.indice_actionneur = 4
+            # caller la fonction pour activer lin 4
+            print(self.indice_actionneur)
 
 
 if __name__ == '__main__':
