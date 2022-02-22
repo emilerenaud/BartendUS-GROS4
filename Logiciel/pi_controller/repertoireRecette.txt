@@ -1,0 +1,6 @@
+test1,alcool:1,alcool2:2
+test2, alcool2:3,alcool2:3,alcool2:3
+test 3, alcool2:3,alcool2:3,alcool2:3
+test4,alcool:1,alcool2:2
+test5, alcool2:3,alcool2:3,alcool2:3
+test 6, alcool2:3,alcool2:3,alcool2:3

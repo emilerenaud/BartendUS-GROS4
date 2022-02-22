@@ -9,8 +9,8 @@ class scaraRobot():
 
 
     def __init__(self):
-        self.A=0.2
-        self.B=0.25
+        self.A=0.2001
+        self.B=0.25212
         self.origineX=0
         self.origineY=0
         self.theta01Init=0
@@ -60,6 +60,8 @@ class scaraRobot():
     def isInEnvloppe(self, x, y):
         if math.sqrt(math.pow(x, 2) + math.pow(y, 2)) <= (self.A + self.B) and math.sqrt(
                 math.pow(x, 2) + math.pow(y, 2)) >= (0.15):
+
+
 
             return True
         else:
@@ -123,13 +125,13 @@ def positionSegment2d(r,target):
 
 
 
-#arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
 
-# def write_read(x):
-# 	arduino.write(bytes(x, 'utf-8'))
-# 	time.sleep(0.5)
-# 	data = arduino.readline()
-# 	return data
+def write_read(x):
+	arduino.write(bytes(x, 'utf-8'))
+	time.sleep(0.5)
+	data = arduino.readline()
+	return data
 
 # def send_angle(self, robot):
 #     angles=robot.positionToAngleRad(input("Enter position in X :"), input("Enter position in y :"))

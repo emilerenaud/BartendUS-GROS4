@@ -1,4 +1,4 @@
-##first line (dont delete)##
+title, alcool1, quantity1, alcool2, quantity2,... 
 Martini, martini:1,vodka:2,lime:3
 Bloody Ceasar, vodka:2,tabasco:1,lime:1
 Swince, swince:1,swince:1,swince:1
