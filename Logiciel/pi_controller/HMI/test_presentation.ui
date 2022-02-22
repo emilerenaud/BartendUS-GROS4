@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>203</width>
-    <height>216</height>
+    <width>604</width>
+    <height>455</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -35,6 +35,8 @@
       <property name="font">
        <font>
         <pointsize>20</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
       </property>
       <property name="text">
@@ -101,9 +103,15 @@
     </item>
     <item row="4" column="0">
      <widget class="QPushButton" name="bouton_VERRE">
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>26</height>
+       </size>
+      </property>
       <property name="font">
        <font>
-        <pointsize>11</pointsize>
+        <pointsize>14</pointsize>
        </font>
       </property>
       <property name="styleSheet">
@@ -114,23 +122,14 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
-     <widget class="QPushButton" name="bouton_ESTOP">
-      <property name="font">
-       <font>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 18, 2);</string>
-      </property>
-      <property name="text">
-       <string>ESTOP</string>
-      </property>
-     </widget>
-    </item>
     <item row="4" column="1">
      <widget class="QPushButton" name="bouton_GO">
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>26</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <pointsize>16</pointsize>
@@ -144,6 +143,125 @@
       </property>
      </widget>
     </item>
+    <item row="11" column="0">
+     <widget class="QRadioButton" name="lin_1">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Linéaire 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0">
+     <widget class="QRadioButton" name="lin_2">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Linéaire 2</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0">
+     <widget class="QRadioButton" name="lin_3">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Linéaire 3</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0">
+     <widget class="QRadioButton" name="lin_4">
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Linéaire 4</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="font">
+       <font>
+        <pointsize>13</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Activation manuelle des actionneurs linéaires :</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="0">
+     <widget class="QPushButton" name="bouton_LINEAIRE">
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 170, 255);</string>
+      </property>
+      <property name="text">
+       <string>Activer</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QPushButton" name="bouton_ESTOP">
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 18, 2);</string>
+      </property>
+      <property name="text">
+       <string>ESTOP</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="1">
+     <widget class="QPushButton" name="HOME">
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>26</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 232, 212);</string>
+      </property>
+      <property name="text">
+       <string>HOME</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -151,7 +269,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>203</width>
+     <width>604</width>
      <height>18</height>
     </rect>
    </property>
