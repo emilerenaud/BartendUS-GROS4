@@ -29,15 +29,15 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
         self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
 
     def write_read(self,x):
-        arduino.write(bytes(x, 'utf-8'))
+        self.arduino.write(bytes(x, 'utf-8'))
         time.sleep(0.5)
         data = self.arduino.readline()
         return data
 
     def Home(self):
         #caller la fonction HOME
-         homing = "G2\r\n"
-         write_read(testString)
+        homing = "G2\r\n"
+        self.write_read(homing)
         qtw.QMessageBox.information(self, 'Success', 'Le robot se déplace vers HOME.')
 
     def deplacement_au_verre(self):
@@ -54,23 +54,25 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
         string_position_X = self.ui.position_X.text()
         string_position_Y = self.ui.position_Y.text()
         string_position_Z = self.ui.position_Z.text()
+        position_X = 0
+        position_Y = 0
+        position_Z = 0
+        #if string_position_X.isdecimal() and string_position_Y.isdecimal() and string_position_Z.isdecimal():
+        position_X = float(string_position_X)
+        position_Y = float(string_position_Y)
+        position_Z = float(string_position_Z)
 
-        if string_position_X.isdecimal() and string_position_Y.isdecimal() and string_position_Z.isdecimal():
-            position_X = int(string_position_X)
-            position_Y = int(string_position_Y)
-            position_Z = int(string_position_Z)
+        self.r.inverseKinematic(position_X,position_Y)
+        angles=self.r.getAngleDeg()
+        aAngle = angles[0]
+        bAngle = angles[1]
+        position = "G0:A" + str(aAngle) + ":B" + str(bAngle) + ":Z" + str(0)+ "\r\n"
+        value = self.write_read(position)
+        #    print(value)
+        ##else:
+          #  print('''Les positions ne sont pas des chiffres ou certaines boites n'ont pas de valeur de entré.''')
 
-            r.inverseKinematic(position_X,position_Y)
-            angles=r.getAngleDeg()
-            aAngle = angles[1]
-            bAngle = angles[2]
-            position = "G0:A" + str(aAngle) + ":B" + str(bAngle) + ":Z" + 0 + "\r\n"
-            value = write_read(position)
-            print(value)
-        else:
-            print('''Les positions ne sont pas des chiffres ou certaines boites n'ont pas de valeur de entré.''')
-
-        if (position_X and position_Y) <= 5 and position_Z <= 6:
+        if self.r.inverseKinematic(position_X,position_Y) is not False:
             #caller la fonction de déplacement avec les bonnes positions
 
             qtw.QMessageBox.information(self, 'Success', 'Le robot peut aller à la position donnée.')
