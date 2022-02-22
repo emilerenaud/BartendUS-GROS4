@@ -15,8 +15,8 @@
 #define endStopY_pin 10
 #define endStopZ_pin 11
 
-#define offset_A 10
-#define offset_B 10
+#define offset_A 176.5
+#define offset_B -141
 #define homingDirA 1
 #define homingDirB 1
 

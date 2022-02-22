@@ -2,8 +2,8 @@
 
 cncShield::cncShield()
 {
-    motorA = new Stepper(dirPinX_pin,stepPinX_pin,16,5.6);
-    motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,11.2);
+    motorA = new Stepper(dirPinX_pin,stepPinX_pin,16,11.2);
+    motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
     motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,16,20);
 
     pinMode(enPin_pin,OUTPUT);
@@ -51,7 +51,7 @@ bool cncShield::homing()
         case 0: // prepare homing B joint
             motorB->setDirection(homingDirB);
             motorB->moveTo(-300);
-            motorB->setSpeed(25);
+            motorB->setSpeed(60);
             _homingSequence ++;
             // Serial.println("Step 0");
             break;
@@ -65,10 +65,10 @@ bool cncShield::homing()
             }
             break;
         case 2: // Prepare homing A joint + prepare to move joint B to 90.
-            motorB->moveTo(90);
+            motorB->moveTo(0);
             motorA->setDirection(homingDirA);
-            motorA->moveTo(-300);
-            motorA->setSpeed(25);
+            motorA->moveTo(300);
+            motorA->setSpeed(50);
             // Serial.println("Step 2");
             _homingSequence ++;
             break;
@@ -83,11 +83,13 @@ bool cncShield::homing()
             if(!motorB->isMoving() && this->getLimitSwitchA())
             {
                 // Serial.println("Step 3 end moving");
+                motorA->setCurrentPosition(offset_A);
                 motorB->setCurrentPosition(0);  // reset it at 0 because Tony want it like that.
                 _homingSequence ++;
             }    
             break;
         case 4:
+            // motorA->setDirection(-1);
             motorA->moveTo(90);
             // Serial.println("Step 4");
             _homingSequence ++;
