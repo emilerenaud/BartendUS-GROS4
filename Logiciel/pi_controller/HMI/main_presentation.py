@@ -3,10 +3,13 @@ from PyQt5.QtWidgets import QRadioButton
 from test_presentation import Ui_MainWindow
 
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtCore as qtc
 from inverseKinematic import scaraRobot
 import serial
 import time
+
+# import numpy as np
+# from PIL import Image
+# import cv2
 
 class PresentationWindow(qtw.QWidget, Ui_MainWindow):
 
@@ -41,6 +44,26 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
         qtw.QMessageBox.information(self, 'Success', 'Le robot se déplace vers HOME.')
 
     def deplacement_au_verre(self):
+        position=self.vision()
+        position_X=position[0]
+        position_Y=position[1]
+        self.r.inverseKinematic(position_X, position_Y)
+        angles = self.r.getAngleDeg()
+        aAngle = angles[0]
+        bAngle = angles[1]
+        position = "G0:A" + str(aAngle) + ":B" + str(bAngle) + ":Z" + str(0) + "\r\n"
+        value = self.write_read(position)
+        #    print(value)
+        ##else:
+        #  print('''Les positions ne sont pas des chiffres ou certaines boites n'ont pas de valeur de entré.''')
+
+        if self.r.inverseKinematic(position_X, position_Y) is not False:
+            # caller la fonction de déplacement avec les bonnes positions
+
+            qtw.QMessageBox.information(self, 'Success', 'Le robot peut aller à la position donnée.')
+
+        else:
+            qtw.QMessageBox.critical(self, 'Fail', 'Le robot ne peut pas se rendre à la position donnée.')
         #caller la fonction de depart
 
         qtw.QMessageBox.information(self, 'Success', 'Le robot se déplace vers le verre selon les coordonnées obtenues par la caméra.')
@@ -100,6 +123,39 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
             # caller la fonction pour activer lin 4
             print(self.indice_actionneur)
 
+    # def vision(self):
+    #     cap = cv2.VideoCapture(0)
+    #     if not cap.isOpened():
+    #         raise IOError("Cannot open webcam")
+    #     # while True:
+    #     ret, frame = cap.read()
+    #
+    #     #frame = cv2.resize(frame, None, fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    #     #     c = cv2.waitKey(1)
+    #     #     if c == 27:
+    #     #         break
+    #
+    #     cap.release()
+    #     #cv2.destroyAllWindows()
+    #     im = frame
+    #     pixel = im.load()
+    #     x =0
+    #     y =0
+    #     nb =0
+    #     for i in range(im.size[0]):
+    #         for j in range(im.size[1]):
+    #             if pixel[i,j] > 150:
+    #                 im.putpixel([i,j], 255)
+    #                 x += i
+    #                 nb += 1
+    #                 y += j
+    #             else:
+    #                 im.putpixel([i,j], 0)
+    #
+    #     x = int(x/nb)
+    #     y = int(y/nb)
+    #     coord = [x, y]
+    #     return coord
 
 if __name__ == '__main__':
     app = qtw.QApplication([])
