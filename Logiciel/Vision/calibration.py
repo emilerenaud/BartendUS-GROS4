@@ -7,27 +7,13 @@ import time
 
 def calib_vision():
     # Fonction permettant de calibrer la caméra sur le robot en fonction
-    # des 3 points de repères présent sur la plateforme
+    # des 3 points de repères présents sur la plateforme
 
-    # Prendre une photo:
-    # ** SOUS Unix **
-    # cap = PiCamera()
-    # time.sleep(2)                                 # Attendre que la caméra s'initialise
-    # cap.capture("/home/pi/Pictures/img.jpg")
-    # print("Photo prise")
-
-    # ** SOUS Windows **
-    cap = cv2.VideoCapture(0)
-
-    # Lecture de la photo:
-    ret, img = cap.read()
-
-    # Sauvegarder l'image:
-    path = r"calibration_pic.jpeg"
-    cv2.imwrite(path, img)
+    # Recherche des centres des cercles sur l'image de référence:
+    img_reference = cv2.imread('img_reference_calib.png')
 
     # Conversion de l'image en noir et blanc:
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor(img_reference, cv2.COLOR_BGR2GRAY)
 
     # Spécification des valeurs limites (pixel = 0 si < 100 et pixel = 1 si > 255) pour en sortir une image binaire
     _, image_binaire = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
@@ -37,13 +23,12 @@ def calib_vision():
 
     i = 0
     liste_coord_centres = []
-
     for c in contours:
         liste_points = []
-        perimeter = cv2.arcLength(c,True)
+        perimeter = cv2.arcLength(c, True)
 
         # Filtrer les perimètres trop petits:
-        if perimeter >= 200:
+        if perimeter >= 50:
             # Ignorer le premier contour pusique la fonction "findcontour" détecte l'image complète comme premier élément
             if i == 0:
                 i = 1
@@ -53,7 +38,7 @@ def calib_vision():
             approx = cv2.approxPolyDP(c, 0.01 * cv2.arcLength(c, True), True)
 
             # Déssiner les contours sur l'image
-            cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
+            # cv2.drawContours(img_reference, [c], -1, (0, 255, 0), 2)
 
             # Trouver le centre des contours
             M = cv2.moments(c)
@@ -64,27 +49,50 @@ def calib_vision():
                 liste_points.append(y)
                 liste_coord_centres.append(liste_points)
 
-            # Ajout du texte "Centre" sur l'image au centre des contours
-            cv2.putText(img, 'Centre', (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
+            # Ajout d'un point sur l'image au centre des contours
+            cv2.circle(img_reference, (x, y), radius = 3, color = (0, 0, 255), thickness = -1)
         else:
             continue
 
-    plt.imshow(img, cmap="gray")
+    plt.imshow(img_reference, cmap="gray")
     plt.show()
 
-    # cv2.imshow('Formes', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-    # Let's say my origin is the up right tape (162, 249):
-    # Calculate the distance in X and Y coord. from the origin to the other points:
 
-    # distance_origin_left = [liste_coord_centres[0][0] - liste_coord_centres[1][0], liste_coord_centres[0][1] - liste_coord_centres[1][1]]
-    # distance_origin_right = [liste_coord_centres[0][0] - liste_coord_centres[2][0], liste_coord_centres[0][1] - liste_coord_centres[2][1]]
 
-    # Calculate the absolute distance from the origin to the other points:
-    # distance_origin_left_absolute = math.sqrt(distance_origin_left[0]**2 + distance_origin_left[1]**2)
-    # distance_origin_right_absolute = math.sqrt(distance_origin_right[0]**2 + distance_origin_right[1]**2)
+    # Afficher les centre des 3 pints sur l'image en temps réel:
+    # Prendre une photo:
+    # ** SOUS Unix **
+    # cap = PiCamera()
+    # time.sleep(2)                                 # Attendre que la caméra s'initialise
+    # cap.capture("/home/pi/Pictures/img.jpg")
+    # print("Photo prise")
+
+    # ** SOUS Windows **
+    cv2.namedWindow("Calibration")
+    cap = cv2.VideoCapture(0)       # Identifier le bon port de caméra -> 0 ou 1 normallement
+
+    # Vérifier que l'ouverture de la caméra se fait correctement:
+    if cap.isOpened():
+        rval, img_reel_time = cap.read()
+    else:
+        rval = False
+        print("ERREUR - Ne peut pas ouvrir la caméra!")
+
+    while rval and cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
+        for center in liste_coord_centres:
+            cv2.circle(img_reel_time, (center[0], center[1]), radius = 4, color = (0, 0, 255), thickness = -1)
+        cv2.imshow("Calibration", img_reel_time)
+        rval, img_reel_time = cap.read()
+
+        k = cv2.waitKey(1) & 0xFF
+        if k == 27:  # Fermeture de la fenêtre avec la touche "ESC" ou le "X" du GUI
+            break
+
+    cv2.destroyAllWindows()
+    cap.release()
 
 if __name__ == '__main__':
     calib_vision()
