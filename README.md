@@ -17,7 +17,7 @@ BartendUS est une plateforme surmontée d'un bras robotisé de type SCARA qui pe
 
 ## Requis matériel
 - Un bras robotisé SCARA et sa plateforme. Les instructions d'assemblage sont disponibles dans [le répertoire « Mécanique »](https://github.com/mimil2014/BartendUS-GROS4/tree/main/M%C3%A9canique).
-- Raspberry PI 4 et une écran tactile. Les liens d'achats sont disponibles dans la liste de matériel[BOM](www.google.com).
+- Raspberry PI 4 et une écran tactile. Les liens d'achats sont disponibles dans la liste de matériel [BOM](www.google.com).
 - Distributeur d'alcool et le support sur mesure. Les plans sont disponible dans [le répertoire « Mécanique »](https://github.com/mimil2014/BartendUS-GROS4/tree/main/M%C3%A9canique).
 - Une caméra compatible avec un Raspberry Pi
 
