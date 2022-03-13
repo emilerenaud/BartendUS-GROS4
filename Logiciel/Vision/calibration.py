@@ -184,9 +184,11 @@ class Calibration_cam():
 
 
 if __name__ == '__main__':
-    pass
+    calib = Calibration_cam()
     # calib_vision_seuil()
-    # calib_vision_init()
+    calib.calib_vision_init()
+    # calib.calib_vision_init
+    print('Done')
 
 
 
