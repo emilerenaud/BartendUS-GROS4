@@ -43,7 +43,7 @@ class scaraRobot():
         return self.B
 
     def getAngleDeg(self):
-        return [math.degrees(self.anglesActuel[1]),math.degrees(self.anglesActuel[2])]
+        return [math.degrees(self.anglesActuel[0]),math.degrees(self.anglesActuel[1])]
 
     def getAngleRad(self):
         return self.anglesActuel
@@ -100,7 +100,19 @@ class scaraRobot():
 
         return [x2,y2]
 
+    def tangentOffset(self,position,rayonVerre):
+        positionOffset=[]
+        self.inverseKinematic(position[0],position[1])
 
+        if position[0] >= 0:
+            # config upper shoulder
+            angleEffecteur=self.anglesActuel[0]+self.anglesActuel[1]-math.pi/2
+        else:
+            angleEffecteur =  angleEffecteur=self.anglesActuel[0]+self.anglesActuel[1]-(math.pi/2)
+
+        positionOffset.insert(0,position[0]+rayonVerre*math.cos(angleEffecteur))
+        positionOffset.insert(1,position[1] + rayonVerre*math.sin(angleEffecteur))
+        return positionOffset
 
 def positionSegment2d(r,target):
     """Segment generation"""
@@ -125,13 +137,13 @@ def positionSegment2d(r,target):
 
 
 
-arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
-
-def write_read(x):
-	arduino.write(bytes(x, 'utf-8'))
-	time.sleep(0.5)
-	data = arduino.readline()
-	return data
+# arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+#
+# def write_read(x):
+# 	arduino.write(bytes(x, 'utf-8'))
+# 	time.sleep(0.5)
+# 	data = arduino.readline()
+# 	return data
 
 # def send_angle(self, robot):
 #     angles=robot.positionToAngleRad(input("Enter position in X :"), input("Enter position in y :"))
@@ -144,17 +156,21 @@ def write_read(x):
 #     return 1
 
 if __name__ == '__main__':
-    target = [0.2, 0.2]
-    print("target= ", [0.2,0.2])
     r = scaraRobot()
+    target = [0.3,0]
+    posOffset =r.tangentOffset(target, 0.05)
+    print("target= ", target)
+    print("targetOffset= ",posOffset)
     angles=r.inverseKinematic(target[0],target[1])
+    r.inverseKinematic(posOffset[0], posOffset[1])
     print("theta 1 deg : ", angles[0],"\ntheta 2 deg : ",angles[1])
     print("forward kinematic result ",r.forwardKinematic())
-
+    print("angle actuel",r.getAngleDeg())
     # for y in np.arange(0,0.45,0.01):
     #     for x in np.arange(0,0.45,0.01):
     #         if r.inverseKinematic(x,y) is not False:
     #
+
     positionSegment2d(r,target)
 
 
