@@ -62,7 +62,7 @@ class scaraRobot():
 
         x=position[0]+self.origineX
         y=position[1]+self.origineY
-        if self.isInEnvloppe(x,y):
+        if self.isInEnvloppe([x,y]):
             #calcule theta 2
             B=(math.pow(x,2)+math.pow(y,2)-math.pow(self.A,2)-math.pow(self.B,2))/(2*self.A*self.B)
             theta2=math.atan2(math.sqrt(1-math.pow(B,2)),B)
@@ -115,8 +115,8 @@ class scaraRobot():
             x=positionVerre[0]+r*math.cos(angle)
             y=positionVerre[1]+r*math.sin(angle)
 
-            if self.isInEnvloppe(x,y):
-                self.inverseKinematic(x,y)
+            if self.isInEnvloppe([x,y]):
+                self.inverseKinematic([x,y])
                 theta1=self.getAngleRad()[0]
                 theta2 =self.getAngleRad()[1]
 
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 
      r = scaraRobot()
      verre=[0.2,0.1]
-     r.inverseKinematic(r.tangentAuVerre(verre[0],verre[1])[0],r.tangentAuVerre(verre[0],verre[1])[1])
+     r.inverseKinematic(r.tangentAuVerre(verre))
      positionSegment2d(r, verre)
     # target = [0.3,0]
     # posOffset =r.tangentOffset(target, 0.05)
