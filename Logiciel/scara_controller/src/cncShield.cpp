@@ -3,9 +3,15 @@
 cncShield::cncShield()
 {
     motorA = new Stepper(dirPinX_pin,stepPinX_pin,16,11.2);
-    motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
+    // motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
+    motorB = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
     motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,16,20);
-
+    // tableau[0] = new Stepper();
+    servoShaker = new Servo();
+    servoShaker->attach(SpnEn);
+    servoShaker->write(0);
+    pinMode(Electro_pin,OUTPUT);
+    openElectro();
     pinMode(enPin_pin,OUTPUT);
     pinMode(endStopX_pin,INPUT_PULLUP);
     pinMode(endStopY_pin,INPUT_PULLUP);
@@ -24,6 +30,16 @@ void cncShield::disableMotor()
 {
     digitalWrite(enPin_pin,HIGH);
     _enMotor = 0;
+};
+
+void cncShield::openElectro()
+{
+    digitalWrite(Electro_pin,LOW);
+};
+
+void cncShield::closeElectro()
+{
+    digitalWrite(Electro_pin,HIGH);
 };
 
 void cncShield::update()
@@ -108,6 +124,11 @@ bool cncShield::homing()
     return 0;
 };
 
+void cncShield::moveServo(int angle)
+{
+    servoShaker->write(angle);
+};
+
  void cncShield::startHoming()
  {
      _homing = 1;
@@ -132,4 +153,9 @@ bool cncShield::getLimitSwitchB()
 bool cncShield::getLimitSwitchZ()
 {
     return !digitalRead(endStopZ_pin);
+};
+
+float cncShield::convertionForMM(float mm)
+{
+    return mm*180;
 };

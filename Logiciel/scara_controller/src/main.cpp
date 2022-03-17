@@ -105,6 +105,11 @@ void readSerial()
           shield->startHoming();
           Serial.println("Homing");
           break;
+
+        case 3:
+          if(aValue.toInt() <= 180 || aValue.toInt() >= 0)
+            shield->moveServo(aValue.toInt());
+          break;
       }
     }
     else if(operatorString[0] == 'M')
@@ -112,9 +117,13 @@ void readSerial()
       switch(operatorString.substring(1).toInt())
       {
         case 0:
-          // code
+          // Serial.println("Move servo 0");
+          // shield->moveServo(0);
+          shield->openElectro();
           break;
         case 1:
+        // Serial.println("Move servo 150");
+          shield->closeElectro();
           // code
           break;
       }
