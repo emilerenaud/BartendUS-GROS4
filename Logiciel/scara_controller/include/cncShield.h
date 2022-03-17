@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <stepper.h>
+#include <Servo.h>
 
 #ifndef CNCSHIELD_H 
 #define CNCSHIELD_H
@@ -14,6 +15,11 @@
 #define endStopX_pin 9
 #define endStopY_pin 10
 #define endStopZ_pin 11
+#define SpnEn 12
+#define Electro_pin 49
+
+#define stepPinP_pin 34
+#define dirPinP_pin 36
 
 #define offset_A 176.5
 #define offset_B -141
@@ -33,7 +39,11 @@ class cncShield
         bool getLimitSwitchA(void);
         bool getLimitSwitchB(void);
         bool getLimitSwitchZ(void);
-
+        float convertionForMM(float mm);
+        void moveServo(int angle);
+        void closeElectro(void);
+        void openElectro(void);
+        Servo *servoShaker;
         Stepper* motorA;
         Stepper* motorB;
         Stepper* motorZ;
