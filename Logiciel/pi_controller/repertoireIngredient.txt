@@ -1,0 +1,15 @@
+Vodka:750,position : 1
+Tequila:750,position : 2
+Amarreto:750,position : 3
+rhum:2, position : 1
+cola:2, position : 1
+rhum:2, position : 1
+cola:2, position : 1
+rhum:2, position : 1
+cola:2, position : 1
+rhum:2, position : 1
+cola:2, position : 1
+rhum:2, position : 1
+cola:2, position : 1
+rhum:2, position : 1
+cola:2, position : 1
