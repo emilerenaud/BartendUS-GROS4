@@ -7,24 +7,20 @@ import matplotlib.pyplot as plt
 
 class scaraRobot():
 
-
     def __init__(self):
         self.A=0.2001
-        self.B=0.25212
+        self.B=0.25212+0.05
         self.origineX=0
         self.origineY=0
-        self.theta01Init=0
-        self.theta01Init=0
         self.anglesActuel=[0,0]
         return
 
-    def __int__(self,A0,B0,origine0X,origine0Y,theta01Init,theta02Init):
+    def __int__(self,A0,B0,origine0X,origine0Y):
         self.A = A0
         self.B = B0
         self.origineX = origine0X
         self.origineY = origine0Y
-        self.theta01Init = theta01Init
-        self.theta01Init = theta02Init
+        self.anglesActuel = [0, 0]
         return
 
 
@@ -48,44 +44,34 @@ class scaraRobot():
     def getAngleRad(self):
         return self.anglesActuel
 
-    #def relativePosition(self,0x,0y)
 
-    #return
-
-    def setAnglesAtStart(self,theta01Init,theta02Init):
-        self.theta01Init=theta01Init
-        self.theta02Init=theta02Init
-        return
-
-    def isInEnvloppe(self, x, y):
+    def isInEnvloppe(self,position):
+        # TO DO
+        # gerer la plage de position acceptable en y neg
+        x=position[0]
+        y=position[1]
         if math.sqrt(math.pow(x, 2) + math.pow(y, 2)) <= (self.A + self.B) and math.sqrt(
                 math.pow(x, 2) + math.pow(y, 2)) >= (0.15):
-
-
 
             return True
         else:
             return False
 
-    def inverseKinematic(self,x,y):
-        #TO DO
-        #gerer la plage de position acceptable en y neg
+    def inverseKinematic(self,position):
+        #offset par rapport à l'origine
 
-
-        x=x+self.origineX
-        y=y+self.origineY
-        if self.isInEnvloppe(x,y):
-
+        x=position[0]+self.origineX
+        y=position[1]+self.origineY
+        if self.isInEnvloppe([x,y]):
+            #calcule theta 2
             B=(math.pow(x,2)+math.pow(y,2)-math.pow(self.A,2)-math.pow(self.B,2))/(2*self.A*self.B)
-
             theta2=math.atan2(math.sqrt(1-math.pow(B,2)),B)
             if x >= 0:
                #config upper shoulder
                 theta2=-theta2
+            # calcule theta 1
             theta1=math.atan2(y,x)-math.atan2((self.B*math.sin(theta2)),(self.A+self.B*math.cos(theta2)))
-
             self.anglesActuel=[theta1,theta2]
-
             return  [math.degrees(theta1), math.degrees(theta2)]
         else:
             return False
@@ -100,19 +86,51 @@ class scaraRobot():
 
         return [x2,y2]
 
-    def tangentOffset(self,position,rayonVerre):
-        positionOffset=[]
-        self.inverseKinematic(position[0],position[1])
+    # def tangentOffset(self,position,rayonVerre):
+    #     positionOffset=[]
+    #     self.inverseKinematic(position[0],position[1])
+    #
+    #     if position[0] >= 0:
+    #         # config upper shoulder
+    #         angleEffecteur=self.anglesActuel[0]+self.anglesActuel[1]-math.pi/2
+    #     else:
+    #         angleEffecteur =  angleEffecteur=self.anglesActuel[0]+self.anglesActuel[1]-(math.pi/2)
+    #
+    #     positionOffset.insert(0,position[0]+rayonVerre*math.cos(angleEffecteur))
+    #     positionOffset.insert(1,position[1] + rayonVerre*math.sin(angleEffecteur))
+    #     return positionOffset
 
-        if position[0] >= 0:
-            # config upper shoulder
-            angleEffecteur=self.anglesActuel[0]+self.anglesActuel[1]-math.pi/2
-        else:
-            angleEffecteur =  angleEffecteur=self.anglesActuel[0]+self.anglesActuel[1]-(math.pi/2)
 
-        positionOffset.insert(0,position[0]+rayonVerre*math.cos(angleEffecteur))
-        positionOffset.insert(1,position[1] + rayonVerre*math.sin(angleEffecteur))
-        return positionOffset
+    def tangentAuVerre(self,positionVerre):
+        nbPoint=100
+        r=0.05
+        start=0
+        end=2*math.pi
+        step=(end-start)/nbPoint
+        diffPrec=1
+
+        #ajuster contrainte
+        for k in range(0,nbPoint):
+            angle=k*(step)+start
+            x=positionVerre[0]+r*math.cos(angle)
+            y=positionVerre[1]+r*math.sin(angle)
+
+            if self.isInEnvloppe([x,y]):
+                self.inverseKinematic([x,y])
+                theta1=self.getAngleRad()[0]
+                theta2 =self.getAngleRad()[1]
+
+                vBy = 1 * y * math.sin(theta1 + theta2) + x * math.cos(theta1 + theta2)
+                vVy = 1 * positionVerre[1] * math.sin(theta1 + theta2) + positionVerre[0] * math.cos(theta1 + theta2)
+
+                diff=vBy-vVy
+
+                if(math.fabs(diff)<diffPrec):
+                    diffPrec=math.fabs(diff)
+                    xfinal=x
+                    yfinal=y
+
+        return [xfinal,yfinal]
 
 def positionSegment2d(r,target):
     """Segment generation"""
@@ -156,22 +174,24 @@ def positionSegment2d(r,target):
 #     return 1
 
 if __name__ == '__main__':
-    r = scaraRobot()
-    target = [0.3,0]
-    posOffset =r.tangentOffset(target, 0.05)
-    print("target= ", target)
-    print("targetOffset= ",posOffset)
-    angles=r.inverseKinematic(target[0],target[1])
-    r.inverseKinematic(posOffset[0], posOffset[1])
-    print("theta 1 deg : ", angles[0],"\ntheta 2 deg : ",angles[1])
-    print("forward kinematic result ",r.forwardKinematic())
-    print("angle actuel",r.getAngleDeg())
+
+     r = scaraRobot()
+     verre=[0.2,0.1]
+     r.inverseKinematic(r.tangentAuVerre(verre))
+     positionSegment2d(r, verre)
+    # target = [0.3,0]
+    # posOffset =r.tangentOffset(target, 0.05)
+    # print("target= ", target)
+    # print("targetOffset= ",posOffset)
+    # angles=r.inverseKinematic(target[0],target[1])
+    # r.inverseKinematic(posOffset[0], posOffset[1])
+    # print("theta 1 deg : ", angles[0],"\ntheta 2 deg : ",angles[1])
+    # print("forward kinematic result ",r.forwardKinematic())
+    # print("angle actuel",r.getAngleDeg())
     # for y in np.arange(0,0.45,0.01):
     #     for x in np.arange(0,0.45,0.01):
     #         if r.inverseKinematic(x,y) is not False:
-    #
 
-    positionSegment2d(r,target)
 
 
 
