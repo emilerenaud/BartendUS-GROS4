@@ -10,6 +10,7 @@ float angleMotor[3] = {0,0,0};
 float lastAngle[3] = {0,0,0};
 void setupSerial(void);
 void readSerial(void);
+void answerSerial(void);
 
 void setup() {
   // Serial.println("Code start here");
@@ -77,8 +78,9 @@ void readSerial()
         case 0:
           shield->motorA->moveTo(aValue.toFloat());
           shield->motorB->moveTo(bValue.toFloat());
-          shield->motorZ->moveTo(zValue.toFloat());
-          serialString = "Angle set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;
+          shield->setNewMouvement();
+          // shield->motorZ->moveTo(zValue.toFloat());
+          serialString = "Angle set to : A=" + aValue + " B=" + bValue; // + " Z=" + zValue;
           Serial.println(serialString);
           break;
         case 1:
@@ -103,13 +105,29 @@ void readSerial()
           
         case 2:
           shield->startHoming();
-          Serial.println("Homing");
+          // Serial.println("Homing");
           break;
 
         case 3:
-          if(aValue.toInt() <= 180 || aValue.toInt() >= 0)
-            shield->moveServo(aValue.toInt());
+            shield->motorZ->moveTo(zValue.toFloat());
+            shield->setNewMouvement();
+            // Serial.println(zValue.toFloat());
+            // G3:Z40
           break;
+        case 4:
+          shield->motorP->moveTo(aValue.toFloat());
+          shield->setNewMouvement();
+          // G4:A40
+          break;
+        case 5:
+          if(aValue.toInt() <= 180 || aValue.toInt() >= 0)
+          {
+            shield->moveServo(aValue.toInt());
+            Serial.println("Done");
+            // Serial.println("servo Write" + String(aValue));
+          }
+          break;
+
       }
     }
     else if(operatorString[0] == 'M')
@@ -120,14 +138,21 @@ void readSerial()
           // Serial.println("Move servo 0");
           // shield->moveServo(0);
           shield->openElectro();
+          answerSerial();
           break;
         case 1:
         // Serial.println("Move servo 150");
           shield->closeElectro();
+          answerSerial();
           // code
           break;
       }
     }
   }
   
+}
+
+void answerSerial()
+{
+  Serial.println("Done");
 }

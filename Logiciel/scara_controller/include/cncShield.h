@@ -39,6 +39,7 @@ class cncShield
         bool getLimitSwitchA(void);
         bool getLimitSwitchB(void);
         bool getLimitSwitchZ(void);
+        void setNewMouvement(void);
         float convertionForMM(float mm);
         void moveServo(int angle);
         void closeElectro(void);
@@ -47,10 +48,12 @@ class cncShield
         Stepper* motorA;
         Stepper* motorB;
         Stepper* motorZ;
+        Stepper* motorP;
 
     private:
         bool _enMotor;
         bool _homing = 0;
+        bool _newMouvement = 0;
         bool _setupHoming = 0;
         int _homingSequence = 0;
 };

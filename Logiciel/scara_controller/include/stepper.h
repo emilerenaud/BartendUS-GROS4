@@ -7,7 +7,7 @@ class Stepper
     public:
         Stepper();
         Stepper(int dirPin, int stepPin, int microstep, float gearRatio);
-        void update(bool accel);
+        bool update(bool accel);
         bool moveTo(float degree);
         bool isMoving(void);
         void setpin(int dirPin, int stepPin);

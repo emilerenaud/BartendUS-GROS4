@@ -18,7 +18,7 @@ Stepper::Stepper(int dirPin, int stepPin,int microstep, float gearRatio)
     _stepAccel = 0;
 };
 
-void Stepper::update(bool accel)
+bool Stepper::update(bool accel)
 {
     if(_stepCount != 0)
     {
@@ -40,7 +40,11 @@ void Stepper::update(bool accel)
         }
         
         // _currentPosition = _stepCount;
-        
+        return 1;
+    }
+    else
+    {
+        return 0;
     }
 };
 

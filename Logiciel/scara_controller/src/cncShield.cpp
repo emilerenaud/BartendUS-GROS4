@@ -3,13 +3,18 @@
 cncShield::cncShield()
 {
     motorA = new Stepper(dirPinX_pin,stepPinX_pin,16,11.2);
-    // motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
-    motorB = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
+    motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
+    // motorB = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
     motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,16,20);
+    motorP = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
+    motorP->setSpeed(50);
+    motorP->setMaxSpeed(50);
+    motorZ->setSpeed(100);
+    motorZ->setMaxSpeed(100);
     // tableau[0] = new Stepper();
     servoShaker = new Servo();
     servoShaker->attach(SpnEn);
-    servoShaker->write(0);
+    servoShaker->write(10);
     pinMode(Electro_pin,OUTPUT);
     openElectro();
     pinMode(enPin_pin,OUTPUT);
@@ -44,20 +49,31 @@ void cncShield::closeElectro()
 
 void cncShield::update()
 {
+    int test = 0;
     if(_homing)
     {
         if(homing())
         {
             _homing = 0;
-            Serial.println("Homing_Done");
+            Serial.println("Done");
         }
     }
-    else if(motorA->isMoving() || motorB->isMoving() || motorZ->isMoving()) // do not update motor while homing
+    else if(_newMouvement)
     {
-        motorA->update(1);
-        motorB->update(1);
-        motorZ->update(1);
+        if(motorA->isMoving() || motorB->isMoving() || motorZ->isMoving() || motorP->isMoving()) // do not update motor while homing
+        {
+            motorA->update(1);
+            motorB->update(1);
+            motorZ->update(0);
+            motorP->update(0);
+        }
+        else
+        {
+            Serial.println("Done");
+            _newMouvement = 0;
+        }
     }
+    
 };
 
 bool cncShield::homing()
@@ -65,6 +81,8 @@ bool cncShield::homing()
     switch(_homingSequence)
     {
         case 0: // prepare homing B joint
+            motorZ->moveTo(-200);
+            motorZ->setSpeed(80);
             motorB->setDirection(homingDirB);
             motorB->moveTo(-300);
             motorB->setSpeed(60);
@@ -72,11 +90,28 @@ bool cncShield::homing()
             // Serial.println("Step 0");
             break;
         case 1: // Move B until limit switch get pressed.
-            motorB->update(0);
-            if(this->getLimitSwitchB()) // 1=pressed
+            // motorB->update(0);
+            // motorZ->update(0);
+            if(this->getLimitSwitchZ())
+            {
+                motorZ->setCurrentPosition(0);
+            }
+            else
+            {
+                motorZ->update(0);
+            }
+            if(this->getLimitSwitchB())
+            {
+                motorB->setCurrentPosition(offset_B);
+            }
+            else
+            {
+                motorB->update(0);
+            }
+            if(!motorB->isMoving() && !motorZ->isMoving()) // 1=pressed
             {   
                 // Serial.println("Step 1 Switch");
-                motorB->setCurrentPosition(offset_B);
+                // motorB->setCurrentPosition(offset_B);
                 _homingSequence ++;
             }
             break;
@@ -159,3 +194,9 @@ float cncShield::convertionForMM(float mm)
 {
     return mm*180;
 };
+
+void cncShield::setNewMouvement(void)
+{
+    _newMouvement = 1;
+}
+
