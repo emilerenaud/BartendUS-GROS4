@@ -16,7 +16,7 @@ class Calibration_cam():
         self.liste_coord_centres_ref = []
         self.liste_points_coord_centre = []
         self.seuil = 5
-
+        self.calib_vision_init()
 
 
     def calib_vision_init(self):
@@ -72,15 +72,8 @@ class Calibration_cam():
 
 
 
-        # Afficher les centre des 3 pints sur l'image en temps réel:
+        # Afficher les centre des 3 points sur l'image en temps réel:
         # Prendre une photo:
-        # ** SOUS Unix **
-        # cap = PiCamera()
-        # time.sleep(2)                                 # Attendre que la caméra s'initialise
-        # cap.capture("/home/pi/Pictures/img.jpg")
-        # print("Photo prise")
-
-        # ** SOUS Windows **
         cv2.namedWindow("Calibration")
         cap = cv2.VideoCapture(0)       # Identifier le bon port de caméra -> 0 ou 1 normallement
 
@@ -108,14 +101,6 @@ class Calibration_cam():
 
     def calib_vision_seuil(self):
         # Prendre une photo:
-
-        # ** SOUS Unix **
-        # cap = PiCamera()
-        # time.sleep(2)                                 # Attendre que la caméra s'initialise
-        # cap.capture("/home/pi/Pictures/img.jpg")
-        # print("Photo prise")
-
-        # ** SOUS Windows **
         cv2.namedWindow("Calibration_seuil")
         cap = cv2.VideoCapture(0)
 
@@ -137,9 +122,7 @@ class Calibration_cam():
         i = 0
         # list for storing names of shapes
         for contour in contours:
-
             perimeter = cv2.arcLength(contour, True)
-
             liste = []
             if i == 0:
                 i = 1
@@ -186,11 +169,5 @@ class Calibration_cam():
 if __name__ == '__main__':
     calib = Calibration_cam()
     # calib_vision_seuil()
-    calib.calib_vision_init()
     # calib.calib_vision_init
     print('Done')
-
-
-
-
-
