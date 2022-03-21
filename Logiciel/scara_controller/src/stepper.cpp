@@ -14,8 +14,9 @@ Stepper::Stepper(int dirPin, int stepPin,int microstep, float gearRatio)
     _maxSpeed = 100;
     _currentPosition = 0;
     _stepCount = 0;
-    _timeAcc = millis();
     _stepAccel = 0;
+    _timeAcc = 2;
+    _setupAcc = 1;
 };
 
 bool Stepper::update(bool accel)
@@ -23,7 +24,7 @@ bool Stepper::update(bool accel)
     if(_stepCount != 0)
     {
         if(accel)
-            updateAccel();
+            updateAccelV2();
         if(micros() - _lastTime >= _delaySpeed)
         {
             if(_flipflopStep&0x01)
@@ -67,6 +68,46 @@ void Stepper::updateAccel()
     }
 }
 
+void Stepper::updateAccelV2()
+{
+    if(millis() - _lastTimeAcc >= _timeAcc)
+    {
+        _lastTimeAcc = millis();
+        if(_setupAcc)
+        {
+            _setupAcc = 0;
+            this->setSpeed(int(_maxSpeed*0.25));
+        }
+        if(_stepCount >= _calculStepAccel*2)
+        {
+            if(_speed < _maxSpeed)
+            {
+                this->setSpeed(_speed + 0.2);
+            }
+            // premiere moitier du parcour
+
+        }
+        else if(_stepCount < _calculStepAccel*2)
+        {
+            // deuxieme moititier du parcour
+            // if(_speed > abs(_maxSpeed/2))
+            // {
+            //     this->setSpeed(_speed - 5);
+            // }
+            if(_speed > (_maxSpeed*0.25))
+            {
+                this->setSpeed((_speed - 0.5));
+            }
+
+            if(_stepCount == 1)
+            {
+                _setupAcc = 1;
+            }
+        }
+    }
+    
+}
+
 bool Stepper::moveTo(float degree)
 {
     if(_stepCount != 0)
@@ -88,6 +129,7 @@ bool Stepper::moveTo(float degree)
     _stepCount = int((abs(deltaPos) * _gearRatio * _microstep * 200.0) /360); 
     _calculStepAccel = _stepCount / 6;
     _lastTime = micros();
+    _lastTimeAcc = millis();
     // Serial.println("step count : " + String(_stepCount));
     
     return EXIT_SUCCESS;
@@ -132,10 +174,15 @@ void Stepper::setMaxSpeed(int speed)
     _maxSpeed = speed;
 };
 
-void Stepper::setSpeed(int speed)
+void Stepper::setSpeed(float speed)
 {
+    if(speed > 100.0)
+        speed = 100.0;
+    if(speed < 0.0)
+        speed = 0.0;
     _speed = speed;
-    _delaySpeed = map(_speed,0,100,800,80);
+    int tempSpeed = _speed * 10;
+    _delaySpeed = map(tempSpeed,0,1000,800,80);
     // Serial.println(_delaySpeed);
 };
 
