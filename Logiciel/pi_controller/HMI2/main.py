@@ -1,32 +1,39 @@
 import sys
+import time
 from PyQt5.uic import loadUi
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
+from librairieRecette import livreRecette,ingredient_dispo,recette
 
-# Variable globale pour ajouter recette
-liste_alcool_recette = []
-titre_recette = ''
-liste_quantite_recette = []
-option = 0
 
-# Variable globale pour ajouter bouteille
-liste_bouteille_ingredient = []
-liste_quantite_ingredient = []
-liste_position_ingredient = []
-quantite_ingredient = 0
+livreRecette=livreRecette()
+livreIngredient=ingredient_dispo()
+max_Bouteille=9
+
+# Step 1: Create a worker class
+class Worker(QObject):
+    finished = pyqtSignal()
+    progress = pyqtSignal(object)
+
+    def run(self):
+        """Long-running task."""
+
+        for i in range(5):
+            print('commander')
+            time.sleep(1)
+            self.progress.emit("incroyable")
+        self.finished.emit()
+
 
 class MainWindow(QDialog):
     def __init__(self):
+        print("refresh")
         super(MainWindow, self).__init__()
         loadUi("MainWindowDialog.ui", self)
         self.recettes.clicked.connect(self.go_to_recettes)
         self.boire.clicked.connect(self.go_to_boire)
         self.bouteilles.clicked.connect(self.go_to_bouteilles)
-
-
 
         # self.container = QFrame()
         # self.container.setObjectName("container")
@@ -56,19 +63,24 @@ class MainWindow(QDialog):
         widget.addWidget(screen4)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
+
+
+
+
+#*****************************************************************************************************WINDOW RECETTE
 class recette_screen2(QDialog):
     def __init__(self):
         super(recette_screen2, self).__init__()
         loadUi("recette.ui", self)
-
+        print("refresh")
         # mettre les recettes a jour dans la liste widget sans bouton
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
-        self.ajouter_alcool.clicked.connect(self.ajouter_liste)
-        self.ajouter_recette.clicked.connect(self.ajouter_livre_recette)
+        self.ajouter_alcool.clicked.connect(self.ajouter_ingredient)
+        self.ajouter_recette.clicked.connect(self.ajouter_livreRecette)
         self.supprimer.clicked.connect(self.supprimer_ligne)
         self.delete_all.clicked.connect(self.supprimer_tout)
-        self.edit.clicked.connect(self.editlist)
-
+        self.liste_ingredient_recette=[]
+        self.liste_quantite_recette=[]
         # self.listWidget.itemDoubleClicked.connect(self.dispSelected)
 
     def go_to_MainWindowDialog(self):
@@ -76,25 +88,30 @@ class recette_screen2(QDialog):
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
-    def ajouter_liste(self):
+    def ajouter_ingredient(self):
         # travailler l'affichage de la liste widget
 
         alcool = self.alcool_ligne.text()
-        titre = self.titre_ligne.text()
         quantite = self.quantite_ligne.text()
 
-        if quantite.isdigit():
-            quantite_verif = int(quantite)
-        else:
-            qtw.QMessageBox.information(self, 'Fail', '''La quantité n'est pas un chiffre.''')
-        print(quantite_verif)
-        if quantite_verif > 8:
-            qtw.QMessageBox.information(self, 'Fail', '''La quantité d'alcool est supérieure à 8 oz''')
+        if alcool == "":
+            qtw.QMessageBox.information(self, 'Attention', '''Aucun alcool entrée''')
+            return
+        try:
+            quantite=float(quantite)
+        except:
+            qtw.QMessageBox.information(self, 'Erreur',
+                                        '''La quantité "''' + quantite + '''" n'est pas un chiffre.''' + "\n" + '''Réessayer...''')
+            return
 
-        liste_alcool_recette.append(alcool)
-        liste_quantite_bouteille.append(quantite)
+        if quantite > 8:
+            qtw.QMessageBox.information(self, 'Attention', '''La quantité d'alcool est supérieure à 8 oz''')
+            return
 
-        chaine_temp = self.alcool_ligne.text() + '(' + self.quantite_ligne.text() + 'oz)'
+        self.liste_ingredient_recette.append(alcool)
+        self.liste_quantite_recette.append(quantite)
+
+        chaine_temp = alcool + ': ' + str(quantite) + 'oz'
         self.listWidget.addItem(chaine_temp)
 
         self.alcool_ligne.setText('')
@@ -104,35 +121,60 @@ class recette_screen2(QDialog):
         self.quantite_ligne.setText('')
         self.quantite_ligne.setFocus()
 
-    def editlist(self):
-        row = self.listWidget.currentRow()
-        newtext, ok = QInputDialog.getText(self, "Enter new text", "Enter new text")
-        if ok and (len(newtext) != 0):
-            self.listWidget.takeItem(self.listWidget.currentRow())
-            self.listWidget.insertItem(row, QListWidgetItem(newtext))
+
 
     def supprimer_ligne(self):
-        self.listWidget.takeItem(self.listWidget.currentRow())
+        row=self.listWidget.currentRow()
+        if(row>=0):
+            print(row)
+            self.listWidget.takeItem(row)
+            self.liste_ingredient_recette.pop(row)
+            self.liste_quantite_recette.pop(row)
+
+
     def supprimer_tout(self):
         self.listWidget.clear()
+        self.liste_ingredient_recette.clear()
+        self.liste_quantite_recette.clear()
 
-    def ajouter_livre_recette(self):
-        # APPELLE DE LA FONCTION A TONY AVEC LISTE_ALCOOL_RECETTE, LISTE_LISTE_QUANTITE_RECETTE, TITRE_RECETTE
-        print('la recette a ete ajoute')
+    def ajouter_livreRecette(self):
 
+        titre = self.titre_ligne.text()
+        if titre == "":
+            qtw.QMessageBox.information(self, 'Erreur','''Aucun titre''' + "\n" + '''Réessayer...''')
+            return
+
+        livreRecette.ajouterRecette(titre,self.liste_ingredient_recette,self.liste_quantite_recette)
+        livreRecette.update_recette_dispo(livreIngredient)
+        self.liste_ingredient_recette.clear()
+        self.liste_quantite_recette.clear()
+        self.listWidget.clear()
+        #clear le texte des boites
+        self.alcool_ligne.setText('')
+        self.alcool_ligne.setFocus()
+        self.titre_ligne.setText('')
+        self.titre_ligne.setFocus()
+        self.quantite_ligne.setText('')
+        self.quantite_ligne.setFocus()
+
+
+
+
+#***********************************************************************************************WINDOW BOIRE
 class boire_screen3(QDialog):
     def __init__(self):
         super(boire_screen3, self).__init__()
         loadUi("Boire.ui", self)
+        #mise a jour recette_dispo
+        livreRecette.update_recette_dispo(livreIngredient)
 
-        # afficher la liste de recette disponible
-        self.recettes_disponibles.addItem('chaine_temp1')
-        # afficher la liste des ingrédients de la premiere recette sélectionnée (initialisation)
+        if(len(livreRecette.list_recette_dispo_string())>0):
+            self.recettes_disponibles.addItems(livreRecette.list_recette_dispo_string())
+        else:
+            self.recettes_disponibles.addItem("Aucune recette compatible")
 
-        self.ingredients.addItem('ingredients de la premiere recette')
-        # mettre a jour ajouter ingredients a chaque fois qu'on selectionne element de la liste recette
-        self.recettes_disponibles.itemClicked.connect(self.ajouter_ingredient_liste)
 
+        self.recettes_disponibles.itemClicked.connect(self.voir_liste_ingredient)
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.commander.clicked.connect(self.commander_verre)
         self.radioVerre.setChecked(True)
@@ -146,14 +188,33 @@ class boire_screen3(QDialog):
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
-    def ajouter_ingredient_liste(self):
+    def voir_liste_ingredient(self):
+        self.ingredients.clear()
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
         row = self.recettes_disponibles.currentRow()
-        print(row)
-        self.ingredients.addItem('ingrédients')
+        self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
 
     def commander_verre(self):
-        print('commander')
+        row = self.recettes_disponibles.currentRow()
+        recette_commander=livreRecette.list_recette_dispo[row]
+        # Step 2: Create a QThread object
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = Worker()
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.progress.connect(self.afficherTest)
+        # Step 6: Start the thread
+        self.thread.start()
+
+        self.thread.finished.connect(
+            lambda: self.commander.setEnabled(False)
+        )
 
     def radioBouton(self):
         self.type_boire = 0
@@ -162,6 +223,10 @@ class boire_screen3(QDialog):
         if self.radioShot.isChecked() == True:
             self.type_boire = 2
 
+
+
+
+#***********************************************************************************************WINDOW BOUTEILLE
 class bouteilles_screen4(QDialog):
     def __init__(self):
         super(bouteilles_screen4, self).__init__()
@@ -177,7 +242,7 @@ class bouteilles_screen4(QDialog):
         # self.label.setPixmap(QPixmap("icône-ou-logo-de-la-meilleure-qualité-d-alcool-dans-ligne-style-102955105.jpeg"))
 
         self.niveau_alcool.valueChanged.connect(self.slidervertical)
-
+        self.update_liste()
     def slidervertical(self, value):
         quantite_ingredient = str(value)
 
@@ -187,67 +252,57 @@ class bouteilles_screen4(QDialog):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def ajouter_ingredient(self):
-        # regarder avec tony quel fonction mettre pas certain probablment un setingredientlist
+
         ingredient = self.ingredient_ligne.text()
         position_ingredient = self.position_ingredient_ligne.text()
 
-        if position_ingredient.isdigit():
-            position_verif_ingredient = int(position_ingredient)
+        if position_ingredient.isdigit()  :
+            position_ingredient = int(position_ingredient)
         else:
-            qtw.QMessageBox.information(self, 'Fail', '''La position n'est pas un chiffre.''')
+            qtw.QMessageBox.information(self, 'Erreur', '''La position"'''+position_ingredient+'''" est invalide.''')
 
-        if position_verif_ingredient > 8:
-            qtw.QMessageBox.information(self, 'Fail', '''La position que vous avez donné n'existe pas.''')
+        if position_ingredient > max_Bouteille:
+            qtw.QMessageBox.information(self, 'Fail', '''La position est trop élevé\n'''+'''Les positions valides sont de 0 à '''+str(max_Bouteille))
 
-        liste_bouteille_ingredient.append(ingredient)
-        liste_position_ingredient.append(position_verif_ingredient)
-        liste_quantite_ingredient.append(quantite_ingredient)
-
-        ingredient = self.ingredient_ligne.text()
-        position_ingredient = self.position_ingredient_ligne.text()
-
-        chaine_temp1 = 'Ingrédient : ' + self.ingredient_ligne.text() + ' - Position : ' + self.position_ingredient_ligne.text()
-        chaine_temp2 = 'Ingrédient2 : ' + self.ingredient_ligne.text() + ' - Position : ' + self.position_ingredient_ligne.text()
-        liste_chaine=[chaine_temp1,chaine_temp2]
-        self.liste_bouteilles.addItems(liste_chaine)
+        livreIngredient.ajouterIngredient(ingredient,quantite_ingredient,position_ingredient)
 
         self.ingredient_ligne.setText('')
         self.ingredient_ligne.setFocus()
-
         self.position_ingredient_ligne.setText('')
         self.position_ingredient_ligne.setFocus()
+        self.update_liste()
 
     def supprimer_ligne(self):
         # avec currenrow qui donne l'indice appeler supprimerIngredient
         #faire un update donc call update_liste
-
-        #self.liste_bouteilles.takeItem(self.liste_bouteilles.currentRow())
+        row=self.liste_bouteilles.currentRow()
+        self.liste_bouteilles.takeItem(row)
+        livreIngredient.supprimerIngredient(row)
+        self.update_liste()
+        return
 
     def update_liste(self):
         # clear la liste liste_bouteilles
         # addItems
+        self.liste_bouteilles.clear()
+        self.liste_bouteilles.addItems(livreIngredient.get_list_ingredient_string())
+        return
 
 
 
 app = QApplication(sys.argv)
 widget=qtw.QStackedWidget()
 
-#init
-#livreRecette=livreRecette()
-
-#creer recette
-# livreRecette.ajouterRecette
-# livreRecette.liste_recette_dispo[index].afficherIngredient
 
 mainwindow=MainWindow()
 widget.addWidget(mainwindow)
-widget.setFixedHeight(500)
-widget.setFixedWidth(500)
+# widget.setFixedHeight()
+# widget.setFixedWidth()
 widget.show()
-
 
 
 try:
     sys.exit(app.exec_())
 except:
     print("Exiting")
+

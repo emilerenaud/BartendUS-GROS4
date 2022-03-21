@@ -135,20 +135,20 @@ def positionSegment2d(r,target):
 #     print(value)
 #     return 1
 
-if __name__ == '__main__':
-    target = [0.2, 0.2]
-    print("target= ", [0.2,0.2])
-    r = scaraRobot()
-    angles=r.inverseKinematic(target[0],target[1])
-    print("theta 1 deg : ", angles[0],"\ntheta 2 deg : ",angles[1])
-    print("forward kinematic result ",r.forwardKinematic())
-
-    # for y in np.arange(0,0.45,0.01):
-    #     for x in np.arange(0,0.45,0.01):
-    #         if r.inverseKinematic(x,y) is not False:
-    #
-    positionSegment2d(r,target)
-
+# if __name__ == '__main__':
+#     target = [0.2, 0.2]
+#     print("target= ", [0.2,0.2])
+#     r = scaraRobot()
+#     angles=r.inverseKinematic(target[0],target[1])
+#     print("theta 1 deg : ", angles[0],"\ntheta 2 deg : ",angles[1])
+#     print("forward kinematic result ",r.forwardKinematic())
+#
+#     # for y in np.arange(0,0.45,0.01):
+#     #     for x in np.arange(0,0.45,0.01):
+#     #         if r.inverseKinematic(x,y) is not False:
+#     #
+#     positionSegment2d(r,target)
+#
 
 
 

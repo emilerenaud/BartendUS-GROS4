@@ -5,8 +5,23 @@ test4,alcool:1,alcool2:2
 test5, alcool2:3,alcool2:3,alcool2:3
 test 6, alcool2:3,alcool2:3,alcool2:6
 bloodyhell,bloody:6,tequila:9
+Ammaretto Sour,amarretto:1.5,lime:0.5,sirop:1.0
+bloodyhell,bloody:6,tequila:9
+random,adada:3.0,erere:3.0,freerfe:4.5
 bloodyhell,bloody:6,tequila:9
 bloodyhell,bloody:6,tequila:9
+swincer,vokfda:1.0
+bloodyhell,bloody:6,tequila:9
+fail,ff:1.0
+bloodyhell,bloody:6,tequila:9
+fail,vodka:2.0
+bloodyhell,bloody:6,tequila:9
+essai3,vodka:3.0
+bloodyhell,bloody:6,tequila:9
+r2342r,fsfs:4.0,ghg:4.0,gdgd:5.0,gg:5.654
+bloodyhell,bloody:6,tequila:9
+bloodyhell,bloody:6,tequila:9
+try2,fsfs:3.0
 bloodyhell,bloody:6,tequila:9
 bloodyhell,bloody:6,tequila:9
 bloodyhell,bloody:6,tequila:9
