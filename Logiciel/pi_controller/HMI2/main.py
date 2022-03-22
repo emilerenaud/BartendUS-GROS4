@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from librairieRecette import livreRecette,ingredient_dispo,recette
 
-
+#init des variables globales
 livreRecette=livreRecette()
 livreIngredient=ingredient_dispo()
 max_Bouteille=9
@@ -17,7 +17,7 @@ class Worker(QObject):
     progress = pyqtSignal(object)
 
     def run(self):
-        """Long-running task."""
+        """state_machine"""
 
         for i in range(5):
             print('commander')
@@ -65,8 +65,6 @@ class MainWindow(QDialog):
 
 
 
-
-
 #*****************************************************************************************************WINDOW RECETTE
 class recette_screen2(QDialog):
     def __init__(self):
@@ -95,7 +93,7 @@ class recette_screen2(QDialog):
         quantite = self.quantite_ligne.text()
 
         if alcool == "":
-            qtw.QMessageBox.information(self, 'Attention', '''Aucun alcool entrée''')
+            qtw.QMessageBox.information(self, 'Attention', '''Aucun alcool entrée'''+ "\n" + '''Réessayer...''')
             return
         try:
             quantite=float(quantite)
@@ -105,7 +103,7 @@ class recette_screen2(QDialog):
             return
 
         if quantite > 8:
-            qtw.QMessageBox.information(self, 'Attention', '''La quantité d'alcool est supérieure à 8 oz''')
+            qtw.QMessageBox.information(self, 'Attention', '''La quantité d'alcool est supérieure à 8 oz'''+ "\n" + '''Réessayer...''')
             return
 
         self.liste_ingredient_recette.append(alcool)
@@ -171,7 +169,7 @@ class boire_screen3(QDialog):
         if(len(livreRecette.list_recette_dispo_string())>0):
             self.recettes_disponibles.addItems(livreRecette.list_recette_dispo_string())
         else:
-            self.recettes_disponibles.addItem("Aucune recette compatible")
+            self.recettes_disponibles.addItem("Aucune Recette Compatible")
 
 
         self.recettes_disponibles.itemClicked.connect(self.voir_liste_ingredient)
@@ -197,6 +195,7 @@ class boire_screen3(QDialog):
     def commander_verre(self):
         row = self.recettes_disponibles.currentRow()
         recette_commander=livreRecette.list_recette_dispo[row]
+
         # Step 2: Create a QThread object
         self.thread = QThread()
         # Step 3: Create a worker object
@@ -212,9 +211,9 @@ class boire_screen3(QDialog):
         # Step 6: Start the thread
         self.thread.start()
 
-        self.thread.finished.connect(
-            lambda: self.commander.setEnabled(False)
-        )
+        # self.thread.finished.connect(
+        #     lambda: self.commander.setEnabled(False)
+        # )
 
     def radioBouton(self):
         self.type_boire = 0
@@ -233,7 +232,7 @@ class bouteilles_screen4(QDialog):
         loadUi("bouteilles.ui", self)
 
         # Initialisation des listes ici afin d'afficher des le debut ## additems(getlistingredients.text())
-
+        self.quantite_ingredient=0
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.ajouter.clicked.connect(self.ajouter_ingredient)
         self.supprimer.clicked.connect(self.supprimer_ligne)
@@ -244,7 +243,7 @@ class bouteilles_screen4(QDialog):
         self.niveau_alcool.valueChanged.connect(self.slidervertical)
         self.update_liste()
     def slidervertical(self, value):
-        quantite_ingredient = str(value)
+        self.quantite_ingredient = value
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -260,11 +259,13 @@ class bouteilles_screen4(QDialog):
             position_ingredient = int(position_ingredient)
         else:
             qtw.QMessageBox.information(self, 'Erreur', '''La position"'''+position_ingredient+'''" est invalide.''')
+            return
 
         if position_ingredient > max_Bouteille:
             qtw.QMessageBox.information(self, 'Fail', '''La position est trop élevé\n'''+'''Les positions valides sont de 0 à '''+str(max_Bouteille))
 
-        livreIngredient.ajouterIngredient(ingredient,quantite_ingredient,position_ingredient)
+
+        livreIngredient.ajouterIngredient(ingredient,self.quantite_ingredient,position_ingredient)
 
         self.ingredient_ligne.setText('')
         self.ingredient_ligne.setFocus()
@@ -276,10 +277,11 @@ class bouteilles_screen4(QDialog):
         # avec currenrow qui donne l'indice appeler supprimerIngredient
         #faire un update donc call update_liste
         row=self.liste_bouteilles.currentRow()
-        self.liste_bouteilles.takeItem(row)
-        livreIngredient.supprimerIngredient(row)
-        self.update_liste()
-        return
+        if row>=0:
+            self.liste_bouteilles.takeItem(row)
+            livreIngredient.supprimerIngredient(row)
+            self.update_liste()
+
 
     def update_liste(self):
         # clear la liste liste_bouteilles

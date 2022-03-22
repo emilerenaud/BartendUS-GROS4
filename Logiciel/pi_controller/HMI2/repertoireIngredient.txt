@@ -1,1 +1,2 @@
-Amarreto:750,position : 3
+
+sprite:26, position : 1
