@@ -1,2 +1,3 @@
-
 sprite:26, position : 1
+
+corona_:0, position : 5

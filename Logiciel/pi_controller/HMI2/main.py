@@ -1,5 +1,6 @@
 import sys
 import time
+# from calib import Calibration_cam
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton
@@ -34,6 +35,7 @@ class MainWindow(QDialog):
         self.recettes.clicked.connect(self.go_to_recettes)
         self.boire.clicked.connect(self.go_to_boire)
         self.bouteilles.clicked.connect(self.go_to_bouteilles)
+        self.reglages.clicked.connect(self.go_to_reglages)
 
         # self.container = QFrame()
         # self.container.setObjectName("container")
@@ -61,6 +63,11 @@ class MainWindow(QDialog):
     def go_to_bouteilles(self):
         screen4 = bouteilles_screen4()
         widget.addWidget(screen4)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def go_to_reglages(self):
+        screen5 = reglages_screen5()
+        widget.addWidget(screen5)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
@@ -193,6 +200,12 @@ class boire_screen3(QDialog):
         self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
 
     def commander_verre(self):
+        # verif_seuil = Calibration_cam()
+        # if not verif_seuil.calib_vision_seuil():
+        #     qtw.QMessageBox.critical(self, 'Fail', '''La caméra doit être calibrée.''')
+        #     reglages_screen5.calibration(self)
+        #     return
+
         row = self.recettes_disponibles.currentRow()
         recette_commander=livreRecette.list_recette_dispo[row]
 
@@ -214,6 +227,8 @@ class boire_screen3(QDialog):
         # self.thread.finished.connect(
         #     lambda: self.commander.setEnabled(False)
         # )
+
+
 
     def radioBouton(self):
         self.type_boire = 0
@@ -282,7 +297,6 @@ class bouteilles_screen4(QDialog):
             livreIngredient.supprimerIngredient(row)
             self.update_liste()
 
-
     def update_liste(self):
         # clear la liste liste_bouteilles
         # addItems
@@ -290,6 +304,56 @@ class bouteilles_screen4(QDialog):
         self.liste_bouteilles.addItems(livreIngredient.get_list_ingredient_string())
         return
 
+
+class reglages_screen5(QDialog):
+    def __init__(self):
+        super(reglages_screen5, self).__init__()
+
+        loadUi("Reglage_v2.ui", self)
+
+        self.precedent.clicked.connect(self.go_to_MainWindowDialog)
+        self.home_x.clicked.connect(self.HOME_X)
+        self.home_y.clicked.connect(self.HOME_Y)
+        self.home_z.clicked.connect(self.HOME_Z)
+        self.home_all.clicked.connect(self.HOME_ALL)
+        self.bouton_electroaimant.clicked.connect(self.activer_electroaimant)
+        self.bouton_calibration.clicked.connect(self.calibration)
+        self.go_to.clicked.connect(self.go_to_position)
+        self.o_servo.clicked.connect(self.ouverture_servo)
+        self.f_servo.clicked.connect(self.fermeture_servo)
+
+    def go_to_MainWindowDialog(self):
+        mainwindow=MainWindow()
+        widget.addWidget(mainwindow)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+    def HOME_X(self):
+        print('aller home x')
+
+    def HOME_Y(self):
+        print('aller home y')
+
+    def HOME_Z(self):
+        print('aller home z')
+
+    def HOME_ALL(self):
+        print('aller home all')
+
+    def activer_electroaimant(self):
+        print('activer_electroaimant')
+
+    def calibration(self):
+        # calib = Calibration_cam()
+        print('activer calibration')
+
+    def go_to_position(self):
+        print('aller à la position')
+
+    def ouverture_servo(self):
+        print('ouverture servo')
+
+    def fermeture_servo(self):
+        print('fermeture servo')
 
 
 app = QApplication(sys.argv)
@@ -300,8 +364,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 # widget.setFixedHeight()
 # widget.setFixedWidth()
-widget.show()
-
+# widget.show()
+widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())
