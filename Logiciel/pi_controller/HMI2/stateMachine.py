@@ -101,6 +101,16 @@ def convTempsQuantite(quantiteOz):
     facteurConv = 0.5
     return quantiteOz * facteurConv
 
+#***************************************A executer pour tester la vision FRED
+# com= communication()
+# com.homing()
+# com.moveTo(vision())
+
+
+
+
+
+
 #1 sequence
 #     homing()
 #     moveUpDown(45)

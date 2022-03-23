@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from librairieRecette import livreRecette,ingredient_dispo,recette
 
+
 #init des variables globales
 livreRecette=livreRecette()
 livreIngredient=ingredient_dispo()
