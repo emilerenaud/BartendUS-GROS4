@@ -3,7 +3,7 @@ import time
 # from calib import Calibration_cam
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
-from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton
+from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from librairieRecette import livreRecette,ingredient_dispo,recette
 
@@ -35,6 +35,7 @@ class MainWindow(QDialog):
         loadUi("MainWindowDialog.ui", self)
         self.recettes.clicked.connect(self.go_to_recettes)
         self.boire.clicked.connect(self.go_to_boire)
+        self.boire.clicked.connect(self.show_popup)
         self.bouteilles.clicked.connect(self.go_to_bouteilles)
         self.reglages.clicked.connect(self.go_to_reglages)
 
@@ -70,6 +71,21 @@ class MainWindow(QDialog):
         screen5 = reglages_screen5()
         widget.addWidget(screen5)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def show_popup(self):
+        print('allo')
+        msg = qtw.QMessageBox()
+        msg.setWindowTitle("BartendUS")
+        msg.setText("Assurez-vous de mettre un verre avant de commander")
+        msg.setIcon(QMessageBox.Question)
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.buttonClicked.connect(self.popup_button)
+        x = msg.exec_()
+
+    def popup_button(self):
+        # buttonClicked appeler Fonction Tony
+        print('bouton connect')
+
 
 
 
@@ -306,6 +322,10 @@ class bouteilles_screen4(QDialog):
         return
 
 
+
+
+
+
 class reglages_screen5(QDialog):
     def __init__(self):
         super(reglages_screen5, self).__init__()
@@ -365,11 +385,12 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 # widget.setFixedHeight()
 # widget.setFixedWidth()
-# widget.show()
+widget.show()
 widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())
+
 except:
     print("Exiting")
 

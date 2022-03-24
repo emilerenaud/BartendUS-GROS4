@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>314</height>
+    <width>619</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,6 +22,12 @@
        <height>0</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>1000</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -31,6 +37,12 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QFrame" name="frame_4">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>300</height>
+         </size>
+        </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -57,10 +69,16 @@
       </item>
       <item>
        <widget class="QFrame" name="frame_3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>190</width>
-          <height>150</height>
+          <width>10000</width>
+          <height>10000</height>
          </size>
         </property>
         <property name="frameShape">
@@ -69,13 +87,19 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
           <widget class="QListWidget" name="liste_bouteilles">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>100</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>200</height>
+             <height>600</height>
             </size>
            </property>
           </widget>
@@ -96,67 +120,116 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QFrame" name="frame_6">
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>20</height>
+          <height>450</height>
          </size>
         </property>
-        <property name="text">
-         <string>Ingrédient</string>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="font">
+            <font>
+             <pointsize>25</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Ingrédient</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ingredient_ligne">
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <pointsize>25</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Position</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="position_ingredient_ligne">
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ingredient_ligne"/>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QFrame" name="frame_5">
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>20</height>
+          <height>300</height>
          </size>
         </property>
-        <property name="text">
-         <string>Position</string>
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="position_ingredient_ligne"/>
-      </item>
-      <item>
-       <widget class="QPushButton" name="ajouter">
-        <property name="maximumSize">
-         <size>
-          <width>1000</width>
-          <height>16777215</height>
-         </size>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
         </property>
-        <property name="text">
-         <string>Ajouter</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="supprimer">
-        <property name="maximumSize">
-         <size>
-          <width>1000</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Supprimer</string>
-        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QPushButton" name="ajouter">
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Ajouter</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="supprimer">
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Spprimer</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="precedent">
+        <property name="font">
+         <font>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>Precedent</string>
+         <string>Précédent</string>
         </property>
        </widget>
       </item>
