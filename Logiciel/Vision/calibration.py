@@ -11,17 +11,18 @@ class Calibration_cam():
     # des 3 points de repères présents sur la plateforme
 
 
-
     def __init__(self):
         self.liste_coord_centres_ref = []
         self.liste_points_coord_centre = []
         self.seuil = 5
+        self.get_data_from_reference()      # Appel de la fonction pour aller chercher les datas de l'image de référence
         self.calib_vision_init()
 
 
-    def calib_vision_init(self):
+    def get_data_from_reference(self):
         # Recherche des centres des cercles sur l'image de référence:
-        img_reference = cv2.imread('img_reference_calib.png')
+        path = "/home/pi/Pictures/img_reference_calib.png"
+        img_reference = cv2.imread(path)
 
         # Conversion de l'image en noir et blanc:
         gray = cv2.cvtColor(img_reference, cv2.COLOR_BGR2GRAY)
@@ -60,7 +61,7 @@ class Calibration_cam():
                     self.liste_coord_centres_ref.append(liste_points_ref)
 
                 # Ajout d'un point sur l'image au centre des contours
-                cv2.circle(img_reference, (x, y), radius = 3, color = (0, 0, 255), thickness = -1)
+                cv2.circle(img_reference, (x, y), radius=3, color=(0, 0, 255), thickness=-1)
             else:
                 continue
 
@@ -72,6 +73,7 @@ class Calibration_cam():
 
 
 
+    def calib_vision_init(self):
         # Afficher les centre des 3 points sur l'image en temps réel:
         # Prendre une photo:
         cv2.namedWindow("Calibration")
@@ -84,11 +86,22 @@ class Calibration_cam():
             rval = False
             print("ERREUR - Ne peut pas ouvrir la caméra!")
 
-        while rval and cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
+
+        # while rval and cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
+        while rval:
             for center in self.liste_coord_centres_ref:
                 cv2.circle(img_reel_time, (center[0], center[1]), radius = 4, color = (0, 0, 255), thickness = -1)
             cv2.imshow("Calibration", img_reel_time)
             rval, img_reel_time = cap.read()
+
+
+            # print(cv2.getWindowProperty("Calibration"), 1)
+
+            # if cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
+            #     print("Timer on")
+            #     time.sleep(500)
+            #     print("Timer done")
+            #     break
 
             k = cv2.waitKey(1) & 0xFF
             if k == 27:  # Fermeture de la fenêtre avec la touche "ESC" ou le "X" du GUI
@@ -112,6 +125,12 @@ class Calibration_cam():
 
         # converting image into grayscale image
         gray = cv2.cvtColor(img_to_verify, cv2.COLOR_BGR2GRAY)
+
+        plt.imshow(gray, cmap="gray")
+        plt.show()
+
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
         # setting threshold of gray image
         _, threshold = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
@@ -161,13 +180,9 @@ class Calibration_cam():
 
 
 
-    def call_calibration_popup(self):
-        pass
-        # todo: POPUP ON HMI SAYING CALIBRATION IS NEEDED
-
-
 if __name__ == '__main__':
     calib = Calibration_cam()
+    # calib.calib_vision_seuil()
     # calib_vision_seuil()
     # calib.calib_vision_init
     print('Done')
