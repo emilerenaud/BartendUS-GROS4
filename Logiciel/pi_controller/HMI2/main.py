@@ -321,11 +321,6 @@ class bouteilles_screen4(QDialog):
         self.liste_bouteilles.addItems(livreIngredient.get_list_ingredient_string())
         return
 
-
-
-
-
-
 class reglages_screen5(QDialog):
     def __init__(self):
         super(reglages_screen5, self).__init__()
