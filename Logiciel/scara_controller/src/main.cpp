@@ -105,7 +105,7 @@ void readSerial()
           
         case 2:
           shield->startHoming();
-          // Serial.println("Homing");
+          Serial.println("Done");
           break;
 
         case 3:

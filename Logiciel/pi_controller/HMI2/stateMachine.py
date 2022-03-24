@@ -8,7 +8,8 @@ from inverseKinematic import scaraRobot
 class communication():
 
     def __init__(self):
-        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+        self.arduino = serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=.1)     # Pour le Pi
+        # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
         self.r= scaraRobot()
     # def wait_for_done():
     #     time.sleep(0.5)
@@ -20,7 +21,15 @@ class communication():
     def send_message(self, x):
         self.arduino.write(bytes(x, 'utf-8'))
         time.sleep(0.05)
-        while(self.arduino.readline()!="Done"):
+        done=True
+        while(done):
+            try :
+                if self.arduino.readline()!="Done":
+                    print("message recu")
+                    done=False
+            except:
+                done=True
+
             time.sleep(0.05)
         return
 
@@ -50,9 +59,10 @@ class communication():
         return
 
     def moveTo(self,x, y):
-        self.r.inverseKinematic(x, y)
+        self.r.inverseKinematic([x, y])
         angles = self.r.getAngleDeg()
         position = "G0:A" + str(angles[0]) + ":B" + str(angles[1]) + "\r\n"
+        print(position)
         self.send_message(position)
         return
 
@@ -74,13 +84,17 @@ class communication():
             return
     def sequence(self):
         self.homing()
-        self.moveUpDown(45)
-        self.moveTo(0.45,0)
-        self.servo(150)
-        self.time.sleep(2)
-        self.servo(5)
-        self.moveTo(0,0.45)
-        self.servo(150)
+        print("home done")
+        #self.moveUpDown(45)
+        #print("z done")
+        self.moveTo(0.40,0)
+        #print("home done")
+        #self.servo(150)
+        #time.sleep(2)
+        #print("servo")
+        #self.servo(5)
+        #self.moveTo(0,0.45)
+        #self.servo(150)
         #self.versement()
 
 

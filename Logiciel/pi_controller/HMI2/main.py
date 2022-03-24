@@ -235,7 +235,7 @@ class boire_screen3(QDialog):
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.progress.connect(self.afficherTest)
+        #self.worker.progress.connect(self.afficherTest)
         # Step 6: Start the thread
         self.thread.start()
 
