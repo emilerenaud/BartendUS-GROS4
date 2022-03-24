@@ -72,7 +72,16 @@ class communication():
             pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_temps[i]) + "\r\n"
             self.send_message(pompe)
             return
-
+    def sequence(self):
+        self.homing()
+        self.moveUpDown(45)
+        self.moveTo(0.45,0)
+        self.servo(150)
+        self.time.sleep(2)
+        self.servo(5)
+        self.moveTo(0,0.45)
+        self.servo(150)
+        #self.versement()
 
 
     # retourne la position et le temps de chacune des pompes a actionner

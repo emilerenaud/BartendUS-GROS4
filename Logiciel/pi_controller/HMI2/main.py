@@ -6,12 +6,14 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from librairieRecette import livreRecette,ingredient_dispo,recette
+from stateMachine import communication
 
 
 #init des variables globales
 livreRecette=livreRecette()
 livreIngredient=ingredient_dispo()
 max_Bouteille=9
+com=communication()
 
 # Step 1: Create a worker class
 class Worker(QObject):
@@ -20,11 +22,7 @@ class Worker(QObject):
 
     def run(self):
         """state_machine"""
-
-        for i in range(5):
-            print('commander')
-            time.sleep(1)
-            self.progress.emit("incroyable")
+        com.sequence()
         self.finished.emit()
 
 
@@ -223,8 +221,8 @@ class boire_screen3(QDialog):
         #     reglages_screen5.calibration(self)
         #     return
 
-        row = self.recettes_disponibles.currentRow()
-        recette_commander=livreRecette.list_recette_dispo[row]
+        # row = self.recettes_disponibles.currentRow()
+        # recette_commander=livreRecette.list_recette_dispo[row]
 
         # Step 2: Create a QThread object
         self.thread = QThread()
@@ -378,10 +376,10 @@ widget=qtw.QStackedWidget()
 
 mainwindow=MainWindow()
 widget.addWidget(mainwindow)
-# widget.setFixedHeight()
-# widget.setFixedWidth()
+widget.setFixedHeight(720)
+widget.setFixedWidth(1280)
 widget.show()
-widget.showFullScreen()
+#widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())
