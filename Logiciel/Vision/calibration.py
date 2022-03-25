@@ -5,7 +5,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 import time
 
-
 class Calibration_cam():
     # Classe permettant de calibrer la caméra sur le robot en fonction
     # des 3 points de repères présents sur la plateforme
@@ -164,12 +163,12 @@ class Calibration_cam():
             if not(self.liste_coord_centres_ref[j][0] - self.seuil <= point[0] <= \
                    self.liste_coord_centres_ref[j][0] - self.seuil):
                 print("CALIBRATION NÉCESSAIRE: Coordonnée en X ne respecte pas le seuil")
-                self.call_calibration_popup()
+                return False
 
             elif not (self.liste_coord_centres_ref[j][1] - self.seuil <= point[1] <= \
                       self.liste_coord_centres_ref[j][1] - self.seuil):
                 print("CALIBRATION NÉCESSAIRE: Coordonnée en Y ne respecte pas le seuil")
-                self.call_calibration_popup()
+                return False
 
         plt.imshow(img_to_verify, cmap="gray")
         plt.show()
@@ -177,11 +176,15 @@ class Calibration_cam():
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
+        return True
+
 
 
 if __name__ == '__main__':
     calib = Calibration_cam()
+    calib.calib_vision_init()
+
     # calib.calib_vision_seuil()
     # calib_vision_seuil()
     # calib.calib_vision_init
-    print('Done')
+    print('Done with vision')
