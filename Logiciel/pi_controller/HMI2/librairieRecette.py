@@ -6,11 +6,13 @@ class gestion_ingredient_dispo():
         self.list_ingredient = []
         self.list_quantite = []
         self.list_position=[]
+        self.path = "pi_controller/HMI2/repertoireIngredient.txt"
         self.lireIngredientDispo()
+
 
     def lireIngredientDispo(self):
 
-        f = open("repertoireIngredient.txt", 'r', encoding="utf-8")
+        f = open(self.path, 'r', encoding="utf-8")
         #exemple typo : Vodka : 750 , position : 8
         for line in f:
 
@@ -50,10 +52,10 @@ class gestion_ingredient_dispo():
         self.supprimerLigneVide()
         chaineAsupprimer=self.list_ingredient[index] + ":" + str(self.list_quantite[index])+", position : "+str(self.list_position[index])
         chaineAsupprimer=chaineAsupprimer.strip('\n')
-        f= open("repertoireIngredient.txt", 'r', encoding="utf-8")
+        f= open(self.path, 'r', encoding="utf-8")
         lines = f.readlines()
         f.close()
-        f = open("repertoireIngredient.txt", 'w', encoding="utf-8")
+        f = open(self.path, 'w', encoding="utf-8")
 
         for l in range (len(lines)):
             line_actuel=lines[l].strip('\n')
@@ -63,10 +65,10 @@ class gestion_ingredient_dispo():
 
     def supprimerLigneVide(self):
         nbLigneVide=0
-        f = open("repertoireIngredient.txt", 'r', encoding="utf-8")
+        f = open(self.path, 'r', encoding="utf-8")
         lines = f.readlines()
         f.close()
-        f = open("repertoireIngredient.txt", 'w', encoding="utf-8")
+        f = open(self.path, 'w', encoding="utf-8")
         longueur=len(lines)
         l=0
         while l <=longueur-1:
@@ -88,7 +90,7 @@ class gestion_ingredient_dispo():
 
 
     def sauvegardeIngredient(self, ingredient, quantite, position):
-        f = open("repertoireIngredient.txt", 'a', encoding="utf-8")
+        f = open(self.path, 'a', encoding="utf-8")
         f.write(ingredient + ":" + str(quantite)+", position : "+str(position)+'\n')
         f.close()
         return
@@ -112,6 +114,7 @@ class recette() :
         self.titre = "Swince"
         self.list_alcool = ["swince"]
         self.list_quantite = ["69"]
+
 
     def __init__(self,titre, list_alcool,list_quantite):
         self.titre = titre
@@ -145,8 +148,10 @@ class recette() :
 class gestion_Recette():
 
     def __init__(self):
+        self.path = "pi_controller/HMI2/repertoireRecette.txt"
         self.list_recette=self.lireRecette()
         self.list_recette_dispo=[]
+
         return
 
     def __str__(self):
@@ -171,7 +176,7 @@ class gestion_Recette():
         return self.list_recette[index]
 
     def sauvegardeRecette(self,recette):
-        f = open("repertoireRecette.txt", 'a', encoding="utf-8")
+        f = open(self.path, 'a', encoding="utf-8")
         f.write("\n"+recette.__str__())
         f.close()
         return
@@ -184,7 +189,7 @@ class gestion_Recette():
 
     def lireRecette(self):
 
-        f = open("repertoireRecette.txt", 'r', encoding="utf-8")
+        f = open(self.path, 'r', encoding="utf-8")
         list_recette=[]
 
         for line in f:

@@ -1,17 +1,19 @@
 import sys
 import time
-# from calib import Calibration_cam
+#from calibration import Calibration_cam
+from Logiciel.Vision.calibration import Calibration_cam
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-from librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
 from stateMachine import sequence
 
 
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
+#calib = Calibration_cam()
 max_Bouteille=9
 #sequence=sequence()
 
@@ -30,7 +32,7 @@ class MainWindow(QDialog):
     def __init__(self):
         print("refresh")
         super(MainWindow, self).__init__()
-        loadUi("MainWindowDialog.ui", self)
+        loadUi("pi_controller/HMI2/MainWindowDialog.ui", self)
         self.recettes.clicked.connect(self.go_to_recettes)
         self.boire.clicked.connect(self.go_to_boire)
         self.boire.clicked.connect(self.show_popup)
@@ -89,7 +91,7 @@ class MainWindow(QDialog):
 class recette_screen2(QDialog):
     def __init__(self):
         super(recette_screen2, self).__init__()
-        loadUi("recette.ui", self)
+        loadUi("pi_controller/HMI2/recette.ui", self)
         # mettre les recettes a jour dans la liste widget sans bouton
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.ajouter_alcool.clicked.connect(self.ajouter_ingredient)
@@ -180,7 +182,7 @@ class recette_screen2(QDialog):
 class boire_screen3(QDialog):
     def __init__(self):
         super(boire_screen3, self).__init__()
-        loadUi("Boire.ui", self)
+        loadUi("pi_controller/HMI2/Boire.ui", self)
         #mise a jour recette_dispo
         livreRecette.update_recette_dispo(livreIngredient)
 
@@ -262,7 +264,7 @@ class boire_screen3(QDialog):
 class bouteilles_screen4(QDialog):
     def __init__(self):
         super(bouteilles_screen4, self).__init__()
-        loadUi("bouteilles.ui", self)
+        loadUi("pi_controller/HMI2/bouteilles.ui", self)
 
         # Initialisation des listes ici afin d'afficher des le debut ## additems(getlistingredients.text())
         self.quantite_ingredient=0
@@ -276,7 +278,7 @@ class bouteilles_screen4(QDialog):
         self.niveau_alcool.valueChanged.connect(self.slidervertical)
         self.update_liste()
     def slidervertical(self, value):
-        self.quantite_ingredient = value
+        self.quantite_ingredient = value*750/100
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -342,7 +344,7 @@ class reglages_screen5(QDialog):
     def __init__(self):
         super(reglages_screen5, self).__init__()
 
-        loadUi("Reglage_v2.ui", self)
+        loadUi("pi_controller/HMI2/Reglage_v2.ui", self)
 
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.home_x.clicked.connect(self.HOME_X)
@@ -376,7 +378,7 @@ class reglages_screen5(QDialog):
         print('activer_electroaimant')
 
     def calibration(self):
-        # calib = Calibration_cam()
+        #calib.calib_vision_init()
         print('activer calibration')
 
     def go_to_position(self):

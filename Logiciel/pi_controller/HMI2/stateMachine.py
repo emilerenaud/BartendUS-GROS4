@@ -2,7 +2,7 @@
 
 import serial
 import time
-from inverseKinematic import scaraRobot
+from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
 
 class sequence():
 
@@ -23,14 +23,14 @@ class sequence():
     def send_message(self, x):
         self.arduino.write(bytes(x, 'utf-8'))
         time.sleep(0.05)
-        done=True
-        while(done):
+        done=False
+        while(not done):
             try :
                 if self.arduino.readline()!="Done":
                     print("message recu")
-                    done=False
+                    done=True
             except:
-                done=True
+                done=False
 
             time.sleep(0.05)
         return

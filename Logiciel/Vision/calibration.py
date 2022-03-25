@@ -16,7 +16,6 @@ class Calibration_cam():
         self.liste_points_coord_centre = []
         self.seuil = 5
         self.get_data_from_reference()      # Appel de la fonction pour aller chercher les datas de l'image de référence
-        self.calib_vision_init()
 
 
     def get_data_from_reference(self):
