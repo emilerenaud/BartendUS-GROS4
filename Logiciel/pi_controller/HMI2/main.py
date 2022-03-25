@@ -13,7 +13,7 @@ from stateMachine import communication
 livreRecette=livreRecette()
 livreIngredient=ingredient_dispo()
 max_Bouteille=9
-com=communication()
+
 
 # Step 1: Create a worker class
 class Worker(QObject):
@@ -22,7 +22,7 @@ class Worker(QObject):
 
     def run(self):
         """state_machine"""
-        com.sequence()
+
         self.finished.emit()
 
 
@@ -215,6 +215,7 @@ class boire_screen3(QDialog):
         self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
 
     def commander_verre(self):
+
         # verif_seuil = Calibration_cam()
         # if not verif_seuil.calib_vision_seuil():
         #     qtw.QMessageBox.critical(self, 'Fail', '''La caméra doit être calibrée.''')
@@ -288,11 +289,27 @@ class bouteilles_screen4(QDialog):
         if position_ingredient.isdigit()  :
             position_ingredient = int(position_ingredient)
         else:
-            qtw.QMessageBox.information(self, 'Erreur', '''La position"'''+position_ingredient+'''" est invalide.''')
+            qtw.QMessageBox.information(self, 'Erreur position', '''La position"'''+position_ingredient+'''" est invalide.''')
             return
 
         if position_ingredient > max_Bouteille:
-            qtw.QMessageBox.information(self, 'Fail', '''La position est trop élevé\n'''+'''Les positions valides sont de 0 à '''+str(max_Bouteille))
+            qtw.QMessageBox.information(self, 'Erreur position', '''La position est trop élevé\n'''+'''Les positions valides sont de 0 à '''+str(max_Bouteille))
+            return
+
+        try:
+             print(livreIngredient.list_position)
+             livreIngredient.list_position.index(position_ingredient)
+             qtw.QMessageBox.information(self, 'Erreur Doublon', '''La  position : "''' + str(position_ingredient) + '''" est déjà occuper par une bouteille''')
+             return
+        except:
+            pass
+
+        try:
+            livreIngredient.list_ingredient.index(ingredient)
+            qtw.QMessageBox.information(self, 'Erreur Doublon','''L'ingrédient : "''' + ingredient + '''" est déjà présent dans la liste''')
+            return
+        except:
+            pass
 
 
         livreIngredient.ajouterIngredient(ingredient,self.quantite_ingredient,position_ingredient)

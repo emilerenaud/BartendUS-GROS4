@@ -15,11 +15,11 @@ class ingredient_dispo():
 
             chaine=line.split(",")
             ingredientQuantite=chaine[0].split(":")
-            self.list_ingredient.append( ingredientQuantite[0])
-            self.list_quantite.append(float(ingredientQuantite[1]))
-
-            textePosition = chaine[1].split(":")
-            self.list_position.append(textePosition[1])
+            if(len(ingredientQuantite)==2):
+                self.list_ingredient.append( ingredientQuantite[0])
+                self.list_quantite.append(float(ingredientQuantite[1]))
+                textePosition = chaine[1].split(":")
+                self.list_position.append(int(textePosition[1]))
 
         f.close()
         return
@@ -43,6 +43,7 @@ class ingredient_dispo():
         return chaine
 
     def supprimerSauvegarde(self,index):
+        self.supprimerLigneVide()
         chaineAsupprimer=self.list_ingredient[index] + ":" + str(self.list_quantite[index])+", position : "+str(self.list_position[index])
         chaineAsupprimer=chaineAsupprimer.strip('\n')
         f= open("repertoireIngredient.txt", 'r', encoding="utf-8")
@@ -50,11 +51,28 @@ class ingredient_dispo():
         f.close()
         f = open("repertoireIngredient.txt", 'w', encoding="utf-8")
 
-        for line in lines:
-            line_actuel=line.strip('\n')
+        for l in range (len(lines)):
+            line_actuel=lines[l].strip('\n')
             if line_actuel[0] != chaineAsupprimer[0]:
-                f.write(line)
+                f.write(lines[l])
+        f.close()
 
+    def supprimerLigneVide(self):
+        nbLigneVide=0
+        f = open("repertoireIngredient.txt", 'r', encoding="utf-8")
+        lines = f.readlines()
+        f.close()
+        f = open("repertoireIngredient.txt", 'w', encoding="utf-8")
+        longueur=len(lines)
+        l=0
+        while l <=longueur-1:
+            len(lines) - nbLigneVide - 1
+            line_actuel = lines[l+nbLigneVide]
+            while lines[l+nbLigneVide]=="\n" and (l+nbLigneVide)<len(lines)-1 :
+                nbLigneVide=nbLigneVide+1
+                longueur=len(lines)-nbLigneVide-1
+            f.write(lines[l+nbLigneVide])
+            l=l+1
         f.close()
 
     def supprimerIngredient(self,index):
@@ -67,7 +85,7 @@ class ingredient_dispo():
 
     def sauvegardeIngredient(self, ingredient, quantite, position):
         f = open("repertoireIngredient.txt", 'a', encoding="utf-8")
-        f.write("\n"+ingredient + ":" + str(quantite)+", position : "+str(position))
+        f.write(ingredient + ":" + str(quantite)+", position : "+str(position)+'\n')
         f.close()
         return
 
@@ -294,7 +312,10 @@ class livreRecette():
 #     versement()
 #
 #
-
-
+#
+# livre=livreRecette()
+# ingredient=ingredient_dispo()
+#
+# ingredient.supprimerLigneVide()
 
 
