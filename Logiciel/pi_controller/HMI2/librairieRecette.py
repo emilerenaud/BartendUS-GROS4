@@ -1,5 +1,6 @@
-class ingredient_dispo():
 
+
+class gestion_ingredient_dispo():
 
     def __init__(self):
         self.list_ingredient = []
@@ -26,6 +27,9 @@ class ingredient_dispo():
 
     def get_list_ingredient(self):
         return self.list_ingredient
+
+    def get_list_position(self):
+        return self.list_position
 
     def get_list_ingredient_string(self):
         list_chaine=[]
@@ -138,7 +142,7 @@ class recette() :
 
 
 
-class livreRecette():
+class gestion_Recette():
 
     def __init__(self):
         self.list_recette=self.lireRecette()
@@ -200,8 +204,6 @@ class livreRecette():
         return list_recette
 
     def update_recette_dispo(self,ingredient_dispo):
-    #TO DO
-    # GERER LOWER CASE
         list_ingredient=ingredient_dispo.get_list_ingredient()
         list_recette_dispo=[]
 
@@ -211,7 +213,7 @@ class livreRecette():
             for i in range(nbIngredient):
                 if trouver == i:
                     for alcool in list_ingredient:
-                        if alcool==recette.getlistAlcool()[i]:
+                        if alcool.lower()==recette.getlistAlcool()[i].lower():
                             if i == nbIngredient-1:
                                 list_recette_dispo.append(recette)
                             else:
@@ -221,101 +223,7 @@ class livreRecette():
         self.list_recette_dispo=list_recette_dispo
         return self.list_recette_dispo
 
-##test
-# livreIngredient=ingredient_dispo()
-# livre=livreRecette()
-# livre.update_recette_dispo(livreIngredient)
-# print("recette dispo:",livre.list_recette_dispo_string())
 
 
-# print("La/les recette(s) disponible(s) sont : \n",livre.afficherRecetteDispo())
-
-
-
-#
-# def wait_for_done():
-#     time.sleep(0.5)
-#     messageIn = arduino.readline()
-#     if(messageIn)
-#
-#     return data
-#
-# def send_message(x):
-#     arduino.write(bytes(x, 'utf-8'))
-#     time.sleep(0.5)
-#     data = arduino.readline()
-#     return data
-#
-# # en deg
-# def poignet(angle):
-#     position = "G4:A" + str(angle) + "\r\n"
-#     value = send_message(position)
-#     if wait_for_done()is False:
-#         wait_for_done()
-#
-#
-#     return
-#
-# def servo(angle):
-#     position = "G5:A" + str(angle) + "\r\n"
-#     value = send_message(position)
-#     return
-#
-# def electro(activate):
-#     if activate:
-#         position = "M1" + "\r\n"
-#         value = send_message(position)
-#     else:
-#         position = "M0" + "\r\n"
-#         value = send_message(position)
-#     return
-#
-#     # z est en mm
-#
-# def moveUpDown(z):
-#     position = "G3:Z" + str(z) + "\r\n"
-#     value = send_message(position)
-#     return
-#
-# def moveTo(x, y):
-#     r.inverseKinematic(x, y)
-#     angles = r.getAngleDeg()
-#     position = "G0:A" + str(angles[0]) + ":B" + str(angles[1]) + "\r\n"
-#     value = send_message(position)
-#     return
-#
-#
-#
-# def homing():
-#     # caller la fonction HOME
-#     homing = "G2\r\n"
-#     send_message(homing)
-#     return
-#
-# def versement():
-#     poignet(120)
-#     moveUpDown(20)
-#
-# if __name__ == '__main__':
-#
-#     r=scaraRobot()
-#     arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
-#
-#     homing()
-#     moveUpDown(45)
-#     moveTo(0.45,0)
-#     servo(150)
-#     time.sleep(2)
-#     servo(5)
-#     moveTo(0,0.45)
-#     servo(150)
-#     versement()
-#
-#
-#
-# livre=livreRecette()
-# ingredient=ingredient_dispo()
-#
-# ingredient.supprimerLigneVide()
 
 

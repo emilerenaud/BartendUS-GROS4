@@ -2,21 +2,23 @@
 
 import serial
 import time
-import sys
 from inverseKinematic import scaraRobot
 
-class communication():
+class sequence():
+
+    # def send_message(x):
+    #     arduino.write(bytes(x, 'utf-8'))
+    #     time.sleep(0.5)
+    #     data = arduino.readline()
+    #     return data
 
     def __init__(self):
-        self.arduino = serial.Serial('/dev/ttyUSB0', baudrate=9600, timeout=.1)     # Pour le Pi
+        #raspPi : '/dev/ttyUSB0'
+        #ordi : port=COM3
+        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)     # Pour le Pi
         # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
         self.r= scaraRobot()
-    # def wait_for_done():
-    #     time.sleep(0.5)
-    #     messageIn = arduino.readline()
-    #     if (messageIn)
-    #
-    #     return data
+
 
     def send_message(self, x):
         self.arduino.write(bytes(x, 'utf-8'))
@@ -76,12 +78,14 @@ class communication():
     #     poignet(120)
     #     moveUpDown(20)
 
-    def activatePompe(self,list_pompe, list_temps):
+    def activatePompe(self,list_pompe, list_quant):
         # G101:A1.5 pour la pompe 1 avec 1.5oz
         for i in list_pompe:
-            pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_temps[i]) + "\r\n"
+            pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_quant[i]) + "\r\n"
             self.send_message(pompe)
             return
+
+
     def sequence(self):
         self.homing()
         print("home done")
@@ -99,30 +103,35 @@ class communication():
 
 
     # retourne la position et le temps de chacune des pompes a actionner
-def sequence_pompe(recette, livreIngredient):
-    list_position_pompe = []
-    list_temps_pompe = []
+    def identification_pompe(self,recette, livreIngredient):
+        conv=0.5
+        list_position_pompe = []
+        list_quant_pompe = []
 
-    list_ingredient_dispo = livreIngredient.list_ingredient
-    list_pos_bouteille = livreIngredient.list_position
+        list_ingredient_dispo = livreIngredient.get_list_ingredient().copy()
+        list_pos_bouteille = livreIngredient.get_list_position().copy()
 
-    list_ingredient = recette.getlistAlcool()
-    list_quantite = recette.getlistQuantite()
+        list_ingredient = recette.getlistAlcool()
+        list_quantite = recette.getlistQuantite()
 
-    for i in range(len(list_ingredient)):
-        for j in range(len(list_ingredient_dispo)):
-            if list_ingredient_dispo[j] == list_ingredient[i]:
-                list_position_pompe.append(list_pos_bouteille[j])
-                list_temps_pompe.append(convTempsQuantite(list_quantite[i]))
-                # remove from next search
-                list_ingredient_dispo.pop(j)
-                list_pos_bouteille.pop(j)
+        for i in range(len(list_ingredient)):
+            for j in range(len(list_ingredient_dispo)):
+                if list_ingredient_dispo[j] == list_ingredient[i]:
+                    list_position_pompe.append(list_pos_bouteille[j])
+                    list_quant_pompe.append(list_quantite[i])
+                    # remove from next search
+                    list_ingredient_dispo.pop(j)
+                    list_pos_bouteille.pop(j)
+                    break
 
-    return [list_position_pompe, list_temps_pompe]
+        return [list_position_pompe, list_quant_pompe]
 
-def convTempsQuantite(quantiteOz):
-    facteurConv = 0.5
-    return quantiteOz * facteurConv
+
+    def pompe(self,recette, livreIngredient):
+        list_pompe_quantite=self.identification_pompe(recette, livreIngredient)
+        self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1])
+
+
 
 #***************************************A executer pour tester la vision FRED
 # com= communication()

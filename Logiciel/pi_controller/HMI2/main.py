@@ -5,14 +5,15 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-from librairieRecette import livreRecette,ingredient_dispo,recette
-from stateMachine import communication
+from librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from stateMachine import sequence
 
 
 #init des variables globales
-livreRecette=livreRecette()
-livreIngredient=ingredient_dispo()
+livreRecette=gestion_Recette()
+livreIngredient=gestion_ingredient_dispo()
 max_Bouteille=9
+#sequence=sequence()
 
 
 # Step 1: Create a worker class
@@ -22,7 +23,6 @@ class Worker(QObject):
 
     def run(self):
         """state_machine"""
-
         self.finished.emit()
 
 
@@ -71,7 +71,6 @@ class MainWindow(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
     def show_popup(self):
-        print('allo')
         msg = qtw.QMessageBox()
         msg.setWindowTitle("BartendUS")
         msg.setText("Assurez-vous de mettre un verre avant de commander")
@@ -82,8 +81,7 @@ class MainWindow(QDialog):
 
     def popup_button(self):
         # buttonClicked appeler Fonction Tony
-        print('bouton connect')
-
+        pass
 
 
 
@@ -92,7 +90,6 @@ class recette_screen2(QDialog):
     def __init__(self):
         super(recette_screen2, self).__init__()
         loadUi("recette.ui", self)
-        print("refresh")
         # mettre les recettes a jour dans la liste widget sans bouton
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.ajouter_alcool.clicked.connect(self.ajouter_ingredient)
@@ -146,7 +143,6 @@ class recette_screen2(QDialog):
     def supprimer_ligne(self):
         row=self.listWidget.currentRow()
         if(row>=0):
-            print(row)
             self.listWidget.takeItem(row)
             self.liste_ingredient_recette.pop(row)
             self.liste_quantite_recette.pop(row)
@@ -209,13 +205,19 @@ class boire_screen3(QDialog):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def voir_liste_ingredient(self):
-        self.ingredients.clear()
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
         row = self.recettes_disponibles.currentRow()
-        self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
+        if row>=0 and len(livreRecette.list_recette_dispo_string())>0:
+            self.ingredients.clear()
+            self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
+
+
 
     def commander_verre(self):
-
+        row = self.recettes_disponibles.currentRow()
+        if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
+            recette_commander=livreRecette.list_recette_dispo[row]
+           # print("pompe activer : ",sequence.pompe(recette_commander,livreIngredient))
         # verif_seuil = Calibration_cam()
         # if not verif_seuil.calib_vision_seuil():
         #     qtw.QMessageBox.critical(self, 'Fail', '''La caméra doit être calibrée.''')
