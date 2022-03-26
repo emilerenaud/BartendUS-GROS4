@@ -401,7 +401,33 @@ class reglages_screen5(QDialog):
         print('activer calibration')
 
     def go_to_position(self):
-        print('aller à la position')
+        pos_x = self.position_x.text()
+        pos_y = self.position_y.text()
+        pos_z = self.position_z.text()
+
+        if pos_x == "":
+            qtw.QMessageBox.information(self, 'Attention', '''Aucune position entrée en x''' + "\n" + '''Réessayer...''')
+            return
+        if pos_y == "":
+            qtw.QMessageBox.information(self, 'Attention', '''Aucune position entrée en y''' + "\n" + '''Réessayer...''')
+            return
+        if pos_z == "":
+            qtw.QMessageBox.information(self, 'Attention', '''Aucune position entrée en z''' + "\n" + '''Réessayer...''')
+            return
+        try:
+            x = float(pos_x)
+            y = float(pos_y)
+            z = float(pos_z)
+        except:
+            qtw.QMessageBox.information(self, 'Erreur',
+                                        '''Un des positions n'est pas un chiffre''' + "\n" + '''Réessayer...''')
+            return
+
+        if x > 3 or y > 3 or z > 3:
+            qtw.QMessageBox.information(self, 'Attention',
+                                        '''Un des positions est supérieures à la dimension du bar.''' + "\n" + '''Réessayer...''')
+            return
+
 
     def radioBouton_servo(self):
         self.type_servo = 0
