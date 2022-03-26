@@ -114,6 +114,11 @@
              <height>600</height>
             </size>
            </property>
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
           </widget>
          </item>
         </layout>
@@ -150,7 +155,7 @@
           <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
+             <pointsize>23</pointsize>
             </font>
            </property>
            <property name="text">
@@ -171,7 +176,7 @@
           <widget class="QLabel" name="label_3">
            <property name="font">
             <font>
-             <pointsize>25</pointsize>
+             <pointsize>23</pointsize>
             </font>
            </property>
            <property name="text">
@@ -206,11 +211,23 @@
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
-         <item>
+         <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="ajouter">
+           <property name="minimumSize">
+            <size>
+             <width>400</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
-             <pointsize>20</pointsize>
+             <pointsize>23</pointsize>
             </font>
            </property>
            <property name="text">
@@ -218,11 +235,23 @@
            </property>
           </widget>
          </item>
-         <item>
+         <item alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="supprimer">
+           <property name="minimumSize">
+            <size>
+             <width>400</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
-             <pointsize>20</pointsize>
+             <pointsize>23</pointsize>
             </font>
            </property>
            <property name="text">
@@ -233,11 +262,23 @@
         </layout>
        </widget>
       </item>
-      <item>
+      <item alignment="Qt::AlignHCenter">
        <widget class="QPushButton" name="precedent">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="font">
          <font>
-          <pointsize>20</pointsize>
+          <pointsize>23</pointsize>
          </font>
         </property>
         <property name="text">

@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>754</width>
-    <height>494</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1280</width>
+    <height>720</height>
+   </size>
   </property>
   <property name="maximumSize">
    <size>
@@ -25,7 +31,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>40</height>
+       <height>90</height>
       </size>
      </property>
      <property name="frameShape">
@@ -37,6 +43,11 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>30</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Boire</string>
         </property>
@@ -88,22 +99,7 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item>
-             <widget class="QRadioButton" name="radioVerre">
-              <property name="text">
-               <string>Verre</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioShot">
-              <property name="text">
-               <string>Shot</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <layout class="QVBoxLayout" name="verticalLayout_7"/>
           </widget>
          </item>
          <item row="2" column="0">
@@ -140,6 +136,11 @@
          </item>
          <item row="0" column="0">
           <widget class="QFrame" name="frame_4">
+           <property name="font">
+            <font>
+             <pointsize>23</pointsize>
+            </font>
+           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -169,10 +170,16 @@
       </item>
       <item>
        <widget class="QFrame" name="bas_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>120</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>90</height>
+          <height>120</height>
          </size>
         </property>
         <property name="frameShape">
@@ -193,6 +200,17 @@
            <layout class="QGridLayout" name="gridLayout">
             <item row="0" column="0">
              <widget class="QPushButton" name="commander">
+              <property name="maximumSize">
+               <size>
+                <width>400</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Commander</string>
               </property>
@@ -210,8 +228,25 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
+            <item alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="precedent">
+              <property name="minimumSize">
+               <size>
+                <width>400</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>400</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string>Précédent</string>
               </property>

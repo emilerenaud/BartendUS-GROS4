@@ -27,75 +27,21 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QFrame" name="frame_2">
+    <widget class="QFrame" name="frame">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>100</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QFrame" name="frame_3">
-        <property name="minimumSize">
-         <size>
-          <width>1280</width>
-          <height>720</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>1280</width>
-          <height>720</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QPushButton" name="bouton_electroaimant">
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Électroaimant</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="bouton_calibration">
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>CALIBRATION</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="go_to">
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>GO TO POSITION</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="1" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
        <widget class="QFrame" name="frame_4">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -103,83 +49,119 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QPushButton" name="home_x">
+          <widget class="QLabel" name="label">
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <pointsize>30</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>HOME X</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="home_y">
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>HOME Y</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="home_z">
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>HOME Z</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="home_all">
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>HOME ALL</string>
+            <string>RÉGLAGES</string>
            </property>
           </widget>
          </item>
         </layout>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QFrame" name="frame">
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame_2">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QFrame" name="frame_3">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="label">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="bouton_calibration">
+           <property name="minimumSize">
+            <size>
+             <width>400</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
-             <pointsize>19</pointsize>
+             <pointsize>23</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>Réglages</string>
+            <string>CALIBRATION CAMÉRA</string>
+           </property>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="home_all">
+           <property name="minimumSize">
+            <size>
+             <width>400</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>23</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>HOME ROBOT</string>
+           </property>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="purge_pompes">
+           <property name="minimumSize">
+            <size>
+             <width>400</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>23</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>PURGE POMPE</string>
            </property>
           </widget>
          </item>
         </layout>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item>
        <widget class="QFrame" name="frame_5">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -187,65 +169,287 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="2" column="0">
-          <widget class="QPushButton" name="o_servo">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QFrame" name="frame_6">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
            </property>
-           <property name="text">
-            <string>OUVERTURE</string>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="3" column="3">
+             <widget class="QLineEdit" name="position_y">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="position_x">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="4">
+             <widget class="QLineEdit" name="position_z">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="move_to">
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>MOVE TO</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLabel" name="label_4">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>X :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLabel" name="label_5">
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Y :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QLabel" name="label_6">
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Z :</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
-         <item row="1" column="0" colspan="2">
-          <widget class="QLabel" name="label_3">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>20</height>
-            </size>
+         <item row="1" column="0">
+          <widget class="QFrame" name="frame_7">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
            </property>
-           <property name="font">
-            <font>
-             <pointsize>14</pointsize>
-            </font>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
-           <property name="text">
-            <string>SERVO-MOTEUR</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QPushButton" name="f_servo">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>FERMETURE</string>
-           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QFrame" name="frame_8">
+              <property name="maximumSize">
+               <size>
+                <width>300</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QPushButton" name="bouton_electro">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>23</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>ÉLECTRO-AIMANT</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="bouton_servo">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>50</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>23</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>SERVO-MOTEUR</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_9">
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QGroupBox" name="groupBox">
+                 <property name="title">
+                  <string/>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QRadioButton" name="radio_ouverture_electro">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>OUVERTURE</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_fermeture_electro">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>FERMETURE</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="groupBox_2">
+                 <property name="title">
+                  <string/>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <item>
+                   <widget class="QRadioButton" name="radio_ouverture_servo">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>OUVERTURE</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="radio_fermeture_servo">
+                    <property name="font">
+                     <font>
+                      <pointsize>16</pointsize>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>FERMETURE</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="precedent">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Precedent</string>
-        </property>
-       </widget>
-      </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="precedent">
+     <property name="minimumSize">
+      <size>
+       <width>400</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>400</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>23</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Précédent</string>
+     </property>
     </widget>
    </item>
   </layout>
