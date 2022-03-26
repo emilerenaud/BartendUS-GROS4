@@ -13,7 +13,7 @@ from stateMachine import sequence
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-#calib = Calibration_cam()
+calib = Calibration_cam()
 max_Bouteille=9
 sequence=sequence()
 
@@ -385,7 +385,7 @@ class reglages_screen5(QDialog):
         print('activer_electroaimant')
 
     def calibration(self):
-        #calib.calib_vision_init()
+        calib.calib_vision_init()
         print('activer calibration')
 
     def go_to_position(self):
