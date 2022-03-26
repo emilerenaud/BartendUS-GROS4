@@ -45,6 +45,9 @@ class cncShield
         void closeElectro(void);
         void openElectro(void);
         void shake(void);
+        void startShake(void);
+        void verser(void);
+        void startVerser(void);
         Servo *servoShaker;
         Stepper* motorA;
         Stepper* motorB;
@@ -57,8 +60,13 @@ class cncShield
         bool _newMouvement = 0;
         bool _setupHoming = 0;
         int _homingSequence = 0;
-        bool initShake = 0;
-        int compteurShake = 0;
+        bool _shake = 0;
+        bool _initShake = 0;
+        bool _shakeDone = 0;
+        int _compteurShake = 0;
+        bool _verser = 0;
+        bool _verserDone = 0;
+        int _compteurVerser = 0;
         
 };
 

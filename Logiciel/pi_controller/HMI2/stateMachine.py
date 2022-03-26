@@ -99,17 +99,31 @@ class sequence():
         print("home done")
         #self.moveUpDown(45)
         #print("z done")
-        self.moveTo(0.40,0)
-        #print("home done")
-        #self.servo(150)
-        #time.sleep(2)
-        #print("servo")
-        #self.servo(5)
-        #self.moveTo(0,0.45)
-        #self.servo(150)
-        #self.versement()
+        #0.4Y 0.15X
+        self.moveUpDown(170)
+        pos = self.r.tangentAuVerre([-0.15, 0.4])
+        if(pos is not False):
 
+            self.moveTo(pos[0],pos[1])
 
+            #print("home done")
+            time.sleep(0)
+
+            self.poignet(-70)
+            self.servo(45)
+            self.versement()
+            self.servo(0)
+            #print("servo")
+            #self.servo(5)
+            #self.moveTo(0,0.45)
+            #self.servo(150)
+            #self.versement()
+
+    def versement(self):
+        # caller la fonction HOME
+        versementMessage = "M4\r\n"
+        self.send_message(versementMessage)
+        return
     # retourne la position et le temps de chacune des pompes a actionner
     def identification_pompe(self,recette, livreIngredient):
         conv=0.5

@@ -115,6 +115,7 @@ void readSerial()
             // G3:Z40
           break;
         case 4: //G4 Control poignet
+          shield->motorP->setSpeed(8);
           shield->motorP->moveTo(aValue.toFloat());
           shield->setNewMouvement();
           // G4:A40
@@ -148,6 +149,11 @@ void readSerial()
           break;
         case 3: 
           //
+          // Serial.println("shake");
+          shield->startShake();
+          break;
+        case 4:
+          shield->startVerser();
           break;
       }
     }

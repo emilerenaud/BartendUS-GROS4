@@ -1,7 +1,7 @@
 import sys
 import time
 #from calibration import Calibration_cam
-from Logiciel.Vision.calibration import Calibration_cam
+# from Logiciel.Vision.calibration import Calibration_cam
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
@@ -13,7 +13,7 @@ from stateMachine import sequence
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-calib = Calibration_cam()
+# calib = Calibration_cam()
 max_Bouteille=9
 sequence=sequence()
 
