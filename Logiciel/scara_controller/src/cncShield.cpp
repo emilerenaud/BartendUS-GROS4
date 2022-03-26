@@ -55,6 +55,7 @@ void cncShield::update()
         if(homing())
         {
             _homing = 0;
+            _homingSequence = 0;
             Serial.println("Done");
         }
     }
@@ -150,14 +151,35 @@ bool cncShield::homing()
             if(!motorA->isMoving())
             {
                 // Serial.println("Step 5 last");
-                _homing = 0;
+                // _homing = 0;
                 _homingSequence = 0;
+                // Serial.println("Done");
                 return 1;
             }
             break;
     }
     return 0;
 };
+
+void cncShield::shake()
+{
+    if(!initShake)
+    {
+        moveServo(0);
+        compteurShake = 0;
+        initShake = 1;
+    }
+    if(compteurShake&0x01)
+    {
+        motorP->moveTo(30);
+    }
+    else
+    {
+        motorP->moveTo(-30);
+    }
+};
+
+
 
 void cncShield::moveServo(int angle)
 {
@@ -198,5 +220,5 @@ float cncShield::convertionForMM(float mm)
 void cncShield::setNewMouvement(void)
 {
     _newMouvement = 1;
-}
+};
 

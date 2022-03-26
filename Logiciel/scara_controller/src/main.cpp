@@ -61,7 +61,7 @@ void readSerial()
     operatorString = tempString.substring(0,indexOperator);
     Serial.print(tempString);
     Serial.print("  ");
-    if(operatorString[0] == 'G')
+    if(operatorString[0] == 'G') 
     {
       aIndex = tempString.indexOf(':A');
       bIndex = tempString.indexOf(':B',indexOperator+1);
@@ -75,15 +75,15 @@ void readSerial()
 //
       switch(operatorString.substring(1).toInt())
       {
-        case 0:
+        case 0: //G0 Move to
           shield->motorA->moveTo(aValue.toFloat());
           shield->motorB->moveTo(bValue.toFloat());
           shield->setNewMouvement();
           // shield->motorZ->moveTo(zValue.toFloat());
           serialString = "Angle set to : A=" + aValue + " B=" + bValue; // + " Z=" + zValue;
-          Serial.println(serialString);
+          // Serial.println(serialString);
           break;
-        case 1:
+        case 1: //G1 Set Speed
           // int speedA = aValue.toInt();
           if(aValue.toInt() <= 100 || aValue.toInt() >= 0)
             shield->motorA->setMaxSpeed(aValue.toInt());
@@ -100,26 +100,26 @@ void readSerial()
           else
             shield->motorZ->setMaxSpeed(75);
           serialString = "Speed set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;
-          Serial.println(serialString);
+          // Serial.println(serialString);
           break;
           
-        case 2:
+        case 2: //G2 Home
           shield->startHoming();
-          Serial.println("Done");
+          // Serial.println("Done");
           break;
 
-        case 3:
+        case 3: //G3 Control Z
             shield->motorZ->moveTo(zValue.toFloat());
             shield->setNewMouvement();
             // Serial.println(zValue.toFloat());
             // G3:Z40
           break;
-        case 4:
+        case 4: //G4 Control poignet
           shield->motorP->moveTo(aValue.toFloat());
           shield->setNewMouvement();
           // G4:A40
           break;
-        case 5:
+        case 5: //G5 Control Servo
           if(aValue.toInt() <= 180 || aValue.toInt() >= 0)
           {
             shield->moveServo(aValue.toInt());
@@ -134,17 +134,20 @@ void readSerial()
     {
       switch(operatorString.substring(1).toInt())
       {
-        case 0:
+        case 0: // M0 open electro
           // Serial.println("Move servo 0");
           // shield->moveServo(0);
           shield->openElectro();
           answerSerial();
           break;
-        case 1:
+        case 1: // M1 close electro
         // Serial.println("Move servo 150");
           shield->closeElectro();
           answerSerial();
           // code
+          break;
+        case 3: 
+          //
           break;
       }
     }

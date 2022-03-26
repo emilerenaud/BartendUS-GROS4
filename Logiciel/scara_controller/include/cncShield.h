@@ -44,6 +44,7 @@ class cncShield
         void moveServo(int angle);
         void closeElectro(void);
         void openElectro(void);
+        void shake(void);
         Servo *servoShaker;
         Stepper* motorA;
         Stepper* motorB;
@@ -56,6 +57,9 @@ class cncShield
         bool _newMouvement = 0;
         bool _setupHoming = 0;
         int _homingSequence = 0;
+        bool initShake = 0;
+        int compteurShake = 0;
+        
 };
 
 #endif

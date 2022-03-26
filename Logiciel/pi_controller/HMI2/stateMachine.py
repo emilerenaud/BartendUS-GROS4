@@ -23,15 +23,23 @@ class sequence():
     def send_message(self, x):
         self.arduino.write(bytes(x, 'utf-8'))
         time.sleep(0.05)
+        print("data sent")
         done=False
         while(not done):
             try :
-                if self.arduino.readline()!="Done":
+                # print(self.arduino.readline())
+                dataIn = str(self.arduino.readline())
+                # print(dataIn)
+                if dataIn.find("Done") != -1:
                     print("message recu")
                     done=True
+                # else:
+                #     print("wrong message")
             except:
                 done=False
+                print("mauvais message")
 
+            # print("while not done")
             time.sleep(0.05)
         return
 

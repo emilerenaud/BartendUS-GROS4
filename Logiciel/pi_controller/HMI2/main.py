@@ -15,7 +15,7 @@ livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
 #calib = Calibration_cam()
 max_Bouteille=9
-#sequence=sequence()
+sequence=sequence()
 
 
 # Step 1: Create a worker class
@@ -25,6 +25,7 @@ class Worker(QObject):
 
     def run(self):
         """state_machine"""
+        sequence.sequence()
         self.finished.emit()
 
 
@@ -230,6 +231,12 @@ class boire_screen3(QDialog):
         # recette_commander=livreRecette.list_recette_dispo[row]
 
         # Step 2: Create a QThread object
+
+        # try:
+        #     sequence.sequence()
+        # except:
+        #     print("An exception occurred")
+
         self.thread = QThread()
         # Step 3: Create a worker object
         self.worker = Worker()
