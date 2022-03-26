@@ -1,8 +1,6 @@
 import cv2
-import math
-import numpy as np
 from matplotlib import pyplot as plt
-import time
+
 
 class Calibration_cam():
     # Classe permettant de calibrer la caméra sur le robot en fonction
@@ -18,7 +16,10 @@ class Calibration_cam():
 
     def get_data_from_reference(self):
         # Recherche des centres des cercles sur l'image de référence:
-        path = "/home/pi/Pictures/img_reference_calib.png"
+        # path = "Vision/img_reference_calib.png"               # Si on roule avec le HMI
+        path = "img_reference_calib.png"                    # Si on roule juste calibration.py
+        # path = "/home/pi/Pictures/img_reference_calib.png"  # Pour le Pi
+
         img_reference = cv2.imread(path)
 
         # Conversion de l'image en noir et blanc:
@@ -83,22 +84,14 @@ class Calibration_cam():
             rval = False
             print("ERREUR - Ne peut pas ouvrir la caméra!")
 
-
-        # while rval and cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
-        while rval:
+        while rval and cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
             for center in self.liste_coord_centres_ref:
                 cv2.circle(img_reel_time, (center[0], center[1]), radius = 4, color = (0, 0, 255), thickness = -1)
+
+            # Pour afficher l'image en plein écran :
+            # cv2.setWindowProperty("Calibration", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
             cv2.imshow("Calibration", img_reel_time)
             rval, img_reel_time = cap.read()
-
-
-            # print(cv2.getWindowProperty("Calibration"), 1)
-
-            # if cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
-            #     print("Timer on")
-            #     time.sleep(500)
-            #     print("Timer done")
-            #     break
 
             k = cv2.waitKey(1) & 0xFF
             if k == 27:  # Fermeture de la fenêtre avec la touche "ESC" ou le "X" du GUI
