@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 class scaraRobot():
 
     def __init__(self):
-        self.A=0.2001
-        self.B=0.25212+0.05
+        self.A=0.200
+        self.B=0.28
         self.origineX=0
         self.origineY=0
         self.anglesActuel=[0,0]
@@ -102,7 +102,7 @@ class scaraRobot():
 
     def tangentAuVerre(self,positionVerre):
         nbPoint=100
-        r=0.05
+        r=0.09
         start=0
         end=2*math.pi
         step=(end-start)/nbPoint
