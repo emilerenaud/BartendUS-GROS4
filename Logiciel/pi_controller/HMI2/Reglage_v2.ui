@@ -422,34 +422,34 @@
            </layout>
           </widget>
          </item>
+         <item row="3" column="0" alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="precedent">
+           <property name="minimumSize">
+            <size>
+             <width>400</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>23</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Précédent</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="precedent">
-     <property name="minimumSize">
-      <size>
-       <width>400</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>400</width>
-       <height>50</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>23</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Précédent</string>
-     </property>
     </widget>
    </item>
   </layout>

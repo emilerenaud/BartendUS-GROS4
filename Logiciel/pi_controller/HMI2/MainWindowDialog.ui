@@ -167,30 +167,6 @@
        </widget>
       </item>
       <item alignment="Qt::AlignHCenter">
-       <widget class="QPushButton" name="consulter">
-        <property name="minimumSize">
-         <size>
-          <width>400</width>
-          <height>70</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>400</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>23</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Consulter Recettes</string>
-        </property>
-       </widget>
-      </item>
-      <item alignment="Qt::AlignHCenter">
        <widget class="QPushButton" name="reglages">
         <property name="minimumSize">
          <size>

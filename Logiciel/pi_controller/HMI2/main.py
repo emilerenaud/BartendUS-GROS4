@@ -38,26 +38,12 @@ class MainWindow(QDialog):
         self.boire.clicked.connect(self.go_to_boire)
         # self.boire.clicked.connect(self.show_popup)
         self.bouteilles.clicked.connect(self.go_to_bouteilles)
-        self.consulter.clicked.connect(self.go_to_consulter_recettes)
+        # self.consulter.clicked.connect(self.go_to_consulter_recettes)
         self.reglages.clicked.connect(self.go_to_reglages)
 
-
-        # self.container = QFrame()
-        # self.container.setObjectName("container")
-        # self.container.setStyleSheet("#container { background-color: #222 }")
-        # self.layout = QVBoxLayout()
-        #
-        # # ADD WIDGETS TO LAYOUT
-        # self.toggle = QPushButton("Teste")
-        # # layout pt haut
-        # self.layout.addWidget(self.toggle, Qt.AlignCenter, QtAlignCenter)
-        # self.container.setLayout(self.layout)
-        # self.setCentralWidget(self.container)
-
-
     def go_to_recettes(self):
-        screen2 = recette_screen2()
-        widget.addWidget(screen2)
+        screen5 = consulter_recettes_screen5()
+        widget.addWidget(screen5)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def go_to_boire(self):
@@ -70,21 +56,11 @@ class MainWindow(QDialog):
         widget.addWidget(screen4)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def go_to_consulter_recettes(self):
-        screen7 = consulter_recettes_screen7()
-        widget.addWidget(screen7)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
-        print('allo')
-
     def go_to_reglages(self):
         screen5 = reglages_screen5()
         widget.addWidget(screen5)
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
-    def go_to_consulter_recettes(self):
-        screen7 = consulter_recettes_screen5()
-        widget.addWidget(screen7)
-        widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
 
@@ -241,6 +217,27 @@ class consulter_recettes_screen5(QDialog):
         super(consulter_recettes_screen5, self).__init__()
         loadUi("pi_controller/HMI2/consulter_recette.ui", self)
 
+        self.ajouter_recette.clicked.connect(self.ajouter_recette_repertoire)
+        self.supprimer.clicked.connect(self.supprimer_recette)
+        self.precedent.clicked.connect(self.go_to_MainWindowDialog)
+
+    def go_to_MainWindowDialog(self):
+        mainwindow = MainWindow()
+        widget.addWidget(mainwindow)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+    def supprimer_recette(self):
+        print('supprimer une recette')
+
+    def ajouter_recette_repertoire(self):
+        screen2 = recette_screen2()
+        widget.addWidget(screen2)
+        widget.setCurrentIndex(widget.currentIndex() + 1)
+
+
+
+
+
 #***********************************************************************************************WINDOW BOUTEILLE
 class bouteilles_screen4(QDialog):
     def __init__(self):
@@ -338,7 +335,7 @@ class commander_screen6(QDialog):
         self.recette = recette
         self.nb_verre = 0
         # self.nombre_verre.setText('''Nombre de verre : "''' + str(self.nb_verre) + '''"''')
-        self.nombre_verre.setText('''\t\t''' + str(self.nb_verre)  + ' verre(s)')
+        self.nombre_verre.setText('''\t\t''' + str(self.nb_verre) + ' verre(s)')
 
     def go_to_Boire(self):
         windowBoire=boire_screen3()
@@ -474,7 +471,7 @@ widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
 widget.show()
-#widget.showFullScreen()
+# widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())

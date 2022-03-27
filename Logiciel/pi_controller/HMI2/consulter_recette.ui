@@ -154,7 +154,7 @@
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>140</height>
+          <height>200</height>
          </size>
         </property>
         <property name="frameShape">
@@ -173,18 +173,18 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0" alignment="Qt::AlignHCenter">
+            <item row="3" column="0">
              <widget class="QPushButton" name="supprimer">
               <property name="minimumSize">
                <size>
                 <width>400</width>
-                <height>0</height>
+                <height>50</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>400</width>
-                <height>16777215</height>
+                <height>50</height>
                </size>
               </property>
               <property name="font">
@@ -197,12 +197,18 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton">
+            <item row="4" column="0">
+             <widget class="QPushButton" name="ajouter_recette">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>50</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>400</width>
-                <height>16777215</height>
+                <height>50</height>
                </size>
               </property>
               <property name="font">
@@ -232,13 +238,13 @@
               <property name="minimumSize">
                <size>
                 <width>400</width>
-                <height>0</height>
+                <height>50</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
                 <width>400</width>
-                <height>16777215</height>
+                <height>50</height>
                </size>
               </property>
               <property name="font">
