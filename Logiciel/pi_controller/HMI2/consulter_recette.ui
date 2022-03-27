@@ -65,7 +65,7 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QListWidget" name="recettes_disponibles">
+             <widget class="QListWidget" name="recettes_repertoire">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -109,7 +109,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Recette sélectionnée</string>
+               <string>Ingrédients de la recette</string>
               </property>
              </widget>
             </item>
@@ -121,7 +121,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Recettes disponibles</string>
+               <string>Répertoire de recettes</string>
               </property>
              </widget>
             </item>
@@ -173,7 +173,7 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="0" alignment="Qt::AlignHCenter">
+            <item row="1" column="0" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="supprimer">
               <property name="minimumSize">
                <size>
@@ -194,6 +194,24 @@
               </property>
               <property name="text">
                <string>Supprimer</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton">
+              <property name="maximumSize">
+               <size>
+                <width>400</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Ajouter Recette</string>
               </property>
              </widget>
             </item>

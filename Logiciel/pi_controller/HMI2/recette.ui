@@ -137,7 +137,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Ajouter Alcool</string>
+               <string>Ajouter Ingrédients</string>
               </property>
              </widget>
             </item>
@@ -149,7 +149,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Alcool</string>
+               <string>Ingrédients</string>
               </property>
              </widget>
             </item>
