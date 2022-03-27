@@ -99,9 +99,56 @@ class scaraRobot():
     #     positionOffset.insert(1,position[1] + rayonVerre*math.sin(angleEffecteur))
     #     return positionOffset
 
+    def angleTangentAuVerre(self,positionVerre,nbPoint,start_angle,stop_angle):
+        nbPoint = 4
+        rayon = 0.09
+        start = start_angle
+        end = stop_angle
+        step = (end - start) / nbPoint
+        diffPrec = 1
+
+        # ajuster contrainte
+        for k in range(0, nbPoint):
+            angle = k * (step) + start
+            x = positionVerre[0] + rayon * math.cos(angle)
+            y = positionVerre[1] + rayon * math.sin(angle)
+
+            if self.isInEnvloppe([x, y]):
+                self.inverseKinematic([x, y])
+                theta1 = self.getAngleRad()[0]
+                theta2 = self.getAngleRad()[1]
+
+                vBy = 1 * y * math.sin(theta1 + theta2) + x * math.cos(theta1 + theta2)
+                vVy = 1 * positionVerre[1] * math.sin(theta1 + theta2) + positionVerre[0] * math.cos(theta1 + theta2)
+
+                diff=vBy-vVy
+                if (math.fabs(diff) < diffPrec):
+                    diffPrec = math.fabs(diff)
+                    anglefinal = angle
+
+        return [diffPrec,anglefinal]
+
+    def tangent(self,positionVerre):
+            rayon = 0.09
+            i=4
+            k=2
+            prec = self.angleTangentAuVerre(positionVerre, 4, 0, 2 * math.pi)
+            while(prec[0]>=0.001 ):
+                offset = math.pi/(k)
+                i=i+1
+                k=k+5
+                prec=self.angleTangentAuVerre(positionVerre, 4, prec[1]-offset,  prec[1]+offset)
+            print(i*4)
+            # prec = self.angleTangentAuVerre(positionVerre, 16, prec[1]-math.pi/4,  prec[1]+math.pi/4)
+            # prec = self.angleTangentAuVerre(positionVerre, 32, prec[1] - math.pi / 5, prec[1] + math.pi / 5)
+            # prec = self.angleTangentAuVerre(positionVerre, 64, prec[1] - math.pi / 6, prec[1] + math.pi / 6)
+
+            angle=prec[1]
+            print(angle)
+            return [positionVerre[0] + rayon * math.cos(angle), positionVerre[1] + rayon * math.sin(angle)]
 
     def tangentAuVerre(self,positionVerre):
-        nbPoint=100
+        nbPoint= 115*2
         r=0.09
         start=0
         end=2*math.pi
@@ -122,14 +169,25 @@ class scaraRobot():
                 vBy = 1 * y * math.sin(theta1 + theta2) + x * math.cos(theta1 + theta2)
                 vVy = 1 * positionVerre[1] * math.sin(theta1 + theta2) + positionVerre[0] * math.cos(theta1 + theta2)
 
+                vBx = -1 * x * math.sin(theta1 + theta2) + y * math.cos(theta1 + theta2)
+                vVx = -1 * positionVerre[0] * math.sin(theta1 + theta2) + positionVerre[1] * math.cos(theta1 + theta2)
+
                 diff=vBy-vVy
+
 
                 if(math.fabs(diff)<diffPrec):
                     diffPrec=math.fabs(diff)
                     xfinal=x
                     yfinal=y
+                    vectdiffx=vBx-vVx
+                    # print(-vBx+vVx)
 
-        return [xfinal,yfinal]
+        if(vectdiffx>0):
+            sens="droite"
+        else:
+            sens="gauche"
+        print(sens)
+        return [xfinal,yfinal,sens]
 
 def positionSegment2d(r,target):
     """Segment generation"""
@@ -156,9 +214,12 @@ def positionSegment2d(r,target):
 if __name__ == '__main__':
 
      r = scaraRobot()
-     verre=[0.2,0.1]
+     verre=[0.2,0]
      r.inverseKinematic(r.tangentAuVerre(verre))
      positionSegment2d(r, verre)
+
+     # r.inverseKinematic(r.tangent(verre))
+     # positionSegment2d(r, verre)
     # target = [0.3,0]
     # posOffset =r.tangentOffset(target, 0.05)
     # print("target= ", target)
