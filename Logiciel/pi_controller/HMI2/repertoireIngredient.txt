@@ -1,4 +1,5 @@
-vodka:55.0, position : 5lime:75.76, position : 1
+vodka:35.0, position : 5
+lime:75.76, position : 1
 lait:75.76, position : 2
 baileys:75.76, position : 3
 cafe:386.36, position : 4

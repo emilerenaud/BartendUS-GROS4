@@ -425,7 +425,7 @@ class commander_screen6(QDialog):
         # recette_commander=livreRecette.list_recette_dispo[row]
 
         # Step 2: Create a QThread object
-        livreIngredient.update_Quantite(0,10)
+        #livreIngredient.update_Quantite(0,10)
         self.thread = QThread()
         # Step 3: Create a worker object
         self.worker = Worker()
