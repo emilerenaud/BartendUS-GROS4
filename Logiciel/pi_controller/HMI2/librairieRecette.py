@@ -103,10 +103,34 @@ class gestion_ingredient_dispo():
         self.sauvegardeIngredient(ingredient, quantite, position)
         return
 
+    def isIngredientDoublon(self, ingredient_ajout):
+        for ingredient in self.list_ingredient:
+            if(ingredient.lower()==ingredient_ajout.lower()):
+                return True
+        return False
 
+    def isPositionDoublon(self,position_ajout):
 
+        for position in self.list_position:
+            if(position==position_ajout):
+                return True
+        return False
 
+    def update_Quantite(self,index,quantite):
+        self.supprimerLigneVide()
+        new_line = self.list_ingredient[index] + ":" + str(self.list_quantite[index]-quantite) + ", position : " + str(self.list_position[index])
+        f = open(self.path, 'r', encoding="utf-8")
+        lines = f.readlines()
+        f.close()
+        f = open(self.path, 'w', encoding="utf-8")
 
+        for l in range(len(lines)):
+            line_actuel = lines[l].strip('\n')
+            if l!=index:
+                f.write(lines[l])
+            else:
+                f.write(new_line)
+        f.close()
 
 class recette() :
 
@@ -118,8 +142,8 @@ class recette() :
 
     def __init__(self,titre, list_alcool,list_quantite):
         self.titre = titre
-        self.list_alcool = list_alcool
-        self.list_quantite = list_quantite
+        self.list_alcool = list_alcool.copy()
+        self.list_quantite = list_quantite.copy()
         return
 
     def getTitre(self):
@@ -169,6 +193,12 @@ class gestion_Recette():
     def list_recette_dispo_string(self):
         list_chaine = []
         for recette in self.list_recette_dispo:
+            list_chaine.append(recette.getTitre())
+        return list_chaine
+
+    def list_recette_string(self):
+        list_chaine = []
+        for recette in self.list_recette:
             list_chaine.append(recette.getTitre())
         return list_chaine
 
@@ -230,5 +260,41 @@ class gestion_Recette():
 
 
 
+    def supprimerSauvegarde(self,index):
+        self.supprimerLigneVide()
+        chaineAsupprimer=self.list_recette[index].__str__()
 
+        f= open(self.path, 'r', encoding="utf-8")
+        lines = f.readlines()
+        f.close()
+        f = open(self.path, 'w', encoding="utf-8")
+
+        for l in range (len(lines)):
+            line_actuel=lines[l].strip('\n')
+            if line_actuel != chaineAsupprimer:
+                f.write(lines[l])
+        f.close()
+
+    def supprimerLigneVide(self):
+        nbLigneVide=0
+        f = open(self.path, 'r', encoding="utf-8")
+        lines = f.readlines()
+        f.close()
+        f = open(self.path, 'w', encoding="utf-8")
+        longueur=len(lines)
+        l=0
+        while l <=longueur-1:
+            pass
+            while lines[l+nbLigneVide]=="\n" and (l+nbLigneVide)<len(lines)-1 :
+                nbLigneVide=nbLigneVide+1
+                longueur=len(lines)-nbLigneVide
+            f.write(lines[l+nbLigneVide])
+            l=l+1
+        f.close()
+
+    def supprimerRecette(self,index):
+        self.supprimerSauvegarde(index)
+        self.list_recette.pop(index)
+
+        return
 

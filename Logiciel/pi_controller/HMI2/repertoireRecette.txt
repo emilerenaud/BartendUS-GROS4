@@ -1,7 +1,7 @@
 sourVodka,Vodka:2.0,lime:1.0
 long island ice tea,tequila:2.0,rhum:2.0
 cafe comique,baileys:2.0,lait:1.0,cafe:2.0
-dasfsf,ddada:1.0,dafaf:2.0
-fsfs,fafa:3.0
-swince,swince:1.0
-test1,test1:1.0
+Rhum and coke,Pepsi:3.0,rhum:2.0
+shooter vodka,vodka:1.0
+shooter rhum,rhum:2.0
+Bloody Ceasar,vodka:2.0,tabasco:0.5,lime:1.0

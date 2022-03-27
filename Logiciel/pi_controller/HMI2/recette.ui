@@ -211,7 +211,7 @@
                 </widget>
                </item>
                <item alignment="Qt::AlignLeft">
-                <widget class="QLineEdit" name="lineEdit">
+                <widget class="QLineEdit" name="titre_ligne">
                  <property name="minimumSize">
                   <size>
                    <width>400</width>

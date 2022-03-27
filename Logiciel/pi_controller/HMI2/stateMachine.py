@@ -2,7 +2,7 @@
 
 import serial
 import time
-from pi_controller.HMI2.inverseKinematic import scaraRobot
+from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
 
 class sequence():
 

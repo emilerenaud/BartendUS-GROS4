@@ -1,12 +1,12 @@
 import sys
 import time
 #from calibration import Calibration_cam
-from Vision.calibration import Calibration_cam
+#from Vision.calibration import Calibration_cam
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-from pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
 from stateMachine import sequence
 
 
@@ -50,6 +50,7 @@ class MainWindow(QDialog):
         screen3 = boire_screen3()
         widget.addWidget(screen3)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        screen3.recettes_disponibles.setCurrentRow(-1)
 
     def go_to_bouteilles(self):
         screen4 = bouteilles_screen4()
@@ -71,7 +72,7 @@ class recette_screen2(QDialog):
         super(recette_screen2, self).__init__()
         loadUi("pi_controller/HMI2/recette.ui", self)
         # mettre les recettes a jour dans la liste widget sans bouton
-        self.precedent.clicked.connect(self.go_to_MainWindowDialog)
+        self.precedent.clicked.connect(self.go_to_recettes)
         self.ajouter_alcool.clicked.connect(self.ajouter_ingredient)
         self.ajouter_recette.clicked.connect(self.ajouter_livreRecette)
         self.supprimer.clicked.connect(self.supprimer_ligne)
@@ -79,9 +80,9 @@ class recette_screen2(QDialog):
         self.liste_ingredient_recette=[]
         self.liste_quantite_recette=[]
 
-    def go_to_MainWindowDialog(self):
-        mainwindow=MainWindow()
-        widget.addWidget(mainwindow)
+    def go_to_recettes(self):
+        screen5 = consulter_recettes_screen5()
+        widget.addWidget(screen5)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def ajouter_ingredient(self):
@@ -112,8 +113,6 @@ class recette_screen2(QDialog):
 
         self.alcool_ligne.setText('')
         self.alcool_ligne.setFocus()
-        self.titre_ligne.setText('')
-        self.titre_ligne.setFocus()
         self.quantite_ligne.setText('')
         self.quantite_ligne.setFocus()
 
@@ -134,7 +133,11 @@ class recette_screen2(QDialog):
 
         titre = self.titre_ligne.text()
         if titre == "":
-            qtw.QMessageBox.information(self, 'Erreur','''Aucun titre''' + "\n" + '''Réessayer...''')
+            qtw.QMessageBox.information(self, 'Erreur entrée','''Aucun titre''' + "\n" + '''Réessayer...''')
+            return
+
+        if len(self.liste_ingredient_recette)<1:
+            qtw.QMessageBox.information(self, 'Erreur entrée', '''Aucun ingrédient''' + "\n" + '''Ajoutez au moins un ingrédient...''')
             return
 
         livreRecette.ajouterRecette(titre,self.liste_ingredient_recette,self.liste_quantite_recette)
@@ -170,7 +173,8 @@ class boire_screen3(QDialog):
         self.recettes_disponibles.itemClicked.connect(self.voir_liste_ingredient)
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.commander.clicked.connect(self.go_to_commander_screen6)
-
+        print(self.recettes_disponibles.currentRow())
+        print(self.recettes_disponibles.currentRow())
         # mettre les recettes a jour dans la liste widget sans bouton
 
 
@@ -178,10 +182,12 @@ class boire_screen3(QDialog):
         mainwindow=MainWindow()
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        print(self.recettes_disponibles.currentRow())
 
     def voir_liste_ingredient(self):
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
         row = self.recettes_disponibles.currentRow()
+        print(self.recettes_disponibles.currentRow())
         if row>=0 and len(livreRecette.list_recette_dispo_string())>0:
             self.ingredients.clear()
             self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
@@ -190,18 +196,14 @@ class boire_screen3(QDialog):
         # print(self.recettes_disponibles.currentRow())
         # print(self.recettes_disponibles.currentItem().text())
         row = self.recettes_disponibles.currentRow()
-
-        # if row == 0:
-        #     print('allo4')
-        #     self.recettes_disponibles.itemActivated(self.recettes_disponibles.item(0))
-        #     print('active')
-
+        print(self.recettes_disponibles.currentRow())
         if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
             recette_commander = livreRecette.list_recette_dispo[row]
             screen6=commander_screen6(recette_commander)
             widget.addWidget(screen6)
             widget.setCurrentIndex(widget.currentIndex()+1)
         else:
+            qtw.QMessageBox.information(self, 'Erreur', '''Aucune recette selectionnée''' + "\n" + '''Sélectionnez ou ajouter une recette puis réessayez...''')
             return
 
     # def radioBouton(self):
@@ -211,15 +213,31 @@ class boire_screen3(QDialog):
     #     if self.radioShot.isChecked() == True:
     #         self.type_boire = 2
 
-
+#***************************************************************************************Consulter recette
 class consulter_recettes_screen5(QDialog):
     def __init__(self):
         super(consulter_recettes_screen5, self).__init__()
         loadUi("pi_controller/HMI2/consulter_recette.ui", self)
-
+        self.recettes_repertoire.clicked.connect(self.voir_liste_ingredient)
         self.ajouter_recette.clicked.connect(self.ajouter_recette_repertoire)
         self.supprimer.clicked.connect(self.supprimer_recette)
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
+        livreRecette.lireRecette()
+
+        if (len(livreRecette.list_recette_string()) > 0):
+            self.recettes_repertoire.addItems(livreRecette.list_recette_string())
+        else:
+            self.recettes_repertoire.addItem("Aucune Recette")
+
+
+    def voir_liste_ingredient(self):
+        # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
+        row = self.recettes_repertoire.currentRow()
+        print(self.recettes_repertoire.currentRow())
+        if row >= 0 and len(livreRecette.list_recette_string()) > 0:
+            self.ingredients.clear()
+            self.ingredients.addItem(livreRecette.getRecette(row).afficherIngredient())
+            print(livreRecette.getRecette(row).getlistAlcool())
 
     def go_to_MainWindowDialog(self):
         mainwindow = MainWindow()
@@ -235,6 +253,23 @@ class consulter_recettes_screen5(QDialog):
         widget.setCurrentIndex(widget.currentIndex() + 1)
 
 
+    def supprimer_recette(self):
+        # avec currenrow qui donne l'indice appeler supprimerIngredient
+        #faire un update donc call update_liste
+        row=self.recettes_repertoire.currentRow()
+        if row>=0:
+            self.recettes_repertoire.takeItem(row)
+            livreRecette.supprimerRecette(row)
+            self.update_liste()
+
+    def update_liste(self):
+        # clear la liste liste_bouteilles
+        # addItems
+        self.ingredients.clear()
+        self.recettes_repertoire.clear()
+        self.recettes_repertoire.addItems(livreRecette.list_recette_string())
+        livreRecette.update_recette_dispo(livreIngredient)
+        return
 
 
 
@@ -257,7 +292,7 @@ class bouteilles_screen4(QDialog):
         self.update_liste()
 
     def slidervertical(self, value):
-        self.quantite_ingredient = value*750/100
+        self.quantite_ingredient = float("{:.2f}".format(value*750/99))
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -278,21 +313,34 @@ class bouteilles_screen4(QDialog):
         if position_ingredient > max_Bouteille:
             qtw.QMessageBox.information(self, 'Erreur position', '''La position est trop élevé\n'''+'''Les positions valides sont de 0 à '''+str(max_Bouteille))
             return
-
-        try:
-             print(livreIngredient.list_position)
-             livreIngredient.list_position.index(position_ingredient)
-             qtw.QMessageBox.information(self, 'Erreur Doublon', '''La  position : "''' + str(position_ingredient) + '''" est déjà occuper par une bouteille''')
-             return
-        except:
-            pass
-
-        try:
-            livreIngredient.list_ingredient.index(ingredient)
-            qtw.QMessageBox.information(self, 'Erreur Doublon','''L'ingrédient : "''' + ingredient + '''" est déjà présent dans la liste''')
+        if self.quantite_ingredient==0  :
+            qtw.QMessageBox.information(self, 'Erreur quantité','''Vous ne pouvez pas ajouter une bouteille vide''')
             return
-        except:
+        else:
             pass
+
+        # try:
+        #      livreIngredient.list_position.index(position_ingredient)
+        #      qtw.QMessageBox.information(self, 'Erreur Doublon', '''La  position : "''' + str(position_ingredient) + '''" est déjà occuper par une bouteille''')
+        #      return
+        # except:
+        #     pass
+        #
+        # try:
+        #     livreIngredient.list_ingredient.index(ingredient)
+        #     qtw.QMessageBox.information(self, 'Erreur Doublon','''L'ingrédient : "''' + ingredient + '''" est déjà présent dans la liste''')
+        #     return
+        # except:
+        #     pass
+
+        if livreIngredient.isIngredientDoublon(ingredient):
+            qtw.QMessageBox.information(self, 'Erreur Doublon','''L'ingrédient : "''' + ingredient.lower() + '''" est déjà présent dans la liste''')
+            return
+
+        if livreIngredient.isPositionDoublon(position_ingredient):
+            qtw.QMessageBox.information(self, 'Erreur Doublon', '''La  position : "''' + str(position_ingredient) + '''" est déjà occuper par une bouteille''')
+            return
+
 
 
         livreIngredient.ajouterIngredient(ingredient,self.quantite_ingredient,position_ingredient)
@@ -318,7 +366,7 @@ class bouteilles_screen4(QDialog):
         self.liste_bouteilles.clear()
         self.liste_bouteilles.addItems(livreIngredient.get_list_ingredient_string())
         return
-
+#**********************************************************************************************************commander
 class commander_screen6(QDialog):
     def __init__(self, recette):
         super(commander_screen6, self).__init__()
@@ -377,6 +425,7 @@ class commander_screen6(QDialog):
         # recette_commander=livreRecette.list_recette_dispo[row]
 
         # Step 2: Create a QThread object
+        livreIngredient.update_Quantite(0,10)
         self.thread = QThread()
         # Step 3: Create a worker object
         self.worker = Worker()
@@ -395,13 +444,6 @@ class commander_screen6(QDialog):
         #     lambda: self.commander.setEnabled(False)
         # )
 
-class consulter_recettes_screen7(QDialog):
-    def __init__(self):
-        super(consulter_recettes_screen7, self).__init__()
-        loadUi("pi_controller/HMI2/consulter_recette.ui", self)
-
-        self.precedent.clicked.connect(self.go_to_MainWindowDialog)
-        self.supprimer.clicked.connect(self.supprimer_recette)
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -411,7 +453,15 @@ class consulter_recettes_screen7(QDialog):
     def supprimer_recette(self):
         pass
 
+    def voir_liste_ingredient(self):
+        # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
+        row = self.recettes_repertoire.currentRow()
+        print(self.recettes_repertoire.currentRow())
+        if row>=0 and len(livreRecette.list_recette_string())>0:
+            self.ingredients.clear()
+            self.ingredients.addItem(livreRecette.list_recette[row].afficherIngredient())
 
+#*******************************************************************************************************Reglage
 class reglages_screen5(QDialog):
     def __init__(self):
         super(reglages_screen5, self).__init__()
