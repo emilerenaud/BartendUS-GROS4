@@ -2,6 +2,7 @@ import cv2
 from matplotlib import pyplot as plt
 
 
+
 class Calibration_cam():
     # Classe permettant de calibrer la caméra sur le robot en fonction
     # des 3 points de repères présents sur la plateforme
