@@ -12,6 +12,7 @@ class scaraRobot():
         self.origineX=0
         self.origineY=0
         self.anglesActuel=[0,0]
+        self.sens="neutre"
         return
 
     def __int__(self,A0,B0,origine0X,origine0Y):
@@ -22,7 +23,8 @@ class scaraRobot():
         self.anglesActuel = [0, 0]
         return
 
-
+    def getSensVersement(self):
+        return self.sens
     def setLongueurSegmentA(self,A0):
         self.A=A0
         return
@@ -183,11 +185,11 @@ class scaraRobot():
                     # print(-vBx+vVx)
 
         if(vectdiffx>0):
-            sens="droite"
+            self.sens="droite"
         else:
-            sens="gauche"
-        print(sens)
-        return [xfinal,yfinal,sens]
+            self.sens="gauche"
+
+        return [xfinal,yfinal]
 
 def positionSegment2d(r,target):
     """Segment generation"""
@@ -214,9 +216,10 @@ def positionSegment2d(r,target):
 if __name__ == '__main__':
 
      r = scaraRobot()
-     verre=[0.2,0]
+     verre=[-0.2,0]
      r.inverseKinematic(r.tangentAuVerre(verre))
      positionSegment2d(r, verre)
+     print(r.getSensVersement())
 
      # r.inverseKinematic(r.tangent(verre))
      # positionSegment2d(r, verre)
