@@ -2,10 +2,10 @@
 
 cncShield::cncShield()
 {
-    motorA = new Stepper(dirPinX_pin,stepPinX_pin,16,11.2);
-    motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
+    motorA = new Stepper(dirPinX_pin,stepPinX_pin,8,11.2);
+    motorB = new Stepper(dirPinY_pin,stepPinY_pin,8,5.6);
     // motorB = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
-    motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,16,20);
+    motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,2,20);
     motorP = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
     motorP->setSpeed(50);
     motorP->setMaxSpeed(50);

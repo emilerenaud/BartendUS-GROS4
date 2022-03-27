@@ -15,7 +15,7 @@ class sequence():
     def __init__(self):
         #raspPi : '/dev/ttyUSB0'
         #ordi : port=COM3
-        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)     # Pour le Pi
+        self.arduino = serial.Serial(port='COM5', baudrate=9600, timeout=.1)     # Pour le Pi
         # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
         self.r= scaraRobot()
 
@@ -90,6 +90,7 @@ class sequence():
         # G101:A1.5 pour la pompe 1 avec 1.5oz
         for i in list_pompe:
             pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_quant[i]) + "\r\n"
+
             self.send_message(pompe)
             return
 
@@ -111,17 +112,21 @@ class sequence():
 
             self.poignet(-70)
             self.servo(45)
-            self.versement()
-            self.servo(0)
+            sens = self.r.getSensVersement()
+            self.versement(sens)
+            self.servo(5)
             #print("servo")
             #self.servo(5)
             #self.moveTo(0,0.45)
             #self.servo(150)
             #self.versement()
 
-    def versement(self):
+    def versement(self,sens):
         # caller la fonction HOME
-        versementMessage = "M4\r\n"
+        if sens == "droite":
+            versementMessage = "M4\r\n"
+        else:
+            versementMessage = "M5\r\n"
         self.send_message(versementMessage)
         return
     # retourne la position et le temps de chacune des pompes a actionner
