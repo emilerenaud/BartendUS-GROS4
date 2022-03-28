@@ -3,7 +3,7 @@ import sys
 import glob
 import serial
 import time
-from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
+from pi_controller.HMI2.inverseKinematic import scaraRobot
 
 class sequence():
 

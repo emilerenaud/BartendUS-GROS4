@@ -39,7 +39,7 @@ class MainWindow(QDialog):
     def __init__(self):
         print("refresh")
         super(MainWindow, self).__init__()
-        loadUi("pi_controller/HMI2/MainWindowDialog.ui", self)
+        loadUi("pi_controller/HMI2/MainWindow_test.ui", self)
         self.recettes.clicked.connect(self.go_to_recettes)
         self.boire.clicked.connect(self.go_to_boire)
         # self.boire.clicked.connect(self.show_popup)
@@ -371,7 +371,7 @@ class commander_screen6(QDialog):
         self.recette = recette
         self.nb_verre = 0
         # self.nombre_verre.setText('''Nombre de verre : "''' + str(self.nb_verre) + '''"''')
-        self.nombre_verre.setText('''\t\t''' + str(self.nb_verre) + ' verre(s)')
+        self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
 
 
     def go_to_Boire(self):
@@ -398,7 +398,7 @@ class commander_screen6(QDialog):
 
     def afficher_compteur(self):
         str_nb_verre = str(self.nb_verre)
-        self.nombre_verre.setText('''Nombre de verre : "''' + str_nb_verre + '''"''')
+        self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
 
 
     def commander_verre(self):
@@ -460,7 +460,7 @@ class reglages_screen5(QDialog):
     def __init__(self):
         super(reglages_screen5, self).__init__()
 
-        loadUi("pi_controller/HMI2/Reglage_v2.ui", self)
+        loadUi("pi_controller/HMI2/Reglage_v3.ui", self)
 
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.home_all.clicked.connect(self.HOME_ALL)
@@ -469,6 +469,7 @@ class reglages_screen5(QDialog):
 
         self.bouton_calibration.clicked.connect(self.calibration)
         self.move_to.clicked.connect(self.go_to_position)
+        self.connexion.connect(self.connected_button)
 
         self.radio_ouverture_servo.setChecked(True)
         self.radio_ouverture_electro.setChecked(True)
@@ -516,7 +517,22 @@ class reglages_screen5(QDialog):
         except():
             print("Error while checking opened serial port")
 
-
+    def connected_button(self):
+        # le nom de la boite pour les ports est 'comboBox'
+        # Step 2: Create a QThread object
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = Worker()
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        # self.worker.progress.connect(self.afficherTest)
+        # Step 6: Start the thread
+        self.thread.start()
 
 
 
@@ -526,10 +542,10 @@ widget=qtw.QStackedWidget()
 
 mainwindow=MainWindow()
 widget.addWidget(mainwindow)
-widget.setFixedHeight(720)
-widget.setFixedWidth(1280)
-widget.show()
-# widget.showFullScreen()
+# widget.setFixedHeight(720)
+# widget.setFixedWidth(1280)
+# widget.show()
+widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())

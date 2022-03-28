@@ -1,4 +1,3 @@
-sourVodka,Vodka:2.0,lime:1.0
 long island ice tea,tequila:2.0,rhum:2.0
 cafe comique,baileys:2.0,lait:1.0,cafe:2.0
 Rhum and coke,Pepsi:3.0,rhum:2.0

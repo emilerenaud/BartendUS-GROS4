@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>1280</width>
-    <height>720</height>
+    <width>3000</width>
+    <height>3000</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -45,19 +45,23 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="label">
-           <property name="minimumSize">
-            <size>
-             <width>470</width>
-             <height>0</height>
-            </size>
-           </property>
+          <widget class="QFrame" name="frame_3">
            <property name="maximumSize">
             <size>
-             <width>470</width>
-             <height>300</height>
+             <width>100</width>
+             <height>3000</height>
             </size>
            </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+         <item alignment="Qt::AlignRight">
+          <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
              <pointsize>45</pointsize>
@@ -78,7 +82,7 @@
            </property>
            <property name="maximumSize">
             <size>
-             <width>350</width>
+             <width>500</width>
              <height>16777215</height>
             </size>
            </property>
@@ -94,6 +98,12 @@
          </item>
          <item>
           <widget class="QFrame" name="frame_6">
+           <property name="maximumSize">
+            <size>
+             <width>400</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
@@ -105,20 +115,23 @@
              <widget class="QPushButton" name="incrementer">
               <property name="minimumSize">
                <size>
-                <width>150</width>
-                <height>150</height>
+                <width>200</width>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>150</width>
-                <height>150</height>
+                <width>200</width>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>34</pointsize>
+                <pointsize>70</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: rgb(43, 255, 50);</string>
               </property>
               <property name="text">
                <string>+</string>
@@ -129,20 +142,23 @@
              <widget class="QPushButton" name="decrementer">
               <property name="minimumSize">
                <size>
-                <width>150</width>
-                <height>150</height>
+                <width>200</width>
+                <height>200</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>150</width>
-                <height>150</height>
+                <width>200</width>
+                <height>200</height>
                </size>
               </property>
               <property name="font">
                <font>
-                <pointsize>34</pointsize>
+                <pointsize>70</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: rgb(255, 0, 0);</string>
               </property>
               <property name="text">
                <string>-</string>
@@ -175,10 +191,16 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="terminer">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>100</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>500</width>
-          <height>16777215</height>
+          <width>400</width>
+          <height>100</height>
          </size>
         </property>
         <property name="font">
@@ -193,10 +215,16 @@
       </item>
       <item>
        <widget class="QPushButton" name="annuler">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>100</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>500</width>
-          <height>16777215</height>
+          <width>400</width>
+          <height>100</height>
          </size>
         </property>
         <property name="font">

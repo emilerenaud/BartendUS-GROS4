@@ -18,8 +18,8 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>1280</width>
-    <height>720</height>
+    <width>3000</width>
+    <height>3000</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -40,30 +40,19 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="font">
-         <font>
-          <pointsize>30</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Recettes</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="frame">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <pointsize>30</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Création de recettes</string>
+     </property>
     </widget>
    </item>
    <item>
@@ -137,10 +126,16 @@
             </item>
             <item row="3" column="1">
              <widget class="QPushButton" name="ajouter_alcool">
+              <property name="minimumSize">
+               <size>
+                <width>400</width>
+                <height>100</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>400</width>
-                <height>50</height>
+                <height>100</height>
                </size>
               </property>
               <property name="font">
@@ -192,11 +187,11 @@
                <enum>QFrame::Raised</enum>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
-               <item>
+               <item alignment="Qt::AlignLeft">
                 <widget class="QLabel" name="label_4">
                  <property name="maximumSize">
                   <size>
-                   <width>60</width>
+                   <width>100</width>
                    <height>16777215</height>
                   </size>
                  </property>
@@ -210,7 +205,7 @@
                  </property>
                 </widget>
                </item>
-               <item alignment="Qt::AlignLeft">
+               <item>
                 <widget class="QLineEdit" name="titre_ligne">
                  <property name="minimumSize">
                   <size>
@@ -256,14 +251,14 @@
                 <widget class="QPushButton" name="delete_all">
                  <property name="minimumSize">
                   <size>
-                   <width>0</width>
-                   <height>50</height>
+                   <width>400</width>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>16777215</width>
-                   <height>50</height>
+                   <width>400</width>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="font">
@@ -280,8 +275,14 @@
                 <widget class="QPushButton" name="supprimer">
                  <property name="minimumSize">
                   <size>
-                   <width>0</width>
-                   <height>50</height>
+                   <width>400</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>400</width>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="font">
@@ -298,14 +299,14 @@
                 <widget class="QPushButton" name="ajouter_recette">
                  <property name="minimumSize">
                   <size>
-                   <width>0</width>
-                   <height>50</height>
+                   <width>400</width>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>400</width>
-                   <height>16777215</height>
+                   <height>100</height>
                   </size>
                  </property>
                  <property name="font">
@@ -379,7 +380,7 @@
               <property name="maximumSize">
                <size>
                 <width>400</width>
-                <height>50</height>
+                <height>100</height>
                </size>
               </property>
               <property name="font">
