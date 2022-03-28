@@ -1,5 +1,6 @@
 
-
+import sys
+import glob
 import serial
 import time
 from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
@@ -15,10 +16,13 @@ class sequence():
     def __init__(self):
         #raspPi : '/dev/ttyUSB0'
         #ordi : port=COM3
-        self.arduino = serial.Serial(port='COM5', baudrate=9600, timeout=.1)     # Pour le Pi
+        # self.arduino = serial.Serial(port='COM5', baudrate=9600, timeout=.1)     # Pour le Pi
         # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
         self.r= scaraRobot()
 
+    def openSerial(self):
+        # open the serial port selon lui qui a ete choisi dans le ComboBox du HMI.
+        self.arduino = serial.Serial(port='COM5', baudrate=9600, timeout=.1)
 
     def send_message(self, x):
         self.arduino.write(bytes(x, 'utf-8'))

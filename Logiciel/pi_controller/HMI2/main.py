@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
 from stateMachine import sequence
+import serial.tools.list_ports
 
 
 #init des variables globales
@@ -25,7 +26,8 @@ class Worker(QObject):
 
     def run(self):
         """state_machine"""
-        sequence.sequence()
+        print("start thread sequence")
+        # sequence.sequence()
         self.finished.emit()
 
 
@@ -413,7 +415,9 @@ class commander_screen6(QDialog):
 
 
     def commander_verre(self):
-           # print("pompe activer : ",sequence.pompe(recette_commander,livreIngredient))
+        None
+        # self.startThread()
+        # print("pompe activer : ",sequence.pompe(recette_commander,livreIngredient))
 
         # verif_seuil = Calibration_cam()
         # if not verif_seuil.calib_vision_seuil():
@@ -424,26 +428,9 @@ class commander_screen6(QDialog):
         # row = self.recettes_disponibles.currentRow()
         # recette_commander=livreRecette.list_recette_dispo[row]
 
-        # Step 2: Create a QThread object
-        #livreIngredient.update_Quantite(0,10)
-        self.thread = QThread()
-        # Step 3: Create a worker object
-        self.worker = Worker()
-        # Step 4: Move worker to the thread
-        self.worker.moveToThread(self.thread)
-        # Step 5: Connect signals and slots
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        #self.worker.progress.connect(self.afficherTest)
-        # Step 6: Start the thread
-        self.thread.start()
-
         # self.thread.finished.connect(
         #     lambda: self.commander.setEnabled(False)
         # )
-
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -479,6 +466,8 @@ class reglages_screen5(QDialog):
         self.radio_ouverture_servo.setChecked(True)
         self.radio_ouverture_electro.setChecked(True)
 
+        self.serialPort = []
+
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
         widget.addWidget(mainwindow)
@@ -510,6 +499,32 @@ class reglages_screen5(QDialog):
 
     def commande_purge_pompes(self):
         print('purge')
+
+    def read_serial_port(self):
+        try:
+            ports = serial.tools.list_ports.comports()
+            for port, desc, hwid in sorted(ports):
+                self.serialPort.append(port)
+            print(self.serialPort)
+        except():
+            print("Error while checking opened serial port")
+
+    def connected_button(self):
+        # Step 2: Create a QThread object
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = Worker()
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        # self.worker.progress.connect(self.afficherTest)
+        # Step 6: Start the thread
+        self.thread.start()
+
 
 
 app = QApplication(sys.argv)
