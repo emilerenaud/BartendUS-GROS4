@@ -31,7 +31,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>100</height>
+       <height>150</height>
       </size>
      </property>
      <property name="frameShape">
@@ -70,6 +70,11 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
           </widget>
          </item>
          <item>
@@ -105,7 +110,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
+      <item alignment="Qt::AlignRight">
        <widget class="QFrame" name="frame_3">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -119,7 +124,7 @@
            <property name="minimumSize">
             <size>
              <width>400</width>
-             <height>50</height>
+             <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -143,7 +148,7 @@
            <property name="minimumSize">
             <size>
              <width>400</width>
-             <height>50</height>
+             <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -167,7 +172,7 @@
            <property name="minimumSize">
             <size>
              <width>400</width>
-             <height>50</height>
+             <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -207,13 +212,27 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="3" column="3">
-             <widget class="QLineEdit" name="position_y">
+            <item row="3" column="0">
+             <widget class="QPushButton" name="move_to">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>70</height>
+               </size>
+              </property>
               <property name="maximumSize">
                <size>
-                <width>100</width>
-                <height>16777215</height>
+                <width>250</width>
+                <height>50</height>
                </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>MOVE TO</string>
               </property>
              </widget>
             </item>
@@ -225,6 +244,11 @@
                 <height>16777215</height>
                </size>
               </property>
+              <property name="font">
+               <font>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
              </widget>
             </item>
             <item row="3" column="4">
@@ -235,29 +259,10 @@
                 <height>16777215</height>
                </size>
               </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QPushButton" name="move_to">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>150</width>
-                <height>50</height>
-               </size>
-              </property>
               <property name="font">
                <font>
-                <pointsize>23</pointsize>
+                <pointsize>20</pointsize>
                </font>
-              </property>
-              <property name="text">
-               <string>MOVE TO</string>
               </property>
              </widget>
             </item>
@@ -291,6 +296,21 @@
               </property>
              </widget>
             </item>
+            <item row="3" column="3">
+             <widget class="QLineEdit" name="position_y">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="4">
              <widget class="QLabel" name="label_6">
               <property name="font">
@@ -306,7 +326,7 @@
            </layout>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="1" column="0" alignment="Qt::AlignHCenter">
           <widget class="QFrame" name="frame_7">
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
@@ -314,78 +334,36 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QFrame" name="frame_8">
-              <property name="maximumSize">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="bouton_electro">
+              <property name="minimumSize">
                <size>
-                <width>300</width>
-                <height>16777215</height>
+                <width>400</width>
+                <height>60</height>
                </size>
               </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
+              <property name="maximumSize">
+               <size>
+                <width>400</width>
+                <height>50</height>
+               </size>
               </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_4">
-               <item alignment="Qt::AlignHCenter">
-                <widget class="QPushButton" name="bouton_electro">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>10000</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>23</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Électro-Aimant</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="bouton_servo">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>50</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>23</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Servo-Moteur</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <property name="text">
+               <string>Électro-Aimant</string>
+              </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="2">
              <widget class="QFrame" name="frame_9">
               <property name="maximumSize">
                <size>
-                <width>200</width>
+                <width>10000</width>
                 <height>16777215</height>
                </size>
               </property>
@@ -429,37 +407,61 @@
                  </layout>
                 </widget>
                </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="bouton_servo">
+              <property name="minimumSize">
+               <size>
+                <width>400</width>
+                <height>60</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>400</width>
+                <height>50</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Servo-Moteur</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string/>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
                <item>
-                <widget class="QGroupBox" name="groupBox_2">
-                 <property name="title">
-                  <string/>
+                <widget class="QRadioButton" name="radio_ouverture_servo">
+                 <property name="font">
+                  <font>
+                   <pointsize>16</pointsize>
+                  </font>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_6">
-                  <item>
-                   <widget class="QRadioButton" name="radio_ouverture_servo">
-                    <property name="font">
-                     <font>
-                      <pointsize>16</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>OUVERTURE</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QRadioButton" name="radio_fermeture_servo">
-                    <property name="font">
-                     <font>
-                      <pointsize>16</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>FERMETURE</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                 <property name="text">
+                  <string>OUVERTURE</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radio_fermeture_servo">
+                 <property name="font">
+                  <font>
+                   <pointsize>16</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>FERMETURE</string>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -468,18 +470,18 @@
            </layout>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="2" column="0" alignment="Qt::AlignHCenter">
           <widget class="QPushButton" name="precedent">
            <property name="minimumSize">
             <size>
              <width>400</width>
-             <height>50</height>
+             <height>100</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>400</width>
-             <height>50</height>
+             <height>100</height>
             </size>
            </property>
            <property name="font">
