@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
-from stateMachine import sequence
+from Logiciel.pi_controller.HMI2.stateMachine import sequence
 import serial.tools.list_ports
 
 
@@ -469,12 +469,12 @@ class reglages_screen5(QDialog):
 
         self.bouton_calibration.clicked.connect(self.calibration)
         self.move_to.clicked.connect(self.go_to_position)
-        self.connexion.connect(self.connected_button)
+        #self.connexion.connect(self.connected_button)
 
         self.radio_ouverture_servo.setChecked(True)
         self.radio_ouverture_electro.setChecked(True)
 
-        self.serialPort = []
+        #self.serialPort = []
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -512,14 +512,14 @@ class reglages_screen5(QDialog):
             qtw.QMessageBox.information(self, 'Erreur','''Entrée en Z incompatible''')
 
         if position_x != "" and position_y!="" and position_z!="":
-            sequence.moveTo(int(position_x), int(position_x), False)
-            sequence.moveUpDown(int(position_z) * 1000,False)
+            sequence.moveTo((position_x), (position_y), False)
+            sequence.moveUpDown((position_z) * 1000,False)
 
         elif position_x == "" and position_y=="" and position_z!="":
-            sequence.moveUpDown(int(position_z) * 1000,False)
+            sequence.moveUpDown((position_z) * 1000,False)
 
         elif position_x != "" and position_y!="" and position_z=="":
-            sequence.moveTo(int(position_x),int(position_x) , False)
+            sequence.moveTo((position_x),(position_y) , False)
 
         return
 
@@ -542,7 +542,7 @@ class reglages_screen5(QDialog):
         sequence.electro(self.type_electro,False)
 
     def commande_purge_pompes(self):
-
+        None
 
     def read_serial_port(self):
         try:
@@ -578,10 +578,10 @@ widget=qtw.QStackedWidget()
 
 mainwindow=MainWindow()
 widget.addWidget(mainwindow)
-# widget.setFixedHeight(720)
-# widget.setFixedWidth(1280)
-# widget.show()
-widget.showFullScreen()
+widget.setFixedHeight(720)
+widget.setFixedWidth(1280)
+widget.show()
+# widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())

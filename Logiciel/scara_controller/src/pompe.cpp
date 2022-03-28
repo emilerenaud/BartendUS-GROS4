@@ -40,11 +40,26 @@ void Pompe::vol_pompe_oz(float volume)
     long t_pompe = (volume * 1000) / oz_par_sec + delais_pompe * oz_des / 1000;
     long t_deb = millis();
 
-    while (millis() - t_deb <= t_pompe)
+    time_pompe = t_pompe;
+
+    // while (millis() - t_deb <= t_pompe)
+    // {
+    //     digitalWrite(vit,1);
+    // }s
+    // digitalWrite(vit, 0);
+    delais_pompe = millis() - delais_pompe;
+    start_time = millis();
+};
+
+void Pompe::update()
+{
+    if(millis() - start_time <= time_pompe)
     {
         digitalWrite(vit,1);
     }
-    digitalWrite(vit, 0);
-
-    delais_pompe = millis() - delais_pompe;
+    else
+    {
+        digitalWrite(vit,0);
+    }
+    
 };

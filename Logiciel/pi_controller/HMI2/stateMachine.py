@@ -3,7 +3,7 @@ import sys
 import glob
 import serial
 import time
-from pi_controller.HMI2.inverseKinematic import scaraRobot
+from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
 
 class sequence():
 
@@ -11,7 +11,9 @@ class sequence():
     def __init__(self):
         #raspPi : '/dev/ttyUSB0'
         #ordi : port=COM3
-        # self.arduino = serial.Serial(port='COM5', baudrate=9600, timeout=.1)     # Pour le Pi
+        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)     # Pour le Pi
+        time.sleep(1)
+        self.send_message("M11\r\n",False)
         # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
         self.r= scaraRobot()
 
@@ -73,6 +75,8 @@ class sequence():
     def moveTo(self,x, y,wait):
         self.r.inverseKinematic([x, y])
         angles = self.r.getAngleDeg()
+        print(x,y)
+        print(angles)
         position = "G0:A" + str(angles[0]) + ":B" + str(angles[1]) + "\r\n"
         print(position)
         self.send_message(position,wait)

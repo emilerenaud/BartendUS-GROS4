@@ -53,6 +53,7 @@ void cncShield::closeElectro()
 
 void cncShield::update()
 {
+    pompe1->update();
     // int test = 0;
     if(_homing)
     {

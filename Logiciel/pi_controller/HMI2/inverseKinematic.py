@@ -216,10 +216,11 @@ def positionSegment2d(r,target):
 if __name__ == '__main__':
 
      r = scaraRobot()
-     verre=[-0.2,0]
+     verre=[-0.2,0.1]
      r.inverseKinematic(r.tangentAuVerre(verre))
      positionSegment2d(r, verre)
      print(r.getSensVersement())
+     print(r.getAngleDeg())
 
      # r.inverseKinematic(r.tangent(verre))
      # positionSegment2d(r, verre)

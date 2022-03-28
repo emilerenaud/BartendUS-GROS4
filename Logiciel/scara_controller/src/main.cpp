@@ -16,7 +16,7 @@ void setup() {
   // Serial.println("Code start here");
   setupSerial();
   shield = new cncShield;
-  shield->enableMotor();
+  shield->disableMotor();
 }
 
 void loop() {
@@ -77,11 +77,6 @@ void readSerial()
       if(gNumber > 100) // Control pompe
       {
         int pompeNumber = gNumber - 100;
-        Serial.print("Pompe");
-        // Serial.print(pompeNumber);
-        // Serial.print("  ");
-        // Serial.print(aValue);
-        Serial.println();
         shield->controlPompe(pompeNumber,aValue.toFloat());
       }
       switch(gNumber)
