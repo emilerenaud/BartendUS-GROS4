@@ -481,31 +481,67 @@ class reglages_screen5(QDialog):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def HOME_ALL(self):
-        print('aller home all')
+        sequence.homing(False)
 
     def calibration(self):
         calib.calib_vision_init()
-        print('activer calibration')
+
 
     def go_to_position(self):
-        print('aller à la position')
+
+        position_x=self.position_x.text()
+        position_y=self.position_y.text()
+        position_z=self.position_z.text()
+        try:
+            if position_x != "":
+                position_y = float(position_y)
+        except:
+            qtw.QMessageBox.information(self, 'Erreur','''Entrée en Y incompatible''')
+            return
+        try:
+            if position_y != "":
+                position_x = float(position_x)
+        except:
+            qtw.QMessageBox.information(self, 'Erreur','''Entrée en X incompatible''')
+            return
+        try:
+            if position_z != "":
+                position_z = float(position_z)
+        except:
+            qtw.QMessageBox.information(self, 'Erreur','''Entrée en Z incompatible''')
+
+        if position_x != "" and position_y!="" and position_z!="":
+            sequence.moveTo(int(position_x), int(position_x), False)
+            sequence.moveUpDown(int(position_z) * 1000,False)
+
+        elif position_x == "" and position_y=="" and position_z!="":
+            sequence.moveUpDown(int(position_z) * 1000,False)
+
+        elif position_x != "" and position_y!="" and position_z=="":
+            sequence.moveTo(int(position_x),int(position_x) , False)
+
+        return
 
     def radioBouton_servo(self):
         self.type_servo = 0
         if self.radio_ouverture_servo.isChecked() == True:
             self.type_servo = 0
+            sequence.servo(150,False)
         if self.radio_fermeture_servo.isChecked() == True:
             self.type_servo = 1
+            sequence.servo(5, False)
 
     def radioBouton_electro(self):
         self.type_electro = 0
         if self.radio_ouverture_electro.isChecked() == True:
             self.type_electro = 0
+
         if self.radio_fermeture_electro.isChecked() == True:
             self.type_electro = 1
+        sequence.electro(self.type_electro,False)
 
     def commande_purge_pompes(self):
-        print('purge')
+
 
     def read_serial_port(self):
         try:

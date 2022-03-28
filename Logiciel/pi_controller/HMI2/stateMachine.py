@@ -22,7 +22,7 @@ class sequence():
     def send_message(self, message,wait):
         try:
             self.arduino.write(bytes(message, 'utf-8'))
-            time.sleep(0.05)
+            time.sleep(0.05)# one tick delay (15ms) in between reads for stability
             print("data sent")
 
             if wait :
