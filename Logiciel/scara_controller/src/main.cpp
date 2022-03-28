@@ -54,26 +54,32 @@ void readSerial()
   String serialString = "";
   if(Serial.available())
   {
-    String tempString = Serial.readStringUntil('\r\n');
+    String tempString = Serial.readStringUntil('\n');
     if(tempString[0] != 'G' || tempString[0] != 'M')
       Serial.flush();
     int indexOperator = tempString.indexOf(':');
     operatorString = tempString.substring(0,indexOperator);
-    Serial.print(tempString);
-    Serial.print("  ");
+    // Serial.print(tempString);
+    // Serial.print("  ");
     if(operatorString[0] == 'G') 
     {
-      aIndex = tempString.indexOf(':A');
-      bIndex = tempString.indexOf(':B',indexOperator+1);
-      zIndex = tempString.indexOf(':Z',bIndex+1);
+      aIndex = tempString.indexOf(":A");
+      bIndex = tempString.indexOf(":B",indexOperator+1);
+      zIndex = tempString.indexOf(":Z",bIndex+1);
       if(aIndex != -1)
         aValue = tempString.substring(aIndex+1,bIndex-1);
       if(bIndex != -1)
         bValue = tempString.substring(bIndex+1,zIndex-1);
       if(zIndex != -1)
         zValue = tempString.substring(zIndex+1);
-//
-      switch(operatorString.substring(1).toInt())
+      int gNumber = operatorString.substring(1).toInt();
+
+      if(gNumber > 100) // Control pompe
+      {
+        int pompeNumber = gNumber - 100;
+        shield->controlPompe(pompeNumber,aValue.toFloat());
+      }
+      switch(gNumber)
       {
         case 0: //G0 Move to
           shield->motorA->moveTo(aValue.toFloat());
@@ -83,6 +89,7 @@ void readSerial()
           serialString = "Angle set to : A=" + aValue + " B=" + bValue; // + " Z=" + zValue;
           // Serial.println(serialString);
           break;
+
         case 1: //G1 Set Speed
           // int speedA = aValue.toInt();
           if(aValue.toInt() <= 100 || aValue.toInt() >= 0)
@@ -102,7 +109,7 @@ void readSerial()
           serialString = "Speed set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;
           // Serial.println(serialString);
           break;
-          
+
         case 2: //G2 Home
           shield->startHoming();
           // Serial.println("Done");
@@ -114,12 +121,14 @@ void readSerial()
             // Serial.println(zValue.toFloat());
             // G3:Z40
           break;
+
         case 4: //G4 Control poignet
           shield->motorP->setSpeed(8);
           shield->motorP->moveTo(aValue.toFloat());
           shield->setNewMouvement();
           // G4:A40
           break;
+          
         case 5: //G5 Control Servo
           if(aValue.toInt() <= 180 || aValue.toInt() >= 0)
           {
@@ -128,7 +137,6 @@ void readSerial()
             // Serial.println("servo Write" + String(aValue));
           }
           break;
-
       }
     }
     else if(operatorString[0] == 'M')
@@ -148,12 +156,13 @@ void readSerial()
           // code
           break;
         case 3: 
-          //
-          // Serial.println("shake");
           shield->startShake();
           break;
         case 4:
-          shield->startVerser();
+          shield->startVerser(1);
+          break;
+        case 5:
+          shield->startVerser(-1);
           break;
       }
     }

@@ -123,7 +123,7 @@ class sequence():
 
     def versement(self,sens):
         # caller la fonction HOME
-        if sens == "droite":
+        if sens == "gauche":
             versementMessage = "M4\r\n"
         else:
             versementMessage = "M5\r\n"

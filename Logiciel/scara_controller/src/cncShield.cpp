@@ -11,7 +11,12 @@ cncShield::cncShield()
     motorP->setMaxSpeed(50);
     motorZ->setSpeed(100);
     motorZ->setMaxSpeed(100);
-    // tableau[0] = new Stepper();
+    
+    for(int i=0; i<6; i++)
+    {
+        pompeTab[i] = new Pompe(pompe_pin[i]);
+    }
+
     servoShaker = new Servo();
     servoShaker->attach(SpnEn);
     servoShaker->write(10);
@@ -22,7 +27,6 @@ cncShield::cncShield()
     pinMode(endStopY_pin,INPUT_PULLUP);
     pinMode(endStopZ_pin,INPUT_PULLUP);
 };
-
 
 
 void cncShield::enableMotor()
@@ -197,9 +201,10 @@ bool cncShield::homing()
     return 0;
 };
 
-void cncShield::startVerser()
+void cncShield::startVerser(int sens)
 {
     _verser = 1;
+    _sensVerser = sens;
 };
 
 void cncShield::startShake()
@@ -237,7 +242,8 @@ void cncShield::shake()
 };
 
 void cncShield::verser(void)
-{
+{   
+
     switch(_compteurVerser)
     {
         case 0:
@@ -254,7 +260,7 @@ void cncShield::verser(void)
             motorZ->setSpeed(100);
             motorZ->moveTo(160);
             motorP->setSpeed(1);
-            motorP->moveTo(-115);
+            motorP->moveTo(115 * _sensVerser);
             _compteurVerser ++;
             break; 
         case 3:
@@ -305,5 +311,15 @@ float cncShield::convertionForMM(float mm)
 void cncShield::setNewMouvement(void)
 {
     _newMouvement = 1;
+};
+
+void cncShield::controlPompe(int pompe,float volume)
+{
+    if(pompe <0)
+        pompe =0;
+    if(pompe>=6)
+        pompe = 6;
+
+    pompeTab[pompe]->vol_pompe_oz(volume);
 };
 

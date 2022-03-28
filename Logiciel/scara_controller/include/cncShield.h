@@ -1,9 +1,10 @@
+#ifndef CNCSHIELD_H 
+#define CNCSHIELD_H
+
 #include <Arduino.h>
 #include <stepper.h>
 #include <Servo.h>
-
-#ifndef CNCSHIELD_H 
-#define CNCSHIELD_H
+#include <pompe.h>
 
 #define stepPinX_pin 2
 #define stepPinY_pin 3
@@ -17,6 +18,13 @@
 #define endStopZ_pin 11
 #define SpnEn 12
 #define Electro_pin 49
+
+#define pompe_pin_1 34
+#define pompe_pin_2 35
+#define pompe_pin_3 36
+#define pompe_pin_4 37
+#define pompe_pin_5 38
+#define pompe_pin_6 39
 
 #define stepPinP_pin 34
 #define dirPinP_pin 36
@@ -47,12 +55,14 @@ class cncShield
         void shake(void);
         void startShake(void);
         void verser(void);
-        void startVerser(void);
+        void startVerser(int sens);
         Servo *servoShaker;
         Stepper* motorA;
         Stepper* motorB;
         Stepper* motorZ;
         Stepper* motorP;
+        Pompe* pompeTab[6];
+        void controlPompe(int pompe,float volume);
 
     private:
         bool _enMotor;
@@ -65,9 +75,10 @@ class cncShield
         bool _shakeDone = 0;
         int _compteurShake = 0;
         bool _verser = 0;
+        int _sensVerser = 0;
         bool _verserDone = 0;
         int _compteurVerser = 0;
-        
+        int pompe_pin[6] = {pompe_pin_1,pompe_pin_2,pompe_pin_3,pompe_pin_4,pompe_pin_5,pompe_pin_6};
 };
 
 #endif
