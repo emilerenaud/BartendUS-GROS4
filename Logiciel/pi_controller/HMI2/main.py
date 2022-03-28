@@ -23,11 +23,15 @@ sequence=sequence()
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(object)
-
+    enCours = pyqtSignal(bool)
     def run(self):
         """state_machine"""
-        print("start thread sequence")
+        self.enCours.emit(True)
+        sequence.sequence()
+        for i in range(5):
+            time.sleep(1)
         # sequence.sequence()
+        self.enCours.emit(False)
         self.finished.emit()
 
 
@@ -321,20 +325,6 @@ class bouteilles_screen4(QDialog):
         else:
             pass
 
-        # try:
-        #      livreIngredient.list_position.index(position_ingredient)
-        #      qtw.QMessageBox.information(self, 'Erreur Doublon', '''La  position : "''' + str(position_ingredient) + '''" est déjà occuper par une bouteille''')
-        #      return
-        # except:
-        #     pass
-        #
-        # try:
-        #     livreIngredient.list_ingredient.index(ingredient)
-        #     qtw.QMessageBox.information(self, 'Erreur Doublon','''L'ingrédient : "''' + ingredient + '''" est déjà présent dans la liste''')
-        #     return
-        # except:
-        #     pass
-
         if livreIngredient.isIngredientDoublon(ingredient):
             qtw.QMessageBox.information(self, 'Erreur Doublon','''L'ingrédient : "''' + ingredient.lower() + '''" est déjà présent dans la liste''')
             return
@@ -342,8 +332,6 @@ class bouteilles_screen4(QDialog):
         if livreIngredient.isPositionDoublon(position_ingredient):
             qtw.QMessageBox.information(self, 'Erreur Doublon', '''La  position : "''' + str(position_ingredient) + '''" est déjà occuper par une bouteille''')
             return
-
-
 
         livreIngredient.ajouterIngredient(ingredient,self.quantite_ingredient,position_ingredient)
 
@@ -354,8 +342,6 @@ class bouteilles_screen4(QDialog):
         self.update_liste()
 
     def supprimer_ligne(self):
-        # avec currenrow qui donne l'indice appeler supprimerIngredient
-        #faire un update donc call update_liste
         row=self.liste_bouteilles.currentRow()
         if row>=0:
             self.liste_bouteilles.takeItem(row)
@@ -363,12 +349,12 @@ class bouteilles_screen4(QDialog):
             self.update_liste()
 
     def update_liste(self):
-        # clear la liste liste_bouteilles
-        # addItems
         self.liste_bouteilles.clear()
         self.liste_bouteilles.addItems(livreIngredient.get_list_ingredient_string())
         return
-#**********************************************************************************************************commander
+
+
+#**********************************************************************************************************Commander
 class commander_screen6(QDialog):
     def __init__(self, recette):
         super(commander_screen6, self).__init__()
@@ -386,6 +372,7 @@ class commander_screen6(QDialog):
         self.nb_verre = 0
         # self.nombre_verre.setText('''Nombre de verre : "''' + str(self.nb_verre) + '''"''')
         self.nombre_verre.setText('''\t\t''' + str(self.nb_verre) + ' verre(s)')
+
 
     def go_to_Boire(self):
         windowBoire=boire_screen3()
@@ -415,7 +402,7 @@ class commander_screen6(QDialog):
 
 
     def commander_verre(self):
-        None
+        self.startThreadSequence()
         # self.startThread()
         # print("pompe activer : ",sequence.pompe(recette_commander,livreIngredient))
 
@@ -431,6 +418,26 @@ class commander_screen6(QDialog):
         # self.thread.finished.connect(
         #     lambda: self.commander.setEnabled(False)
         # )
+    def startThreadSequence(self):
+        # Step 2: Create a QThread object
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = Worker()
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.worker.enCours.connect(self.afficherState)
+        # self.worker.progress.connect(self.afficherTest)
+        # Step 6: Start the thread
+        self.thread.start()
+
+    def afficherState(self,state):
+        self.state=state
+        print(state)
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -509,21 +516,7 @@ class reglages_screen5(QDialog):
         except():
             print("Error while checking opened serial port")
 
-    def connected_button(self):
-        # Step 2: Create a QThread object
-        self.thread = QThread()
-        # Step 3: Create a worker object
-        self.worker = Worker()
-        # Step 4: Move worker to the thread
-        self.worker.moveToThread(self.thread)
-        # Step 5: Connect signals and slots
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        # self.worker.progress.connect(self.afficherTest)
-        # Step 6: Start the thread
-        self.thread.start()
+
 
 
 
