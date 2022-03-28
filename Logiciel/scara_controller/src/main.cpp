@@ -54,7 +54,7 @@ void readSerial()
   String serialString = "";
   if(Serial.available())
   {
-    String tempString = Serial.readStringUntil('\n');
+    String tempString = Serial.readStringUntil('\r\n');
     if(tempString[0] != 'G' || tempString[0] != 'M')
       Serial.flush();
     int indexOperator = tempString.indexOf(':');
@@ -63,9 +63,9 @@ void readSerial()
     // Serial.print("  ");
     if(operatorString[0] == 'G') 
     {
-      aIndex = tempString.indexOf(":A");
-      bIndex = tempString.indexOf(":B",indexOperator+1);
-      zIndex = tempString.indexOf(":Z",bIndex+1);
+      aIndex = tempString.indexOf(':A');
+      bIndex = tempString.indexOf(':B',indexOperator+1);
+      zIndex = tempString.indexOf(':Z',bIndex+1);
       if(aIndex != -1)
         aValue = tempString.substring(aIndex+1,bIndex-1);
       if(bIndex != -1)
@@ -77,6 +77,11 @@ void readSerial()
       if(gNumber > 100) // Control pompe
       {
         int pompeNumber = gNumber - 100;
+        Serial.print("Pompe");
+        // Serial.print(pompeNumber);
+        // Serial.print("  ");
+        // Serial.print(aValue);
+        Serial.println();
         shield->controlPompe(pompeNumber,aValue.toFloat());
       }
       switch(gNumber)
@@ -137,6 +142,10 @@ void readSerial()
             // Serial.println("servo Write" + String(aValue));
           }
           break;
+        case 6:
+          shield->controlPompe(1,aValue.toFloat());
+          break;
+        
       }
     }
     else if(operatorString[0] == 'M')
@@ -163,6 +172,12 @@ void readSerial()
           break;
         case 5:
           shield->startVerser(-1);
+          break;
+        case 10:
+          shield->disableMotor();
+          break;
+        case 11:
+          shield->enableMotor();
           break;
       }
     }

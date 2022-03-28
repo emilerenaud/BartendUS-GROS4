@@ -42,9 +42,9 @@ void Pompe::vol_pompe_oz(float volume)
 
     while (millis() - t_deb <= t_pompe)
     {
-        analogWrite(vit, 255);
+        digitalWrite(vit,1);
     }
-    analogWrite(vit, 0);
+    digitalWrite(vit, 0);
 
     delais_pompe = millis() - delais_pompe;
 };

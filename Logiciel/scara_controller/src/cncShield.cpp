@@ -12,11 +12,11 @@ cncShield::cncShield()
     motorZ->setSpeed(100);
     motorZ->setMaxSpeed(100);
     
-    for(int i=0; i<6; i++)
-    {
-        pompeTab[i] = new Pompe(pompe_pin[i]);
-    }
-
+    // for(int i=0; i<6; i++)
+    // {
+    //     pompeTab[i] = new Pompe(pompe_pin[i]);
+    // }
+    pompe1 = new Pompe(pompe_pin_1);
     servoShaker = new Servo();
     servoShaker->attach(SpnEn);
     servoShaker->write(10);
@@ -319,7 +319,8 @@ void cncShield::controlPompe(int pompe,float volume)
         pompe =0;
     if(pompe>=6)
         pompe = 6;
-
-    pompeTab[pompe]->vol_pompe_oz(volume);
+    Serial.println(volume);
+    pompe1->vol_pompe_oz(volume);
+    // pompeTab[pompe-1]->vol_pompe_oz(volume);
 };
 

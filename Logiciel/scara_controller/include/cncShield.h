@@ -19,12 +19,12 @@
 #define SpnEn 12
 #define Electro_pin 49
 
-#define pompe_pin_1 34
-#define pompe_pin_2 35
-#define pompe_pin_3 36
-#define pompe_pin_4 37
-#define pompe_pin_5 38
-#define pompe_pin_6 39
+#define pompe_pin_1 50
+#define pompe_pin_2 51
+#define pompe_pin_3 48
+#define pompe_pin_4 46
+#define pompe_pin_5 44
+#define pompe_pin_6 42
 
 #define stepPinP_pin 34
 #define dirPinP_pin 36
@@ -62,6 +62,7 @@ class cncShield
         Stepper* motorZ;
         Stepper* motorP;
         Pompe* pompeTab[6];
+        Pompe* pompe1;
         void controlPompe(int pompe,float volume);
 
     private:
