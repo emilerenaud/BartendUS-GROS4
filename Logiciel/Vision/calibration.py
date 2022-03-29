@@ -19,16 +19,29 @@ class Calibration_cam():
         # Recherche des centres des cercles sur l'image de référence:
 
         # path = "Vision/img_reference_calib.png"               # Si on roule avec le HMI
-        path = "img_reference_calib.png"                    # Si on roule juste calibration.py
+        #path = "img_reference_calib.png"                    # Si on roule juste calibration.py
         # path = "/home/pi/Pictures/img_reference_calib.png"  # Pour le Pi
+        path = "pic_2.jpeg"
 
         img_reference = cv2.imread(path)
 
         # Conversion de l'image en noir et blanc:
         gray = cv2.cvtColor(img_reference, cv2.COLOR_BGR2GRAY)
 
+        # plt.imshow(gray, cmap="gray")
+        # plt.show()
+        #
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
+
         # Spécification des valeurs limites (pixel = 0 si < 100 et pixel = 1 si > 255) pour en sortir une image binaire
-        _, image_binaire = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
+        _, image_binaire = cv2.threshold(gray, 168, 255, cv2.THRESH_BINARY)
+
+        # plt.imshow(image_binaire, cmap="gray")
+        # plt.show()
+        #
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()
 
         # Trouver les contours de l'image binaire
         contours, _ = cv2.findContours(image_binaire, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -44,7 +57,7 @@ class Calibration_cam():
 
             # Filtrer les perimètres trop petits:
             # if area <= -500:
-            if perimeter >= 50:
+            if 53 <= perimeter <= 70:
                 # Ignorer le premier contour pusique la fonction "findcontour" détecte l'image complète comme premier élément
                 if i == 0:
                     i = 1
@@ -54,7 +67,7 @@ class Calibration_cam():
                 approx = cv2.approxPolyDP(c, 0.01 * cv2.arcLength(c, True), True)
 
                 # Déssiner les contours sur l'image
-                cv2.drawContours(img_reference, [c], -1, (0, 255, 0), 2)
+                # cv2.drawContours(img_reference, [c], -1, (0, 255, 0), 2)
 
                 # Trouver le centre des contours
                 M = cv2.moments(c)
@@ -63,10 +76,11 @@ class Calibration_cam():
                     liste_points_ref.append(x)
                     y = int(M['m01'] / M['m00'])
                     liste_points_ref.append(y)
-                    self.liste_coord_centres_ref.append(liste_points_ref)
+                    print(liste_points_ref)
 
-                    # Ajout d'un point sur l'image au centre des contours
-                    cv2.circle(img_reference, (x, y), radius=3, color=(0, 0, 255), thickness=-1)
+                    if liste_points_ref[0] != 282 and liste_points_ref[0] != 376:
+                        self.liste_coord_centres_ref.append(liste_points_ref)
+                        cv2.circle(img_reference, (x, y), radius=3, color=(0, 0, 255), thickness=-1)
             else:
                 continue
 
@@ -197,8 +211,17 @@ class Calibration_cam():
 
 
 if __name__ == '__main__':
+    # path = r"pic_2.jpeg"
+    # cap = cv2.VideoCapture(0)
+
+    # Check if the webcam is opened correctly
+    # if not cap.isOpened():
+    #     raise IOError("Cannot open webcam")
+    # ret, frame = cap.read()
+    # cv2.imwrite(path, frame)
+
     calib = Calibration_cam()
-    calib.calib_vision_init()
+    # calib.calib_vision_init()
 
     # calib.calib_vision_seuil()
     # calib_vision_seuil()
