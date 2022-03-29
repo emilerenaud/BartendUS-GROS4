@@ -470,7 +470,10 @@ class reglages_screen5(QDialog):
 
         self.bouton_calibration.clicked.connect(self.calibration)
         self.move_to.clicked.connect(self.go_to_position)
-        #self.connexion.connect(self.connected_button)
+        self.connexion.clicked.connect(self.connected_button)
+
+
+
 
         self.radio_ouverture_servo.setChecked(True)
         self.radio_ouverture_electro.setChecked(True)
@@ -486,7 +489,11 @@ class reglages_screen5(QDialog):
         self.purge_pompes.clicked.connect(self.commande_purge_pompes)
         #self.comboBox_pompe.currentIndexChanged.connect(self.commande_purge_pompes)
 
-        #self.serialPort = []
+        self.serialPort = []
+        self.read_serial_port()
+        for port in self.serialPort:
+            self.comboBox.addItem(port)
+
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -523,14 +530,14 @@ class reglages_screen5(QDialog):
         except:
             qtw.QMessageBox.information(self, 'Erreur','''Entrée en Z incompatible''')
 
-        if position_x != "" and position_y!="" and position_z!="":
+        if position_x != "" and position_y!="" and position_z!="" and position_y >=0:
             sequence.moveTo((position_x), (position_y), False)
             sequence.moveUpDown((position_z) * 1000,False)
 
         elif position_x == "" and position_y=="" and position_z!="":
             sequence.moveUpDown((position_z) * 1000,False)
 
-        elif position_x != "" and position_y!="" and position_z=="":
+        elif position_x != "" and position_y!="" and position_z=="" and position_y >=0:
             sequence.moveTo((position_x),(position_y) , False)
 
         return
@@ -554,8 +561,12 @@ class reglages_screen5(QDialog):
         sequence.electro(self.type_electro,False)
 
     def commande_purge_pompes(self):
-        i_combo_box_pompe = self.comboBox_pompes.currentIndex()
-        print(i_combo_box_pompe)
+        i_combo_box_pompe = self.comboBox_pompes.currentIndex()+1
+
+        if(i_combo_box_pompe==7):
+            sequence.activatePompe([1,2,3,4,5,6], 5, False)
+        else:
+            sequence.activatePompe(i_combo_box_pompe,5,False)
 
 
     def read_serial_port(self):
@@ -568,26 +579,12 @@ class reglages_screen5(QDialog):
             print("Error while checking opened serial port")
 
     def connected_button(self):
-        # le nom de la boite pour les ports est 'comboBox'
-        # Step 2: Create a QThread object
-        self.thread = QThread()
-        # Step 3: Create a worker object
-        self.worker = Worker()
-        # Step 4: Move worker to the thread
-        self.worker.moveToThread(self.thread)
-        # Step 5: Connect signals and slots
-        self.thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.thread.finished.connect(self.thread.deleteLater)
-        # self.worker.progress.connect(self.afficherTest)
-        # Step 6: Start the thread
-        self.thread.start()
-
-    def shake_and_bake(self):
-        pass
 
 
+        port=str(self.comboBox.currentText())
+        print(port)
+        sequence.openSerial(port)
+        print("bravo")
 
 
 app = QApplication(sys.argv)
@@ -598,8 +595,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
-#widget.show()
-widget.showFullScreen()
+widget.show()
+#widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())

@@ -11,7 +11,7 @@ class sequence():
     def __init__(self):
         #raspPi : '/dev/ttyUSB0'
         #ordi : port=COM3
-        self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)     # Pour le Pi
+        #self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)     # Pour le Pi
         time.sleep(1)
         self.send_message("M11\r\n",False)
         # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
@@ -19,7 +19,10 @@ class sequence():
 
     def openSerial(self,port_com):
         # open the serial port selon lui qui a ete choisi dans le ComboBox du HMI.
-        self.arduino = serial.Serial(port=port_com, baudrate=9600, timeout=.1)
+        try:
+            self.arduino = serial.Serial(port=port_com, baudrate=9600, timeout=.1)
+        except:
+            pass
 
     def send_message(self, message,wait):
         try:
