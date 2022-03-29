@@ -474,6 +474,17 @@ class reglages_screen5(QDialog):
         self.radio_ouverture_servo.setChecked(True)
         self.radio_ouverture_electro.setChecked(True)
 
+        self.comboBox_pompes.addItem('Pompe 1')
+        self.comboBox_pompes.addItem('Pompe 2')
+        self.comboBox_pompes.addItem('Pompe 3')
+        self.comboBox_pompes.addItem('Pompe 4')
+        self.comboBox_pompes.addItem('Pompe 5')
+        self.comboBox_pompes.addItem('Pompe 6')
+        self.comboBox_pompes.addItem('Tous les pompes')
+
+        self.purge_pompes.clicked.connect(self.commande_purge_pompes)
+        #self.comboBox_pompe.currentIndexChanged.connect(self.commande_purge_pompes)
+
         #self.serialPort = []
 
     def go_to_MainWindowDialog(self):
@@ -542,7 +553,9 @@ class reglages_screen5(QDialog):
         sequence.electro(self.type_electro,False)
 
     def commande_purge_pompes(self):
-        None
+        i_combo_box_pompe = self.comboBox_pompes.currentIndex()
+        print(i_combo_box_pompe)
+
 
     def read_serial_port(self):
         try:
@@ -572,6 +585,7 @@ class reglages_screen5(QDialog):
 
 
 
+
 app = QApplication(sys.argv)
 widget=qtw.QStackedWidget()
 
@@ -580,8 +594,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
-widget.show()
-# widget.showFullScreen()
+#widget.show()
+widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())
