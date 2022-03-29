@@ -466,6 +466,7 @@ class reglages_screen5(QDialog):
         self.home_all.clicked.connect(self.HOME_ALL)
         self.bouton_electro.clicked.connect(self.radioBouton_electro)
         self.bouton_servo.clicked.connect(self.radioBouton_servo)
+        self.shake.clicked.connect(self.shake_and_bake)
 
         self.bouton_calibration.clicked.connect(self.calibration)
         self.move_to.clicked.connect(self.go_to_position)
@@ -578,6 +579,7 @@ class reglages_screen5(QDialog):
             print("Error while checking opened serial port")
 
     def connected_button(self):
+
 
         port=str(self.comboBox.currentText())
         print(port)
