@@ -182,7 +182,7 @@ void Stepper::setSpeed(float speed)
         speed = 0.0;
     _speed = speed;
     int tempSpeed = _speed * 10;
-    _delaySpeed = map(tempSpeed,0,1000,800,80);
+    _delaySpeed = map(tempSpeed,0,1000,1000,80);
     // Serial.println(_delaySpeed);
 };
 
