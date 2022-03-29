@@ -90,7 +90,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Quantité</string>
+               <string>Quantité (oz) :</string>
               </property>
              </widget>
             </item>
@@ -156,7 +156,7 @@
                </font>
               </property>
               <property name="text">
-               <string>Ingrédients</string>
+               <string>Ingrédients :</string>
               </property>
              </widget>
             </item>
@@ -201,7 +201,7 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>Titre</string>
+                  <string>Titre :</string>
                  </property>
                 </widget>
                </item>
