@@ -8,13 +8,14 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
 from Logiciel.pi_controller.HMI2.stateMachine import sequence
+from Logiciel.Vision.calibration import Calibration_cam
 import serial.tools.list_ports
 
 
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-#calib = Calibration_cam()
+calib = Calibration_cam()
 max_Bouteille=9
 sequence=sequence()
 
@@ -25,13 +26,14 @@ class Worker(QObject):
     progress = pyqtSignal(object)
     enCours = pyqtSignal(bool)
     def run(self):
-        """state_machine"""
-        self.enCours.emit(True)
-        sequence.sequence()
-        for i in range(5):
-            time.sleep(1)
+        # """state_machine"""
+        # self.enCours.emit(True)
         # sequence.sequence()
-        self.enCours.emit(False)
+        # for i in range(5):
+        #     time.sleep(1)
+        # # sequence.sequence()
+        # self.enCours.emit(False)
+        sequence.sequence()
         self.finished.emit()
 
 
@@ -466,7 +468,7 @@ class reglages_screen5(QDialog):
         self.home_all.clicked.connect(self.HOME_ALL)
         self.bouton_electro.clicked.connect(self.radioBouton_electro)
         self.bouton_servo.clicked.connect(self.radioBouton_servo)
-        self.shake.clicked.connect(self.shake_and_bake)
+        self.shake.clicked.connect(self.shake_n_bake)
 
         self.bouton_calibration.clicked.connect(self.calibration)
         self.move_to.clicked.connect(self.go_to_position)
@@ -568,6 +570,8 @@ class reglages_screen5(QDialog):
         else:
             sequence.activatePompe(i_combo_box_pompe,5,False)
 
+    def shake_n_bake(self):
+        sequence.shake(False)
 
     def read_serial_port(self):
         try:

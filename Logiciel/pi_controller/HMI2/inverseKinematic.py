@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 class scaraRobot():
 
     def __init__(self):
-        self.A=0.200
-        self.B=0.28
+        self.A=0.20
+        self.B=0.29
         self.origineX=0
         self.origineY=0
         self.anglesActuel=[0,0]
@@ -131,7 +131,7 @@ class scaraRobot():
         return [diffPrec,anglefinal]
 
     def tangent(self,positionVerre):
-            rayon = 0.09
+            rayon = 0.097/2 +0.065/2
             i=4
             k=2
             prec = self.angleTangentAuVerre(positionVerre, 4, 0, 2 * math.pi)

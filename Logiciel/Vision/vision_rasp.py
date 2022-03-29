@@ -1,19 +1,35 @@
+import os
+
 import numpy as np
 from PIL import Image
 import subprocess
+import cv2
 
 def vision():
     output = False # False: Disable display output & True: Enable display output
-    subprocess.run("sudo fswebcam /home/pi/Desktop/Frame.jpg", capture_output=True)
-    #path = r"C:\Users\thephysicist\Desktop\pic.jpeg"
-    path = r'/home/pi/Desktop/Frame.jpg'
+
+    # subprocess.run(["sudo fswebcam --no-banner -r 2048x1536 image3.jpg"], capture_output=True)
+    # subprocess.run("sudo fswebcam /home/pi/Desktop/Frame.jpg", capture_output=True)
+    # path = r"C:\Users\thephysicist\Desktop\pic.jpeg"
+    # path = r'/home/pi/Desktop/image3.jpg'
+
+    path = r"pic_5.jpeg"
+    cap = cv2.VideoCapture(0)
+
+    # Check if the webcam is opened correctly
+    if not cap.isOpened():
+        raise IOError("Cannot open webcam")
+    ret, frame = cap.read()
+
+    cv2.imwrite(path, frame)
 
     imcolor = Image.open(path)
+    # imcolor = Image.open(path)
     im = imcolor.convert('L')
     pixel = im.load()
-    x =0
-    y =0
-    nb =0
+    x = 0
+    y = 0
+    nb = 0
     for i in range(im.size[0]):
         for j in range(im.size[1]):
             if j > (im.size[1]-200):
@@ -38,4 +54,9 @@ def vision():
         imcolor.show()
     return coord
 
-print(vision())
+
+
+
+if __name__ == '__main__':
+    vision()
+    print("Done with Fred's vision")
