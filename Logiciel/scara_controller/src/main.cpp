@@ -103,7 +103,11 @@ void readSerial()
             shield->motorB->setMaxSpeed(75);
           // int speedZ = zValue.toInt();
           if(zValue.toInt() <= 100 || zValue.toInt() >= 0)
+          {
             shield->motorZ->setMaxSpeed(zValue.toInt());
+            shield->motorZ->setSpeed(zValue.toInt());
+          }
+            
           else
             shield->motorZ->setMaxSpeed(75);
           serialString = "Speed set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;

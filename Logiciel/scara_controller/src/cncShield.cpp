@@ -9,8 +9,8 @@ cncShield::cncShield()
     motorP = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
     motorP->setSpeed(50);
     motorP->setMaxSpeed(50);
-    motorZ->setSpeed(100);
-    motorZ->setMaxSpeed(100);
+    motorZ->setSpeed(70);
+    motorZ->setMaxSpeed(70);
     
     // for(int i=0; i<6; i++)
     // {
@@ -124,7 +124,7 @@ bool cncShield::homing()
     {
         case 0: // prepare homing B joint
             motorZ->moveTo(-200);
-            motorZ->setSpeed(80);
+            // motorZ->setSpeed(60);
             motorB->setDirection(homingDirB);
             motorB->moveTo(-300);
             motorB->setSpeed(60);
@@ -248,8 +248,8 @@ void cncShield::verser(void)
     switch(_compteurVerser)
     {
         case 0:
-            motorZ->setSpeed(100);
-            motorZ->moveTo(70);
+            motorZ->setSpeed(70);
+            motorZ->moveTo(80);
             _compteurVerser ++;
             break;
         case 1:
@@ -258,14 +258,15 @@ void cncShield::verser(void)
             _compteurVerser ++;
             break;
         case 2:
-            motorZ->setSpeed(100);
-            motorZ->moveTo(160);
-            motorP->setSpeed(1);
+            motorZ->setSpeed(70);
+            // motorZ->setMaxSpeed(60);
+            motorZ->moveTo(170);
+            motorP->setSpeed(0);
             motorP->moveTo(115 * _sensVerser);
             _compteurVerser ++;
             break; 
         case 3:
-            motorP->setSpeed(5);
+            motorP->setSpeed(2);
             motorP->moveTo(0);
             _compteurVerser = 0;
             _verserDone = 1;
