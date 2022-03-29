@@ -4,3 +4,5 @@ Rhum and coke,Pepsi:3.0,rhum:2.0
 shooter vodka,vodka:1.0
 shooter rhum,rhum:2.0
 Bloody Ceasar,vodka:2.0,tabasco:0.5,lime:1.0
+
+martin becile,triplesec:1.0,vodka:1.0,canneberge:1.0,lime:1.0
