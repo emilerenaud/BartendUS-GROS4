@@ -52,7 +52,7 @@ class scaraRobot():
         x=position[0]
         y=position[1]
         if math.sqrt(math.pow(x, 2) + math.pow(y, 2)) <= (self.A + self.B) and math.sqrt(
-                math.pow(x, 2) + math.pow(y, 2)) >= (0.15):
+                math.pow(x, 2) + math.pow(y, 2)) >= (0.21):
 
             return True
         else:

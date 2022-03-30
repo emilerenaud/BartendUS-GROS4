@@ -12,12 +12,8 @@ import subprocess
 class sequence():
 
     def __init__(self):
-        #raspPi : '/dev/ttyUSB0'
-        #ordi : port=COM3
+        #raspPi : '/dev/ttyUSB0'    #ordi : port=COM3
         #self.arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)     # Pour le Pi
-        time.sleep(1)
-        #self.send_message("M11\r\n",False)
-        # self.arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
         self.r= scaraRobot()
         self.calib = Calibration_cam
 
@@ -26,7 +22,7 @@ class sequence():
     def send_message(self, message,wait):
         try:
             self.arduino.write(bytes(message, 'utf-8'))
-            time.sleep(0.05)# one tick delay (15ms) in between reads for stability
+            time.sleep(0.05) # one tick delay (15ms) in between reads for stability
             print("data sent")
 
             if wait :
@@ -101,10 +97,6 @@ class sequence():
         self.send_message(homing,wait)
         return
 
-    # def versement():
-    #     poignet(120)
-    #     moveUpDown(20)
-
     def activatePompe(self,list_pompe, list_quant,wait):
         # G101:A1.5 pour la pompe 1 avec 1.5oz
         for i in list_pompe:
@@ -124,19 +116,18 @@ class sequence():
         #positionVerre=[-0.15, 0.4]
         pos = self.r.tangentAuVerre(positionVerre)
         if(pos is not False):
-
             self.moveTo(pos[0],pos[1],wait)
-
             self.servo(45,wait)
+
             sens = self.r.getSensVersement()
             if(sens=="gauche"):
                 self.poignet(70,wait)
             else:
                 self.poignet(-70,wait)
 
-
             self.versement(sens,wait)
             self.servo(5,wait)
+            self.moveTo(0.485, 0, wait)
             #print("servo")
             #self.servo(5)
             #self.moveTo(0,0.45)
