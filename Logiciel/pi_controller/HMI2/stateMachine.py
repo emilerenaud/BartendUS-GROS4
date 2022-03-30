@@ -186,53 +186,63 @@ class sequence():
 
     def vision(self):
         output = True  # False: Disable display output & True: Enable display output
+        subprocess.call('sudo fswebcam -r 2048x1536 /home/pi/Desktop/Vision.jpg', shell=True)
+        path = r'/home/pi/Desktop/Vision.jpg'
 
-        # subprocess.run(["sudo fswebcam --no-banner -r 2048x1536 image3.jpg"], capture_output=True)
-        # subprocess.run("sudo fswebcam /home/pi/Desktop/Frame.jpg", capture_output=True)
-        # path = r"C:\Users\thephysicist\Desktop\pic.jpeg"
-        # path = r'/home/pi/Desktop/image3.jpg'
-
-        path = r"pic_7.jpeg"
-        cap = cv2.VideoCapture(0)
-
-        # Check if the webcam is opened correctly
-        if not cap.isOpened():
-            raise IOError("Cannot open webcam")
-        ret, frame = cap.read()
-
-        cv2.imwrite(path, frame)
-
+        size = 480
         imcolor = Image.open(path)
-        # imcolor = Image.open(path)
-        im = imcolor.convert('L')
+        im = (imcolor.convert('L')).resize((size, size))
         pixel = im.load()
+
+        r = 200
+        top = 75
+        nb_point = 10
+        bottom = 420
+        a = -r / ((bottom / 2) ** 2)
+        np_point_useless = 1
+        seuil = 50
+        y2 = (np.arange(nb_point) - nb_point / 2) * (bottom / nb_point)
+        x2 = abs(a * (y2 ** 2) - top)
+        y2 = y2 + size / 2
+        for i in range(im.size[0]):
+            if i < 430:
+                if i > 50:
+                    for j in range(0, int(abs(a * ((i - 240) ** 2) - top))):
+                        im.putpixel([i, j], 0)
+            else:
+                for j in range(im.size[1]):
+                    im.putpixel([i, j], 0)
+            if i < 51:
+                for j in range(im.size[1]):
+                    im.putpixel([i, j], 0)
+
         x = 0
         y = 0
-        nb = 0
-
+        nb = 1
+        r = 0.40
         for i in range(im.size[0]):
             for j in range(im.size[1]):
-                if j > (im.size[1]-200):
-                    im.putpixel([i,j], 0)
+                if j > (im.size[1] - 150):
+                    im.putpixel([i, j], 0)
                 elif j < (0):
-                    im.putpixel([i,j], 0)
-                elif i > (im.size[0]-0):
-                    im.putpixel([i,j], 0)
+                    im.putpixel([i, j], 0)
+                elif i > (im.size[0] - 0):
+                    im.putpixel([i, j], 0)
                 elif i < (0):
-                    im.putpixel([i,j], 0)
-                elif pixel[i,j] > 220:
+                    im.putpixel([i, j], 0)
+                elif pixel[i, j] > 200:
                     x += i
                     nb += 1
                     y += j
-        x = int(x/nb)
-        y = int(y/nb)
-        coord = [(0.20*(x-(im.size[0]/2))/(im.size[0]/2)), (0.20*(y)/(im.size[1]/2))] #[x,y] in meters, origin at the A axis
+        x = int(x / nb)
+        y = int(y / nb)
+        coord = [((((x - (im.size[0] / 2)))) * (0.19 + 0.17) / (122 + 114)) + 0.003898, (
+                    abs(y - im.size[1]) * (31 - 12) / (
+                        354 - 181) - 7.878) / 100]  # [x,y] in meters, origin at the A axis
         if output:
-            for i in range(x-10,x+10,1):
-                for j in range(y-10,y+10,1):
-                    imcolor.putpixel([i,j], (255,0,0))
-            imcolor.show()
+            for i in range(x - 2, x + 2, 1):
+                for j in range(y - 2, y + 2, 1):
+                    im.putpixel([i, j], 0)
+            im.show()
         return coord
-
-
 
