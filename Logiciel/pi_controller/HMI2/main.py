@@ -15,9 +15,9 @@ import serial.tools.list_ports
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-calib = Calibration_cam()
+#calib = Calibration_cam()
 max_Bouteille=9
-sequence=sequence()
+#sequence=sequence()
 
 
 # Step 1: Create a worker class
@@ -26,10 +26,14 @@ class Worker(QObject):
     progress = pyqtSignal(object)
     enCours = pyqtSignal(bool)
 
+    def ajouterRecette(self,recette):
+        self.recette = recette
+
     def run(self):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
-        sequence.sequence()
+        sequence.sequence(recette)
         self.recalibration()
+
         self.finished.emit()
 
 
@@ -388,7 +392,8 @@ class commander_screen6(QDialog):
 
 
     def commander_verre(self):
-        self.startThreadSequence()
+
+        self.startThreadSequence(self.recette)
         # self.startThread()
         # sequence.pompe(recette_commander,livreIngredient))
 
@@ -401,7 +406,7 @@ class commander_screen6(QDialog):
         # self.thread.finished.connect(
         #     lambda: self.commander.setEnabled(False)
         # )
-    def startThreadSequence(self):
+    def startThreadSequence(self,recette):
         # Step 2: Create a QThread object
         self.thread = QThread()
         # Step 3: Create a worker object
@@ -414,7 +419,7 @@ class commander_screen6(QDialog):
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.enCours.connect(self.afficherState)
-
+        self.worker.ajouterRecette(recette)
         self.thread.start()
 
     def afficherState(self,state):
