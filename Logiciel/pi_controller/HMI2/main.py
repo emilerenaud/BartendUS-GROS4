@@ -6,18 +6,22 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets as qtw
 from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem, QPushButton, QMessageBox
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
-from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
-from Logiciel.pi_controller.HMI2.stateMachine import sequence
-from Logiciel.Vision.calibration import Calibration_cam
+from PyQt5.uic.properties import QtGui
+
+from pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from pi_controller.HMI2.stateMachine import sequence
+from Vision.calibration import Calibration_cam
 import serial.tools.list_ports
+from PyQt5.QtWidgets import QDialog, QApplication, QGraphicsScene, QGraphicsPixmapItem
+from PyQt5.QtGui import QPixmap
 
 
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-calib = Calibration_cam()
+# calib = Calibration_cam()
 max_Bouteille=9
-sequence=sequence()
+# sequence=sequence()
 
 
 # Step 1: Create a worker class
@@ -287,11 +291,17 @@ class bouteilles_screen4(QDialog):
         self.ajouter.clicked.connect(self.ajouter_ingredient)
         self.supprimer.clicked.connect(self.supprimer_ligne)
 
-        # self.label.setScaledContents(True)
-        # self.label.setPixmap(QPixmap("icône-ou-logo-de-la-meilleure-qualité-d-alcool-dans-ligne-style-102955105.jpeg"))
-
         self.niveau_alcool.valueChanged.connect(self.slidervertical)
         self.update_liste()
+
+        # self.ui = Ui_Dialog()
+        # self.ui.setupUi(self)
+        # self.label = QGraphicsScene(self)
+        # pixmap = QtGui.QPixmap()
+        # pixmap.load("test.png")
+        # item = QGraphicsPixmapItem(pixmap)
+        # self.scene.addItem(item)
+        # self.ui.graphicsView.setScene(self.label)
 
     def slidervertical(self, value):
         self.quantite_ingredient = float("{:.2f}".format(value*750/99))
@@ -584,8 +594,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
-widget.show()
-#widget.showFullScreen()
+#widget.show()
+widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())
