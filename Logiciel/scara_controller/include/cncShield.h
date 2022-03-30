@@ -16,18 +16,18 @@
 #define endStopX_pin 9
 #define endStopY_pin 10
 #define endStopZ_pin 11
-#define SpnEn 12
+#define SpnEn 45
 #define Electro_pin 49
 
 #define pompe_pin_1 50
-#define pompe_pin_2 51
-#define pompe_pin_3 48
-#define pompe_pin_4 46
-#define pompe_pin_5 44
-#define pompe_pin_6 42
+#define pompe_pin_2 48
+#define pompe_pin_3 46
+#define pompe_pin_4 44
+#define pompe_pin_5 24
+#define pompe_pin_6 26
 
-#define stepPinP_pin 34
-#define dirPinP_pin 36
+#define stepPinP_pin 12
+#define dirPinP_pin 13
 
 #define offset_A 177
 #define offset_B -137.5

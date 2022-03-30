@@ -22,6 +22,7 @@ class Pompe
         long  start_time = 0;
         const float oz_par_sec = 0.6465;
         const float oz_des = 0.0067;
+        bool message_done = false;
 };
 
 #endif

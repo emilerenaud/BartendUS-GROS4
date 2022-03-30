@@ -12,11 +12,11 @@ cncShield::cncShield()
     motorZ->setSpeed(70);
     motorZ->setMaxSpeed(70);
     
-    // for(int i=0; i<6; i++)
-    // {
-    //     pompeTab[i] = new Pompe(pompe_pin[i]);
-    // }
-    pompe1 = new Pompe(pompe_pin_1);
+    for(int i=0; i<6; i++)
+    {
+        pompeTab[i] = new Pompe(pompe_pin[i]);
+    }
+    // pompe1 = new Pompe(pompe_pin_1);
     servoShaker = new Servo();
     servoShaker->attach(SpnEn);
     servoShaker->write(10);
@@ -53,7 +53,11 @@ void cncShield::closeElectro()
 
 void cncShield::update()
 {
-    pompe1->update();
+    // pompe1->update();
+    for(int i =0; i<6; i++)
+    {
+        pompeTab[i]->update();
+    }
     // int test = 0;
     if(_homing)
     {
@@ -218,8 +222,8 @@ void cncShield::shake()
     if(!_initShake)
     {
         moveServo(0);
-        motorP->setMaxSpeed(85);
-        motorP->setSpeed(85);
+        motorP->setMaxSpeed(50);
+        motorP->setSpeed(50);
         _compteurShake = 0;
         _initShake = 1;
     }
@@ -258,14 +262,29 @@ void cncShield::verser(void)
             _compteurVerser ++;
             break;
         case 2:
-            motorZ->setSpeed(70);
-            // motorZ->setMaxSpeed(60);
-            motorZ->moveTo(170);
             motorP->setSpeed(0);
-            motorP->moveTo(115 * _sensVerser);
+            motorP->moveTo(90 * _sensVerser);
             _compteurVerser ++;
             break; 
         case 3:
+            delay(250);
+            motorP->setSpeed(0);
+            motorP->moveTo(100 * _sensVerser);
+            _compteurVerser ++;
+            break;
+        case 4:
+            delay(100);
+            motorP->setSpeed(0);
+            motorP->moveTo(115 * _sensVerser);
+            motorZ->setSpeed(70);
+            // motorZ->setMaxSpeed(60);
+            motorZ->moveTo(170);
+            _compteurVerser ++;
+            break;
+        case 5:
+            _compteurVerser ++;
+            break;
+        case 6:
             motorP->setSpeed(2);
             motorP->moveTo(0);
             _compteurVerser = 0;
@@ -321,8 +340,7 @@ void cncShield::controlPompe(int pompe,float volume)
         pompe =0;
     if(pompe>=6)
         pompe = 6;
-    Serial.println(volume);
-    pompe1->vol_pompe_oz(volume);
-    // pompeTab[pompe-1]->vol_pompe_oz(volume);
+    int pompeNum = pompe - 1;
+    pompeTab[pompeNum]->vol_pompe_oz(volume);
 };
 
