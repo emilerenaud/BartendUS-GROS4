@@ -25,6 +25,8 @@ class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(object)
     enCours = pyqtSignal(bool)
+    erreur = pyqtSignal(object)
+    success = pyqtSignal()
 
     def ajouterRecette(self,recette):
         self.recette = recette
@@ -32,7 +34,7 @@ class Worker(QObject):
     def run(self):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
 
-        mess_seq=sequence.sequence(recette,livreIngredient)
+        mess_seq=sequence.sequence(self.recette,livreIngredient)
         if(mess_seq is not True):
             self.erreur.emit(mess_seq)
         else:
@@ -493,7 +495,7 @@ class reglages_screen5(QDialog):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def HOME_ALL(self):
-        sequence.homing(False)
+        sequence.homing(True)
 
     def calibration(self):
         calib.calib_vision_init()
@@ -523,14 +525,14 @@ class reglages_screen5(QDialog):
             qtw.QMessageBox.information(self, 'Erreur','''Entrée en Z incompatible''')
 
         if position_x != "" and position_y!="" and position_z!="" and position_y >=0:
-            sequence.moveTo((position_x), (position_y), False)
-            sequence.moveUpDown((position_z) * 1000,False)
+            sequence.moveTo((position_x), (position_y), True)
+            sequence.moveUpDown((position_z) * 1000,True)
 
         elif position_x == "" and position_y=="" and position_z!="":
-            sequence.moveUpDown((position_z) * 1000,False)
+            sequence.moveUpDown((position_z) * 1000,True)
 
         elif position_x != "" and position_y!="" and position_z=="" and position_y >=0:
-            sequence.moveTo((position_x),(position_y) , False)
+            sequence.moveTo((position_x),(position_y) , True)
 
         return
 
@@ -538,10 +540,10 @@ class reglages_screen5(QDialog):
         self.type_servo = 0
         if self.radio_ouverture_servo.isChecked() == True:
             self.type_servo = 0
-            sequence.servo(150,False)
+            sequence.servo(150,True)
         if self.radio_fermeture_servo.isChecked() == True:
             self.type_servo = 1
-            sequence.servo(5, False)
+            sequence.servo(5, True)
 
     def radioBouton_electro(self):
         self.type_electro = 0
@@ -550,18 +552,18 @@ class reglages_screen5(QDialog):
 
         if self.radio_fermeture_electro.isChecked() == True:
             self.type_electro = 1
-        sequence.electro(self.type_electro,False)
+        sequence.electro(self.type_electro,True)
 
     def commande_purge_pompes(self):
         i_combo_box_pompe = self.comboBox_pompes.currentIndex()+1
 
         if(i_combo_box_pompe==7):
-            sequence.activatePompe([1,2,3,4,5,6], 5, False)
+            sequence.activatePompe([1,2,3,4,5,6], [1], True)
         else:
-            sequence.activatePompe(i_combo_box_pompe,5,False)
+            sequence.activatePompe([i_combo_box_pompe],[1],True)
 
     def shake_n_bake(self):
-        sequence.shake(False)
+        sequence.shake(True)
 
     def read_serial_port(self):
         try:

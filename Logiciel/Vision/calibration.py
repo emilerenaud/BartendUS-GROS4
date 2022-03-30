@@ -203,11 +203,11 @@ class Calibration_cam():
 
             if not (self.liste_coord_centres_ref[point][0] - self.seuil <= self.liste_points_coord_centre[point][0] <= self.liste_coord_centres_ref[point][0] + self.seuil):
                 print("CALIBRATION NÉCESSAIRE: Coordonnée en X ne respecte pas le seuil")
-                return False
+                return True
 
             elif not (self.liste_coord_centres_ref[point][1] - self.seuil <= self.liste_points_coord_centre[point][1] <= self.liste_coord_centres_ref[point][1] + self.seuil):
                 print("CALIBRATION NÉCESSAIRE: Coordonnée en Y ne respecte pas le seuil")
-                return False
+                return True
 
         return True
 
@@ -223,9 +223,9 @@ if __name__ == '__main__':
     # cv2.imwrite(path, frame)
 
     calib = Calibration_cam()
-    # calib.calib_vision_init()
+    calib.calib_vision_init()
 
-    calib.calib_vision_seuil()
+    # calib.calib_vision_seuil()
     # calib_vision_seuil()
     # calib.calib_vision_init
     print('Done with vision')

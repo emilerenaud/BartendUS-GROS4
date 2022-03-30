@@ -1,5 +1,6 @@
 baileys:75.76, position : 3
 cafe:386.36, position : 4
 canneberge:303.03, position : 5
-vodka:75.76, position : 2
 triplesec:75.76, position : 6
+rhum:303.03, position : 2
+vodka:227.27, position : 1

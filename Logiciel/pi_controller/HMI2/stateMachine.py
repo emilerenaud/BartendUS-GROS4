@@ -8,6 +8,7 @@ from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
 from Logiciel.Vision.calibration import Calibration_cam
 from PIL import Image
 import subprocess
+import numpy as np
 
 class sequence():
 
@@ -21,6 +22,8 @@ class sequence():
 
     def send_message(self, message,wait):
         try:
+            print(message)
+            #self.arduino.reset_input_buffer()
             self.arduino.write(bytes(message, 'utf-8'))
             time.sleep(0.05) # one tick delay (15ms) in between reads for stability
             print("data sent")
@@ -50,6 +53,7 @@ class sequence():
         try:
             self.arduino = serial.Serial(port=port_com, baudrate=9600, timeout=.1)
             time.sleep(0.5)
+            self.arduino.reset_input_buffer()
             self.send_message("M11\r\n", False)
 
 
@@ -99,27 +103,43 @@ class sequence():
 
     def activatePompe(self,list_pompe, list_quant,wait):
         # G101:A1.5 pour la pompe 1 avec 1.5oz
-        for i in list_pompe:
+        print(list_pompe)
+        print(list_quant)
+
+        for i in range(len(list_pompe)):
+            print(str(list_pompe[i]))
+            print(str(list_quant[i]))
             pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_quant[i]) + "\r\n"
+            print(pompe)
             self.send_message(pompe,wait)
-            return
+        return
 
 
     def sequence(self,recette,livreIngredient):
         wait=True
-        self.moveUpDown(200,wait)
-        self.moveTo(0.48,0,wait)
+        self.moveUpDown(70,wait)
+        self.moveTo(0.49,0,wait)
 
-        if self.calib.calib_vision_seuil() is False:
+        if self.calib.calib_vision_seuil is False:
             return "Veuillez recalibrer la caméra dans la fenêtre réglage"
         else:
             positionVerre=self.vision()
+            time.sleep(2)
             if(positionVerre[0]==0 and positionVerre[1]==0):
                 return "Aucun verre détecté, placez vos verres "
             else:
-                if (self.pompe(recette,livreIngredient) is False):
+                self.moveTo(0.36,0.10,wait)
+                self.servo(170,wait)
+                self.moveTo(0.34,-0.03,wait)
+                if (self.pompe(recette,livreIngredient,wait) is False):
                     return "Quantité insuffisante d'un ingrédient"
                 else:
+                    time.sleep(6)
+                    #self.moveTo(0.49,0,wait)
+                    self.moveTo(0.36,0.14,wait)
+                    self.servo(5,wait)
+                    self.moveUpDown(200,wait)
+                    self.shake(wait)
                     #positionVerre=[-0.15, 0.4]
                     pos = self.r.tangentAuVerre(positionVerre)
                     self.moveTo(pos[0],pos[1],wait)
@@ -131,10 +151,10 @@ class sequence():
                     else:
                         self.poignet(-70,wait)
 
-                    self.versement(sens,wait)
-                    self.servo(5,wait)
-                    self.moveTo(0.485, 0, wait)
-
+                self.versement(sens,wait)
+                self.servo(5,wait)
+                self.moveTo(0.49, 0, wait)
+                return ""
 
     def versement(self,sens,wait):
         # caller la fonction HOME
@@ -148,26 +168,27 @@ class sequence():
     # retourne la position et le temps de chacune des pompes a actionner
     def identification_pompe(self,recette, livreIngredient):
         conv=0.5
-        list_position_pompe = []
-        list_quant_pompe = []
+        print(recette)
+        self.list_position_pompe = []
+        self.list_quant_pompe = []
 
-        list_ingredient_dispo = livreIngredient.get_list_ingredient().copy()
-        list_pos_bouteille = livreIngredient.get_list_position().copy()
+        self.list_ingredient_dispo = livreIngredient.get_list_ingredient().copy()
+        self.list_pos_bouteille = livreIngredient.get_list_position().copy()
 
-        list_ingredient = recette.getlistAlcool()
-        list_quantite = recette.getlistQuantite()
+        self.list_ingredient = recette.getlistAlcool().copy()
+        self.list_quantite = recette.getlistQuantite().copy()
 
-        for i in range(len(list_ingredient)):
-            for j in range(len(list_ingredient_dispo)):
-                if list_ingredient_dispo[j] == list_ingredient[i]:
-                    list_position_pompe.append(list_pos_bouteille[j])
-                    list_quant_pompe.append(list_quantite[i])
+        for i in range(len(self.list_ingredient)):
+            for j in range(len(self.list_ingredient_dispo)):
+                if self.list_ingredient_dispo[j] == self.list_ingredient[i]:
+                    self.list_position_pompe.append(self.list_pos_bouteille[j])
+                    self.list_quant_pompe.append(self.list_quantite[i])
                     # remove from next search
-                    list_ingredient_dispo.pop(j)
-                    list_pos_bouteille.pop(j)
+                    self.list_ingredient_dispo.pop(j)
+                    self.list_pos_bouteille.pop(j)
                     break
 
-        return [list_position_pompe, list_quant_pompe]
+        return [self.list_position_pompe, self.list_quant_pompe]
 
 
     def pompe(self,recette, livreIngredient,wait):
