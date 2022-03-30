@@ -25,15 +25,20 @@ class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(object)
     enCours = pyqtSignal(bool)
+
+    def ajouterRecette(self,recette):
+        self.recette = recette
+
     def run(self):
-        # """state_machine"""
-        # self.enCours.emit(True)
-        # sequence.sequence()
-        # for i in range(5):
-        #     time.sleep(1)
-        # # sequence.sequence()
-        # self.enCours.emit(False)
-        sequence.sequence()
+        #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
+
+        mess_seq=sequence.sequence(recette,livreIngredient)
+        if(mess_seq is not True):
+            self.erreur.emit(mess_seq)
+        else:
+            #self.recalibration()
+            self.success.emit()
+
         self.finished.emit()
 
 
@@ -44,9 +49,7 @@ class MainWindow(QDialog):
         loadUi("pi_controller/HMI2/MainWindow_test.ui", self)
         self.recettes.clicked.connect(self.go_to_recettes)
         self.boire.clicked.connect(self.go_to_boire)
-        # self.boire.clicked.connect(self.show_popup)
         self.bouteilles.clicked.connect(self.go_to_bouteilles)
-        # self.consulter.clicked.connect(self.go_to_consulter_recettes)
         self.reglages.clicked.connect(self.go_to_reglages)
 
     def go_to_recettes(self):
@@ -79,7 +82,7 @@ class recette_screen2(QDialog):
     def __init__(self):
         super(recette_screen2, self).__init__()
         loadUi("pi_controller/HMI2/recette.ui", self)
-        # mettre les recettes a jour dans la liste widget sans bouton
+
         self.precedent.clicked.connect(self.go_to_recettes)
         self.ajouter_alcool.clicked.connect(self.ajouter_ingredient)
         self.ajouter_recette.clicked.connect(self.ajouter_livreRecette)
@@ -94,7 +97,6 @@ class recette_screen2(QDialog):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
     def ajouter_ingredient(self):
-        # travailler l'affichage de la liste widget
 
         alcool = self.alcool_ligne.text()
         quantite = self.quantite_ligne.text()
@@ -177,13 +179,11 @@ class boire_screen3(QDialog):
         else:
             self.recettes_disponibles.addItem("Aucune Recette Compatible")
 
-
         self.recettes_disponibles.itemClicked.connect(self.voir_liste_ingredient)
         self.precedent.clicked.connect(self.go_to_MainWindowDialog)
         self.commander.clicked.connect(self.go_to_commander_screen6)
-        print(self.recettes_disponibles.currentRow())
-        print(self.recettes_disponibles.currentRow())
-        # mettre les recettes a jour dans la liste widget sans bouton
+
+
 
 
     def go_to_MainWindowDialog(self):
@@ -201,8 +201,7 @@ class boire_screen3(QDialog):
             self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
 
     def go_to_commander_screen6(self):
-        # print(self.recettes_disponibles.currentRow())
-        # print(self.recettes_disponibles.currentItem().text())
+
         row = self.recettes_disponibles.currentRow()
         print(self.recettes_disponibles.currentRow())
         if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
@@ -214,12 +213,7 @@ class boire_screen3(QDialog):
             qtw.QMessageBox.information(self, 'Erreur', '''Aucune recette selectionnée''' + "\n" + '''Sélectionnez ou ajouter une recette puis réessayez...''')
             return
 
-    # def radioBouton(self):
-    #     self.type_boire = 0
-    #     if self.radioVerre.isChecked() == True:
-    #         self.type_boire = 1
-    #     if self.radioShot.isChecked() == True:
-    #         self.type_boire = 2
+
 
 #***************************************************************************************Consulter recette
 class consulter_recettes_screen5(QDialog):
@@ -372,7 +366,6 @@ class commander_screen6(QDialog):
         self.decrementer.clicked.connect(self.afficher_compteur)
         self.recette = recette
         self.nb_verre = 0
-        # self.nombre_verre.setText('''Nombre de verre : "''' + str(self.nb_verre) + '''"''')
         self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
 
 
@@ -402,11 +395,17 @@ class commander_screen6(QDialog):
         str_nb_verre = str(self.nb_verre)
         self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
 
+    def erreur_commande(self,mess_erreur):
+        qtw.QMessageBox.critical(self, 'Erreur', '''Erreur : '''+mess_erreur)
+
+    def commande_complete(self):
+        qtw.QMessageBox.critical(self, 'Success', '''Votre verre est plein, recommander à votre soif  ''')
 
     def commander_verre(self):
-        self.startThreadSequence()
+
+        self.startThreadSequence(self.recette)
         # self.startThread()
-        # print("pompe activer : ",sequence.pompe(recette_commander,livreIngredient))
+        # sequence.pompe(recette_commander,livreIngredient))
 
         # verif_seuil = Calibration_cam()
         # if not verif_seuil.calib_vision_seuil():
@@ -414,13 +413,10 @@ class commander_screen6(QDialog):
         #     reglages_screen5.calibration(self)
         #     return
 
-        # row = self.recettes_disponibles.currentRow()
-        # recette_commander=livreRecette.list_recette_dispo[row]
-
         # self.thread.finished.connect(
         #     lambda: self.commander.setEnabled(False)
         # )
-    def startThreadSequence(self):
+    def startThreadSequence(self,recette):
         # Step 2: Create a QThread object
         self.thread = QThread()
         # Step 3: Create a worker object
@@ -432,9 +428,9 @@ class commander_screen6(QDialog):
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.enCours.connect(self.afficherState)
-        # self.worker.progress.connect(self.afficherTest)
-        # Step 6: Start the thread
+        self.worker.erreur.connect(self.erreur_commande)
+        self.worker.success.connect(self.commande_complete)
+        self.worker.ajouterRecette(recette)
         self.thread.start()
 
     def afficherState(self,state):
@@ -446,13 +442,10 @@ class commander_screen6(QDialog):
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
-    def supprimer_recette(self):
-        pass
 
     def voir_liste_ingredient(self):
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
         row = self.recettes_repertoire.currentRow()
-        print(self.recettes_repertoire.currentRow())
         if row>=0 and len(livreRecette.list_recette_string())>0:
             self.ingredients.clear()
             self.ingredients.addItem(livreRecette.list_recette[row].afficherIngredient())
@@ -473,9 +466,6 @@ class reglages_screen5(QDialog):
         self.bouton_calibration.clicked.connect(self.calibration)
         self.move_to.clicked.connect(self.go_to_position)
         self.connexion.clicked.connect(self.connected_button)
-
-
-
 
         self.radio_ouverture_servo.setChecked(True)
         self.radio_ouverture_electro.setChecked(True)
@@ -578,17 +568,12 @@ class reglages_screen5(QDialog):
             ports = serial.tools.list_ports.comports()
             for port, desc, hwid in sorted(ports):
                 self.serialPort.append(port)
-            print(self.serialPort)
         except():
-            print("Error while checking opened serial port")
+            pass
 
     def connected_button(self):
-
-
         port=str(self.comboBox.currentText())
-        print(port)
         sequence.openSerial(port)
-        print("bravo")
 
 
 app = QApplication(sys.argv)
