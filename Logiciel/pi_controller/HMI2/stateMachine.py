@@ -105,34 +105,36 @@ class sequence():
             return
 
 
-    def sequence(self):
+    def sequence(self,recette,livreIngredient):
         wait=True
         self.moveUpDown(200,wait)
-        self.moveTo(0.45,0,wait)
+        self.moveTo(0.48,0,wait)
 
-        #if self.calib.calib_vision_seuil():
-
-        positionVerre=self.vision()
-        #positionVerre=[-0.15, 0.4]
-        pos = self.r.tangentAuVerre(positionVerre)
-        if(pos is not False):
-            self.moveTo(pos[0],pos[1],wait)
-            self.servo(45,wait)
-
-            sens = self.r.getSensVersement()
-            if(sens=="gauche"):
-                self.poignet(70,wait)
+        if self.calib.calib_vision_seuil() is False:
+            return "Veuillez recalibrer la caméra dans la fenêtre réglage"
+        else:
+            positionVerre=self.vision()
+            if(positionVerre[0]==0 and positionVerre[1]==0):
+                return "Aucun verre détecté, placez vos verres "
             else:
-                self.poignet(-70,wait)
+                if (self.pompe(recette,livreIngredient) is False):
+                    return "Quantité insuffisante d'un ingrédient"
+                else:
+                    #positionVerre=[-0.15, 0.4]
+                    pos = self.r.tangentAuVerre(positionVerre)
+                    self.moveTo(pos[0],pos[1],wait)
+                    self.servo(150,wait)
 
-            self.versement(sens,wait)
-            self.servo(5,wait)
-            self.moveTo(0.485, 0, wait)
-            #print("servo")
-            #self.servo(5)
-            #self.moveTo(0,0.45)
-            #self.servo(150)
-            #self.versement()
+                    sens = self.r.getSensVersement()
+                    if(sens=="gauche"):
+                        self.poignet(70,wait)
+                    else:
+                        self.poignet(-70,wait)
+
+                    self.versement(sens,wait)
+                    self.servo(5,wait)
+                    self.moveTo(0.485, 0, wait)
+
 
     def versement(self,sens,wait):
         # caller la fonction HOME
@@ -170,7 +172,11 @@ class sequence():
 
     def pompe(self,recette, livreIngredient,wait):
         list_pompe_quantite=self.identification_pompe(recette, livreIngredient)
-        self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],wait)
+        if( list_pompe_quantite is False):
+            return False
+        else:
+            self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],wait)
+            return True
 
     def shake(self,wait):
         self.send_message("M3\r\n",wait)

@@ -15,9 +15,9 @@ import serial.tools.list_ports
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-#calib = Calibration_cam()
+calib = Calibration_cam()
 max_Bouteille=9
-#sequence=sequence()
+sequence=sequence()
 
 
 # Step 1: Create a worker class
@@ -31,8 +31,13 @@ class Worker(QObject):
 
     def run(self):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
-        sequence.sequence(recette)
-        self.recalibration()
+
+        mess_seq=sequence.sequence(recette,livreIngredient)
+        if(mess_seq is not True):
+            self.erreur.emit(mess_seq)
+        else:
+            #self.recalibration()
+            self.success.emit()
 
         self.finished.emit()
 
@@ -390,6 +395,11 @@ class commander_screen6(QDialog):
         str_nb_verre = str(self.nb_verre)
         self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
 
+    def erreur_commande(self,mess_erreur):
+        qtw.QMessageBox.critical(self, 'Erreur', '''Erreur : '''+mess_erreur)
+
+    def commande_complete(self):
+        qtw.QMessageBox.critical(self, 'Success', '''Votre verre est plein, recommander à votre soif  ''')
 
     def commander_verre(self):
 
@@ -418,7 +428,8 @@ class commander_screen6(QDialog):
         self.worker.finished.connect(self.thread.quit)
         self.worker.finished.connect(self.worker.deleteLater)
         self.thread.finished.connect(self.thread.deleteLater)
-        self.worker.enCours.connect(self.afficherState)
+        self.worker.erreur.connect(self.erreur_commande)
+        self.worker.success.connect(self.commande_complete)
         self.worker.ajouterRecette(recette)
         self.thread.start()
 
@@ -431,8 +442,6 @@ class commander_screen6(QDialog):
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
-    def supprimer_recette(self):
-        pass
 
     def voir_liste_ingredient(self):
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
