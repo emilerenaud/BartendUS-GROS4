@@ -1,7 +1,7 @@
 # BartendUS 
 ## GRO-S4H2022 - Université de Sherbrooke
 
-BartendUS est un projet académique de 4e session du programme de génie robotique de l'Université de Sherbrooke.
+BartendUS est un projet académique de 4e session du programme de génie robotique de l'Université de Sherbrooke. C'est un projet réalisé dans le cadre du cours _GRO400:_ _Conception agile et ouverte en robotique_.
 
 BartendUS est une plateforme surmontée d'un bras robotisé de type SCARA qui permet de créer des breuvages alcoolisés sur mesure. Le robot est assisté par un algorithme de vision ainsi qu'une interface utilisateur graphique. Également, des supports conçus sur mesure permettent le maintien des bouteilles en place tout en facilitant la distribution des liquides.
 
