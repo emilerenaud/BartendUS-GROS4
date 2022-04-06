@@ -19,7 +19,7 @@ from PyQt5.QtGui import QPixmap
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-# calib = Calibration_cam()
+calib = Calibration_cam()
 max_Bouteille=6
 # sequence=sequence()
 

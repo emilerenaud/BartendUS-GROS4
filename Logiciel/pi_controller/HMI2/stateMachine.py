@@ -204,63 +204,74 @@ class sequence():
 
     def vision(self):
         output = True  # False: Disable display output & True: Enable display output
-        subprocess.call('sudo fswebcam -r 2048x1536 /home/pi/Desktop/Vision.jpg', shell=True)
-        path = r'/home/pi/Desktop/Vision.jpg'
+        calib = False
+        subprocess.call('sudo fswebcam -r 2048x1536 /home/pi/Desktop/Vision.jpeg', shell=True)
+        path = r'/home/pi/Desktop/Vision.jpeg'
 
-        size = 480
+        resize_factor = 10
         imcolor = Image.open(path)
-        im = (imcolor.convert('L')).resize((size, size))
+        im = (imcolor.convert('L'))
+        im = im.resize((int(im.size[0] / resize_factor), int(im.size[1] / resize_factor)))
         pixel = im.load()
 
-        r = 200
-        top = 75
-        nb_point = 10
-        bottom = 420
-        a = -r / ((bottom / 2) ** 2)
-        np_point_useless = 1
-        seuil = 50
-        y2 = (np.arange(nb_point) - nb_point / 2) * (bottom / nb_point)
-        x2 = abs(a * (y2 ** 2) - top)
-        y2 = y2 + size / 2
-        for i in range(im.size[0]):
-            if i < 430:
-                if i > 50:
-                    for j in range(0, int(abs(a * ((i - 240) ** 2) - top))):
-                        im.putpixel([i, j], 0)
-            else:
-                for j in range(im.size[1]):
-                    im.putpixel([i, j], 0)
-            if i < 51:
-                for j in range(im.size[1]):
-                    im.putpixel([i, j], 0)
+        nb_line = 10
+        # y_start = [110,70,50,35,30,35,50,70,110]
+        # y_end =   [160,162,164,164,164,162,159,156,154]
+        y_start = [75, 50, 30, 25, 22, 25, 33, 50, 75]
+        y_end = [100, 110, 110, 110, 110, 110, 110, 105, 100]
+        x_space = int(im.size[0] / nb_line)
+        pixel_seuil = 50
+        y_center = 0
+        x_center = 0
 
-        x = 0
-        y = 0
-        nb = 1
-        r = 0.40
-        for i in range(im.size[0]):
-            for j in range(im.size[1]):
-                if j > (im.size[1] - 150):
-                    im.putpixel([i, j], 0)
-                elif j < (0):
-                    im.putpixel([i, j], 0)
-                elif i > (im.size[0] - 0):
-                    im.putpixel([i, j], 0)
-                elif i < (0):
-                    im.putpixel([i, j], 0)
-                elif pixel[i, j] > 200:
-                    x += i
-                    nb += 1
-                    y += j
-        x = int(x / nb)
-        y = int(y / nb)
-        coord = [((((x - (im.size[0] / 2)))) * (0.19 + 0.17) / (122 + 114)) + 0.003898, (
-                    abs(y - im.size[1]) * (31 - 12) / (
-                        354 - 181) - 7.878) / 100]  # [x,y] in meters, origin at the A axis
-        if output:
-            for i in range(x - 2, x + 2, 1):
-                for j in range(y - 2, y + 2, 1):
-                    im.putpixel([i, j], 0)
+        for i in range(1, nb_line):
+            im.putpixel([(i * x_space), y_start[i - 1]], 150)
+            for j in range(y_start[i - 1], y_end[i - 1]):
+                if pixel[(i * x_space), j + 1] - pixel[(i * x_space), (j)] > pixel_seuil:
+                    y1 = j
+                    j = j + 1
+                    # im.putpixel([(i*x_space),j],0)
+                    while (pixel[(i * x_space), j] - pixel[(i * x_space), (j + 1)]) < pixel_seuil and j < (
+                            im.size[1] - 5):
+                        y_center = int(j - ((j - y1) / 2))
+                        # im.putpixel([(i*x_space),j],0)
+                        j = j + 1
+                    x = i * x_space
+                    while (pixel[(x), y_center] - pixel[(x + 1), y_center]) < pixel_seuil and x < (im.size[0] - 5):
+                        x1 = x
+                        # im.putpixel([x,y_center],0)
+                        x = x + 1
+                    x = i * x_space
+                    while (pixel[(x), y_center] - pixel[(x - 1), y_center]) < pixel_seuil and x > 5:
+                        x_center = int(x1 - ((x1 - x) / 2))
+                        # im.putpixel([x,y_center],0)
+                        x = x - 1
+                    y = y_center
+                    while (pixel[(x_center), y] - pixel[(x_center), (y + 1)]) < pixel_seuil and y < (im.size[1] - 5):
+                        y1 = y
+                        # im.putpixel([x_center,y],0)
+                        y = y + 1
+                    y = y_center
+                    while (pixel[(x_center), y] - pixel[(x_center), (y - 1)]) < pixel_seuil and y > y1:
+                        y_center = int(y1 - ((y1 - y) / 2))
+                        # im.putpixel([x_center,y],0)
+                        y = y - 1
+                    break
+
+        if calib:
+            for i in range(1, nb_line):
+                for j in range(y_start[i - 1], y_end[i - 1]):
+                    im.putpixel([(i * x_space), j], 0)
+            print(im.size[0])
+            print(im.size[1])
             im.show()
-        return coord
+
+        size_square = 2
+        if output:
+            if (x_center != 0 and y_center != 0):
+                for i in range(x_center - size_square, x_center + size_square, 1):
+                    for j in range(y_center - size_square, y_center + size_square, 1):
+                        im.putpixel([i, j], 0)
+            im.show()
+        return [x_center, y_center]
 
