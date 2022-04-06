@@ -55,8 +55,6 @@ class sequence():
             time.sleep(0.5)
             self.arduino.reset_input_buffer()
             self.send_message("M11\r\n", False)
-
-
         except:
             pass
     
@@ -117,13 +115,14 @@ class sequence():
 
     def sequence(self,recette,livreIngredient):
         wait=True
-        self.moveUpDown(70,wait)
+        self.moveUpDown(45,wait)
         self.moveTo(0.49,0,wait)
 
         if self.calib.calib_vision_seuil is False:
             return "Veuillez recalibrer la caméra dans la fenêtre réglage"
         else:
             positionVerre=self.vision()
+            print(positionVerre)
             time.sleep(2)
             if(positionVerre[0]==0 and positionVerre[1]==0):
                 return "Aucun verre détecté, placez vos verres "
@@ -138,7 +137,7 @@ class sequence():
                     #self.moveTo(0.49,0,wait)
                     self.moveTo(0.36,0.14,wait)
                     self.servo(5,wait)
-                    self.moveUpDown(200,wait)
+                    self.moveUpDown(210,wait)
                     self.shake(wait)
                     #positionVerre=[-0.15, 0.4]
                     pos = self.r.tangentAuVerre(positionVerre)
@@ -215,12 +214,10 @@ class sequence():
         pixel = im.load()
 
         nb_line = 10
-        # y_start = [110,70,50,35,30,35,50,70,110]
-        # y_end =   [160,162,164,164,164,162,159,156,154]
-        y_start = [75, 50, 30, 25, 22, 25, 33, 50, 75]
+        y_start = [75, 50, 30, 25, 22, 25, 33, 50, 80]
         y_end = [100, 110, 110, 110, 110, 110, 110, 105, 100]
         x_space = int(im.size[0] / nb_line)
-        pixel_seuil = 50
+        pixel_seuil = 40
         y_center = 0
         x_center = 0
 
@@ -273,5 +270,20 @@ class sequence():
                     for j in range(y_center - size_square, y_center + size_square, 1):
                         im.putpixel([i, j], 0)
             im.show()
-        return [x_center, y_center]
+        coord = [0, 0]
+        if (x_center != 0 and y_center != 0):
+            coord = [-(x_center * (-0.003444444) + 0.3065),(y_center * (-0.0034) + 0.4258)]  # [x,y] in meters, origin at the A axis
+        """
+        r = np.sqrt(coord[0] ** 2 + (coord[1] - 0.13) ** 2)
+        r1 = 0.999
+        r2 = 0.98
+        r3 = 0.96
+        if r > 0.8 and r < 0.18:
+            coord = [coord[0] * r1, coord[1] * r1]
+        elif r >= 0.18 and r < 0.22:
+            coord = [coord[0] * r2, coord[1] * r2]
+        else:
+            coord = [coord[0] * r3, coord[1] * r3]
+            """
+        return coord
 

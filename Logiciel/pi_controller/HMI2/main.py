@@ -21,7 +21,7 @@ livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
 calib = Calibration_cam()
 max_Bouteille=6
-# sequence=sequence()
+sequence=sequence()
 
 
 # Step 1: Create a worker class
