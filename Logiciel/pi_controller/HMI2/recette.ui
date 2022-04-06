@@ -94,6 +94,18 @@
               </property>
              </widget>
             </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Ingrédients :</string>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="1">
              <widget class="QLineEdit" name="quantite_ligne">
               <property name="maximumSize">
@@ -148,18 +160,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="font">
-               <font>
-                <pointsize>23</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Ingrédients :</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
          </item>
@@ -187,7 +187,7 @@
                <enum>QFrame::Raised</enum>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_4">
-               <item alignment="Qt::AlignLeft">
+               <item>
                 <widget class="QLabel" name="label_4">
                  <property name="maximumSize">
                   <size>
@@ -207,12 +207,6 @@
                </item>
                <item>
                 <widget class="QLineEdit" name="titre_ligne">
-                 <property name="minimumSize">
-                  <size>
-                   <width>400</width>
-                   <height>0</height>
-                  </size>
-                 </property>
                  <property name="maximumSize">
                   <size>
                    <width>400</width>
@@ -247,8 +241,8 @@
                <enum>QFrame::Raised</enum>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
-               <item row="2" column="2">
-                <widget class="QPushButton" name="delete_all">
+               <item row="0" column="2">
+                <widget class="QPushButton" name="ajouter_recette">
                  <property name="minimumSize">
                   <size>
                    <width>400</width>
@@ -267,7 +261,7 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>Delete all</string>
+                  <string>Ajouter Recette</string>
                  </property>
                 </widget>
                </item>
@@ -295,30 +289,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="2">
-                <widget class="QPushButton" name="ajouter_recette">
-                 <property name="minimumSize">
-                  <size>
-                   <width>400</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>400</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>23</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Ajouter Recette</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -330,6 +300,12 @@
       </item>
       <item>
        <widget class="QFrame" name="bas_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>140</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>

@@ -93,7 +93,7 @@ class recette_screen2(QDialog):
         self.ajouter_alcool.clicked.connect(self.ajouter_ingredient)
         self.ajouter_recette.clicked.connect(self.ajouter_livreRecette)
         self.supprimer.clicked.connect(self.supprimer_ligne)
-        self.delete_all.clicked.connect(self.supprimer_tout)
+        #self.delete_all.clicked.connect(self.supprimer_tout)
         self.liste_ingredient_recette=[]
         self.liste_quantite_recette=[]
 
@@ -146,10 +146,10 @@ class recette_screen2(QDialog):
             self.liste_quantite_recette.pop(row)
 
 
-    def supprimer_tout(self):
-        self.listWidget.clear()
-        self.liste_ingredient_recette.clear()
-        self.liste_quantite_recette.clear()
+    # def supprimer_tout(self):
+    #     self.listWidget.clear()
+    #     self.liste_ingredient_recette.clear()
+    #     self.liste_quantite_recette.clear()
 
     def ajouter_livreRecette(self):
 
@@ -606,8 +606,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
-widget.show()
-#widget.showFullScreen()
+#widget.show()
+widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())
