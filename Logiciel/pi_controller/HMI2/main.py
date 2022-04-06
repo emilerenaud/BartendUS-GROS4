@@ -8,9 +8,9 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.uic.properties import QtGui
 
-from pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
-from pi_controller.HMI2.stateMachine import sequence
-from Vision.calibration import Calibration_cam
+from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from Logiciel.pi_controller.HMI2.stateMachine import sequence
+from Logiciel.Vision.calibration import Calibration_cam
 import serial.tools.list_ports
 from PyQt5.QtWidgets import QDialog, QApplication, QGraphicsScene, QGraphicsPixmapItem
 from PyQt5.QtGui import QPixmap
@@ -20,7 +20,7 @@ from PyQt5.QtGui import QPixmap
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
 # calib = Calibration_cam()
-max_Bouteille=9
+max_Bouteille=6
 # sequence=sequence()
 
 
@@ -596,8 +596,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
-#widget.show()
-widget.showFullScreen()
+widget.show()
+#widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())

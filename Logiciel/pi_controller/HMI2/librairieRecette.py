@@ -117,7 +117,7 @@ class gestion_ingredient_dispo():
         return False
 
     def update_Quantite(self,index,quantite):
-        self.supprimerLigneVide()
+        #self.supprimerLigneVide()
         new_line = self.list_ingredient[index] + ":" + str(self.list_quantite[index]-quantite) + ", position : " + str(self.list_position[index])
         f = open(self.path, 'r', encoding="utf-8")
         lines = f.readlines()
@@ -125,12 +125,13 @@ class gestion_ingredient_dispo():
         f = open(self.path, 'w', encoding="utf-8")
 
         for l in range(len(lines)):
-            line_actuel = lines[l].strip('\n')
             if l!=index:
                 f.write(lines[l])
             else:
                 f.write(new_line)
         f.close()
+
+
 
 class recette() :
 
@@ -298,3 +299,5 @@ class gestion_Recette():
 
         return
 
+# livreIngredient=gestion_ingredient_dispo()
+# livreIngredient.update_Quantite(0,3);

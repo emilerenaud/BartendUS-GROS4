@@ -4,8 +4,8 @@ import glob
 import cv2
 import serial
 import time
-from pi_controller.HMI2.inverseKinematic import scaraRobot
-from Vision.calibration import Calibration_cam
+from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
+from Logiciel.Vision.calibration import Calibration_cam
 from PIL import Image
 import subprocess
 import numpy as np
