@@ -39,7 +39,7 @@ class Worker(QObject):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
 
         mess_seq=sequence.sequence(self.recette,livreIngredient)
-        if(mess_seq is not True):
+        if(mess_seq !=""):
             self.erreur.emit(mess_seq)
         else:
             #self.recalibration()
@@ -107,6 +107,12 @@ class recette_screen2(QDialog):
         alcool = self.alcool_ligne.text()
         quantite = self.quantite_ligne.text()
 
+        if (alcool.find(":") != -1 or alcool.find(",") != -1 or alcool.find("/") != -1):
+            qtw.QMessageBox.information(self, 'Erreur caractère',
+                                        '''Les caractère : ":" "," "/" ne sont pas acceptés''')
+            return
+        else:
+            pass
         if alcool == "":
             qtw.QMessageBox.information(self, 'Attention', '''Aucun alcool entrée'''+ "\n" + '''Réessayer...''')
             return
@@ -317,7 +323,11 @@ class bouteilles_screen4(QDialog):
 
         ingredient = self.ingredient_ligne.text()
         position_ingredient = self.position_ingredient_ligne.text()
-
+        if(ingredient.find(":")!=-1 or ingredient.find(",")!=-1 or ingredient.find("/")!=-1):
+            qtw.QMessageBox.information(self, 'Erreur caractère','''Les caractère : ":" "," "/" ne sont pas acceptés''')
+            return
+        else:
+            pass
         if position_ingredient.isdigit()  :
             position_ingredient = int(position_ingredient)
         else:
