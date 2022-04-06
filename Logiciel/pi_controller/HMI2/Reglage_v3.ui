@@ -269,36 +269,6 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="2">
-             <widget class="QLineEdit" name="position_x">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>20</pointsize>
-               </font>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="4">
-             <widget class="QLineEdit" name="position_z">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>20</pointsize>
-               </font>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="2">
              <widget class="QLabel" name="label_4">
               <property name="maximumSize">
@@ -329,6 +299,33 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="4">
+             <widget class="QLabel" name="label_6">
+              <property name="font">
+               <font>
+                <pointsize>23</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Z :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="position_x">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>20</pointsize>
+               </font>
+              </property>
+             </widget>
+            </item>
             <item row="3" column="3">
              <widget class="QLineEdit" name="position_y">
               <property name="maximumSize">
@@ -344,15 +341,18 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="4">
-             <widget class="QLabel" name="label_6">
+            <item row="3" column="4">
+             <widget class="QLineEdit" name="position_z">
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="font">
                <font>
-                <pointsize>23</pointsize>
+                <pointsize>20</pointsize>
                </font>
-              </property>
-              <property name="text">
-               <string>Z :</string>
               </property>
              </widget>
             </item>
