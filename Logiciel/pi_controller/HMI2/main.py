@@ -8,9 +8,9 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.uic.properties import QtGui
 
-from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
-from Logiciel.pi_controller.HMI2.stateMachine import sequence
-from Logiciel.Vision.calibration import Calibration_cam
+from pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from pi_controller.HMI2.stateMachine import sequence
+from Vision.calibration import Calibration_cam
 import serial.tools.list_ports
 from PyQt5.QtWidgets import QDialog, QApplication, QGraphicsScene, QGraphicsPixmapItem
 from PyQt5.QtGui import QPixmap
@@ -19,7 +19,7 @@ from PyQt5.QtGui import QPixmap
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-calib = Calibration_cam()
+#calib = Calibration_cam()
 max_Bouteille=6
 sequence=sequence()
 
@@ -377,18 +377,18 @@ class commander_screen6(QDialog):
     def __init__(self, recette):
         super(commander_screen6, self).__init__()
 
-        loadUi("pi_controller/HMI2/commander.ui", self)
+        loadUi("pi_controller/HMI2/commander_v2.ui", self)
 
         self.annuler.clicked.connect(self.go_to_Boire)
         self.terminer.clicked.connect(self.go_to_MainWindowDialog)
         self.terminer.clicked.connect(self.commander_verre)
-        self.incrementer.clicked.connect(self.incrementer_compteur_verre)
-        self.decrementer.clicked.connect(self.decrementer_compteur_verre)
-        self.incrementer.clicked.connect(self.afficher_compteur)
-        self.decrementer.clicked.connect(self.afficher_compteur)
+        #self.incrementer.clicked.connect(self.incrementer_compteur_verre)
+        #self.decrementer.clicked.connect(self.decrementer_compteur_verre)
+        #self.incrementer.clicked.connect(self.afficher_compteur)
+        #self.decrementer.clicked.connect(self.afficher_compteur)
         self.recette = recette
         self.nb_verre = 0
-        self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
+        #self.nombre_verre.setText('''\t''' + str(self.nb_verre) + ' verre(s)')
 
 
     def go_to_Boire(self):

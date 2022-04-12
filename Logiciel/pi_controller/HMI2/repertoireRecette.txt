@@ -9,3 +9,4 @@ Amarreto Sour,amaretto:4.0,Lime:1.0,Sirop:1.0
 bizzare,rhum:3.0,vodka:2.0
 lime bin straight,jus de lime:1.0
 moins de lime,jus de lime:0.01
+paradise,diasarronno:2.0
