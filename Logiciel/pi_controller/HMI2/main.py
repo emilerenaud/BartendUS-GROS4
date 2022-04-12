@@ -8,9 +8,9 @@ from PyQt5.QtWidgets import QDialog, QApplication, QInputDialog, QListWidgetItem
 from PyQt5.QtCore import QObject, QThread, pyqtSignal
 from PyQt5.uic.properties import QtGui
 
-from pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
-from pi_controller.HMI2.stateMachine import sequence
-from Vision.calibration import Calibration_cam
+from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
+from Logiciel.pi_controller.HMI2.stateMachine import sequence
+from Logiciel.Vision.calibration import Calibration_cam
 import serial.tools.list_ports
 from PyQt5.QtWidgets import QDialog, QApplication, QGraphicsScene, QGraphicsPixmapItem
 from PyQt5.QtGui import QPixmap
@@ -22,6 +22,7 @@ livreIngredient=gestion_ingredient_dispo()
 #calib = Calibration_cam()
 max_Bouteille=6
 sequence=sequence()
+commande_en_cours=False
 
 
 # Step 1: Create a worker class
@@ -37,7 +38,7 @@ class Worker(QObject):
 
     def run(self):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
-
+        self.enCours.emit(True)
         mess_seq=sequence.sequence(self.recette,livreIngredient)
         if(mess_seq !=""):
             self.erreur.emit(mess_seq)
@@ -45,6 +46,7 @@ class Worker(QObject):
             #self.recalibration()
             self.success.emit()
 
+        self.enCours.emit(False)
         self.finished.emit()
 
 
@@ -202,12 +204,10 @@ class boire_screen3(QDialog):
         mainwindow=MainWindow()
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        print(self.recettes_disponibles.currentRow())
 
     def voir_liste_ingredient(self):
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
         row = self.recettes_disponibles.currentRow()
-        print(self.recettes_disponibles.currentRow())
         if row>=0 and len(livreRecette.list_recette_dispo_string())>0:
             self.ingredients.clear()
             self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
@@ -215,14 +215,18 @@ class boire_screen3(QDialog):
     def go_to_commander_screen6(self):
 
         row = self.recettes_disponibles.currentRow()
-        print(self.recettes_disponibles.currentRow())
-        if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
-            recette_commander = livreRecette.list_recette_dispo[row]
-            screen6=commander_screen6(recette_commander)
-            widget.addWidget(screen6)
-            widget.setCurrentIndex(widget.currentIndex()+1)
+        if (commande_en_cours is not True):
+            if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
+                recette_commander = livreRecette.list_recette_dispo[row]
+                screen6=commander_screen6(recette_commander)
+                widget.addWidget(screen6)
+                widget.setCurrentIndex(widget.currentIndex()+1)
+            else:
+                qtw.QMessageBox.information(self, 'Erreur', '''Aucune recette selectionnée''' + "\n" + '''Sélectionnez ou ajouter une recette puis réessayez...''')
+                return
         else:
-            qtw.QMessageBox.information(self, 'Erreur', '''Aucune recette selectionnée''' + "\n" + '''Sélectionnez ou ajouter une recette puis réessayez...''')
+            qtw.QMessageBox.information(self, 'Erreur',
+                                        '''Commande en cours d'exécution, soyez patient ''')
             return
 
 
@@ -395,6 +399,7 @@ class commander_screen6(QDialog):
         windowBoire=boire_screen3()
         widget.addWidget(windowBoire)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        windowBoire.recettes_disponibles.setCurrentRow(-1)
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -452,12 +457,13 @@ class commander_screen6(QDialog):
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.erreur.connect(self.erreur_commande)
         self.worker.success.connect(self.commande_complete)
+        self.worker.enCours.connect(self.commande_state)
         self.worker.ajouterRecette(recette)
         self.thread.start()
 
-    def afficherState(self,state):
-        self.state=state
+    def commande_state(self,state):
         print(state)
+        commande_en_cours=state
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -606,8 +612,8 @@ mainwindow=MainWindow()
 widget.addWidget(mainwindow)
 widget.setFixedHeight(720)
 widget.setFixedWidth(1280)
-#widget.show()
-widget.showFullScreen()
+widget.show()
+#widget.showFullScreen()
 
 try:
     sys.exit(app.exec_())

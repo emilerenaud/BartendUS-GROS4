@@ -94,6 +94,7 @@ class sequence():
         homing = "G2\r\n"
         self.send_message(homing,wait)
         self.moveTo(0.49,0,wait)
+        self.moveUpDown(35, wait)
         return
 
     def activatePompe(self,list_pompe, list_quant,livreIngredient,wait):
@@ -110,7 +111,7 @@ class sequence():
 
     def sequence(self,recette,livreIngredient):
         wait=True
-        self.moveUpDown(45,wait)
+        self.moveUpDown(35,wait)
         self.moveTo(0.49,0,wait)
 
         if self.calib.calib_vision_seuil is False:
@@ -119,7 +120,7 @@ class sequence():
             positionVerre=self.vision()
             print(positionVerre)
             if(positionVerre[0]==0 and positionVerre[1]==0):
-                return "Aucun verre détecté, placez vos verres "
+                return "Aucun verre détecté! Êtes vous trop chôoo?\nPlacez vos verres et recommander"
             else:
 
                 #self.moveTo(0.36,0.10,wait)
@@ -130,7 +131,7 @@ class sequence():
                 else:
                     time.sleep(5)
                     #self.moveTo(0.49,0,wait)
-                    self.moveTo(0.49,0,wait)
+                    self.moveTo(0.47,0.04,wait)
                     self.servo(5,wait)
                     self.moveUpDown(210,wait)
                     self.shake(wait)
