@@ -94,10 +94,10 @@ class sequence():
         homing = "G2\r\n"
         self.send_message(homing,wait)
         self.moveTo(0.49,0,wait)
-        self.moveUpDown(35, wait)
+        self.moveUpDown(15, wait)
         return
 
-    def activatePompe(self,list_pompe, list_quant,livreIngredient,wait):
+    def activatePompe(self,list_pompe, list_quant,wait):
         # G101:A1.5 pour la pompe 1 avec 1.5oz
         print(list_pompe)
         print(list_quant)
@@ -105,13 +105,13 @@ class sequence():
         for i in range(len(list_pompe)):
             pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_quant[i]) + "\r\n"
             self.send_message(pompe,wait)
-            livreIngredient.update_Quantite(index,quantite)
+            #livreIngredient.update_Quantite(index,quantite)
         return
 
 
     def sequence(self,recette,livreIngredient):
         wait=True
-        self.moveUpDown(35,wait)
+        self.moveUpDown(15,wait)
         self.moveTo(0.49,0,wait)
 
         if self.calib.calib_vision_seuil is False:
@@ -119,13 +119,19 @@ class sequence():
         else:
             positionVerre=self.vision()
             print(positionVerre)
+
+            if(self.r.isInEnvloppe(positionVerre) is False):
+                return "Verre inaccessible! Êtes vous trop chôoo?\nPlacez votre verre et recommander"
+
             if(positionVerre[0]==0 and positionVerre[1]==0):
-                return "Aucun verre détecté! Êtes vous trop chôoo?\nPlacez vos verres et recommander"
+                return "Aucun verre détecté! Êtes vous trop chôoo?\nPlacez votre verre et recommander"
             else:
 
                 #self.moveTo(0.36,0.10,wait)
-                self.servo(175,wait)
-                #self.moveTo(0.34,-0.03,wait)
+                self.servo(180,wait)
+                self.moveUpDown(60, wait)
+                self.moveTo(0.47, 0.04, wait)
+                self.moveTo(0.285,-0.03,wait)
                 if (self.pompe(recette,livreIngredient,wait) is False):
                     return "Quantité insuffisante d'un ingrédient"
                 else:
@@ -134,7 +140,10 @@ class sequence():
                     self.moveTo(0.47,0.04,wait)
                     self.servo(5,wait)
                     self.moveUpDown(210,wait)
+                    self.moveTo(0.40, 0.25, wait)
                     self.shake(wait)
+
+
                     #positionVerre=[-0.15, 0.4]
                     pos = self.r.tangentAuVerre(positionVerre)
                     self.moveTo(pos[0],pos[1],wait)
@@ -191,7 +200,7 @@ class sequence():
         if( list_pompe_quantite is False):
             return False
         else:
-            self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],livreIngredient,wait)
+            self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],wait)
             return True
 
     def shake(self,wait):
@@ -210,54 +219,68 @@ class sequence():
         pixel = im.load()
 
         nb_line = 10
-        y_start = [75, 50, 30, 25, 22, 25, 33, 50, 80]
-        y_end = [100, 110, 110, 110, 110, 110, 110, 105, 100]
+        y_start = [10, 10, 10, 10, 10, 10, 10, 10, 10]  # [75,50,30,25,22,25,33,50,80]
+        y_end = [100, 100, 100, 100, 100, 100, 100, 100, 95]
         x_space = int(im.size[0] / nb_line)
-        pixel_seuil = 40
+        pixel_seuil = 45
+        seuil = 210
         y_center = 0
         x_center = 0
+        end_vr = False
+        vr = 2
 
         for i in range(1, nb_line):
-            im.putpixel([(i * x_space), y_start[i - 1]], 150)
+            if end_vr:
+                print(0)
+            # im.putpixel([(i*x_space),y_start[i-1]],150)
             for j in range(y_start[i - 1], y_end[i - 1]):
-                if pixel[(i * x_space), j + 1] - pixel[(i * x_space), (j)] > pixel_seuil:
+                if end_vr:
+                    print(0)
+                    # break
+                if pixel[(i * x_space), j + vr] > seuil:  # -pixel[(i*x_space),(j)]>pixel_seuil:# or pixel[(i*x_space),(j)]>245:
+                    print('test')
                     y1 = j
                     j = j + 1
                     # im.putpixel([(i*x_space),j],0)
-                    while (pixel[(i * x_space), j] - pixel[(i * x_space), (j + 1)]) < pixel_seuil and j < (
-                            im.size[1] - 5):
+                    while (pixel[(i * x_space), j] - pixel[(i * x_space), (j + vr)]) < pixel_seuil and j < (
+                            im.size[1] - 50):
                         y_center = int(j - ((j - y1) / 2))
                         # im.putpixel([(i*x_space),j],0)
                         j = j + 1
                     x = i * x_space
-                    while (pixel[(x), y_center] - pixel[(x + 1), y_center]) < pixel_seuil and x < (im.size[0] - 5):
+                    # print(x)
+                    # print(pixel[(x),y_center])
+                    while (pixel[(x), y_center] - pixel[(x + vr), y_center]) < pixel_seuil and x < (im.size[0] - 5):
                         x1 = x
                         # im.putpixel([x,y_center],0)
                         x = x + 1
                     x = i * x_space
-                    while (pixel[(x), y_center] - pixel[(x - 1), y_center]) < pixel_seuil and x > 5:
+                    while (pixel[(x), y_center] - pixel[(x - vr), y_center]) < pixel_seuil and x > 5:
                         x_center = int(x1 - ((x1 - x) / 2))
                         # im.putpixel([x,y_center],0)
                         x = x - 1
                     y = y_center
-                    while (pixel[(x_center), y] - pixel[(x_center), (y + 1)]) < pixel_seuil and y < (im.size[1] - 5):
+                    while (pixel[(x_center), y] - pixel[(x_center), (y + vr)]) < pixel_seuil and y < (im.size[1] - 50):
                         y1 = y
                         # im.putpixel([x_center,y],0)
                         y = y + 1
                     y = y_center
-                    while (pixel[(x_center), y] - pixel[(x_center), (y - 1)]) < pixel_seuil and y > y1:
+                    while (pixel[(x_center), y] - pixel[(x_center), (y - vr)]) < pixel_seuil and y > y1:
                         y_center = int(y1 - ((y1 - y) / 2))
                         # im.putpixel([x_center,y],0)
                         y = y - 1
+                        end_vr = True
                     break
 
+        if y_center != 0:
+            y_center = y_center + vr
         if calib:
             for i in range(1, nb_line):
                 for j in range(y_start[i - 1], y_end[i - 1]):
                     im.putpixel([(i * x_space), j], 0)
             print(im.size[0])
             print(im.size[1])
-            im.show()
+            # im.show()
 
         size_square = 2
         if output:
@@ -268,18 +291,19 @@ class sequence():
             im.show()
         coord = [0, 0]
         if (x_center != 0 and y_center != 0):
-            coord = [-(x_center * (-0.003444444) + 0.3065),(y_center * (-0.0034) + 0.4258)]  # [x,y] in meters, origin at the A axis
+            coord = [-(x_center * (-0.003444444) + 0.3065),
+                     (y_center * (-0.0034) + 0.4258)]  # [x,y] in meters, origin at the A axis
         """
-        r = np.sqrt(coord[0] ** 2 + (coord[1] - 0.13) ** 2)
-        r1 = 0.999
-        r2 = 0.98
-        r3 = 0.96
-        if r > 0.8 and r < 0.18:
-            coord = [coord[0] * r1, coord[1] * r1]
-        elif r >= 0.18 and r < 0.22:
-            coord = [coord[0] * r2, coord[1] * r2]
+        r = np.sqrt(coord[0]**2 + (coord[1]-0.13)**2)
+        r1 = 0.98
+        r2 = 0.95
+        r3 = 0.90
+        if r>0.8 and r<0.18:
+            coord = [coord[0]*r1,coord[1]*r1]
+        elif r>=0.18 and r<0.22:
+            coord = [coord[0]*r2,coord[1]*r2]
         else:
-            coord = [coord[0] * r3, coord[1] * r3]
-            """
+            coord = [coord[0]*r3,coord[1]*r3]
+        """
         return coord
 

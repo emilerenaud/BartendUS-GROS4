@@ -151,7 +151,7 @@ class scaraRobot():
 
     def tangentAuVerre(self,positionVerre):
         nbPoint= 115*2
-        r=0.09
+        r=0.07
         start=0
         end=2*math.pi
         step=(end-start)/nbPoint

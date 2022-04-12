@@ -135,20 +135,11 @@ class Calibration_cam():
             rval = False
             print("ERREUR - Ne peut pas ouvrir la caméra!")
 
-        print("Shape of the image", img_to_verify.shape)
-        # img_to_verify = img_to_verify[0:18, 150:200]
-
         # Conversion de l'image en noir et blanc:
         gray = cv2.cvtColor(img_to_verify, cv2.COLOR_BGR2GRAY)
 
-        # plt.imshow(gray, cmap="gray")
-        # plt.show()
-        #
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
-
         # Spécification des valeurs limites (pixel = 0 si < 100 et pixel = 1 si > 255) pour en sortir une image binaire
-        _, image_binaire = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY)
+        _, image_binaire = cv2.threshold(gray, 192, 255, cv2.THRESH_BINARY)
 
         plt.imshow(image_binaire, cmap="gray")
         plt.show()
@@ -185,23 +176,24 @@ class Calibration_cam():
                 # Trouver le centre des contours
                 M = cv2.moments(c)
                 if M['m00'] != 0.0:
-                    x = int(M['m10'] / M['m00'])
-                    liste_points_verify.append(x)
-                    y = int(M['m01'] / M['m00'])
-                    liste_points_verify.append(y)
-                    # print(liste_points_ref)
+                    x1 = int(M['m10'] / M['m00'])
+                    liste_points_verify.append(x1)
+                    y1 = int(M['m01'] / M['m00'])
+                    liste_points_verify.append(y1)
 
                     if liste_points_verify[0] != 1 and liste_points_verify[0] != 368 and liste_points_verify[0] != 150:
                         self.liste_points_coord_centre.append(liste_points_verify)
-                        cv2.circle(img_to_verify, (x, y), radius=3, color=(0, 0, 255), thickness=-1)
+                        cv2.circle(img_to_verify, (x1, y1), radius=3, color=(0, 0, 255), thickness=-1)
             else:
                 continue
+        print("Centre photo seuil : \n")
         print(self.liste_points_coord_centre)
-        # plt.imshow(img_to_verify, cmap="gray")
-        # plt.show()
-        #
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
+
+        plt.imshow(img_to_verify, cmap="gray")
+        plt.show()
+
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
 
         # Vérification si les centre respectent le seuil ou non par rapport à l'image de référence
         for point in range(len(self.liste_points_coord_centre)):
@@ -229,7 +221,7 @@ if __name__ == '__main__':
 
     calib = Calibration_cam()
     # calib.calib_vision_init()
-    # calib.calib_vision_seuil()
+    calib.calib_vision_seuil()
 
     #calib.calib_vision_seuil()
     # calib_vision_seuil()
