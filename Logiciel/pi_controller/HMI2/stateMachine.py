@@ -4,8 +4,8 @@ import glob
 import cv2
 import serial
 import time
-from pi_controller.HMI2.inverseKinematic import scaraRobot
-from Vision.calibration import Calibration_cam
+from Logiciel.pi_controller.HMI2.inverseKinematic import scaraRobot
+from Logiciel.Vision.calibration import Calibration_cam
 from PIL import Image
 import subprocess
 import numpy as np
@@ -32,14 +32,10 @@ class sequence():
                 done=False
                 while(not done):
                     try :
-                        # print(self.arduino.readline())
                         dataIn = str(self.arduino.readline())
                         # print(dataIn)
                         if dataIn.find("Done") != -1:
-                            print("message recu")
                             done=True
-                        # else:
-                        #     print("wrong message")
                     except:
                         done=False
 
@@ -97,19 +93,18 @@ class sequence():
         # caller la fonction HOME
         homing = "G2\r\n"
         self.send_message(homing,wait)
+        self.moveTo(0.49,0,wait)
         return
 
-    def activatePompe(self,list_pompe, list_quant,wait):
+    def activatePompe(self,list_pompe, list_quant,livreIngredient,wait):
         # G101:A1.5 pour la pompe 1 avec 1.5oz
         print(list_pompe)
         print(list_quant)
 
         for i in range(len(list_pompe)):
-            print(str(list_pompe[i]))
-            print(str(list_quant[i]))
             pompe = "G10" + str(list_pompe[i]) + ":A" + str(list_quant[i]) + "\r\n"
-            print(pompe)
             self.send_message(pompe,wait)
+            livreIngredient.update_Quantite(index,quantite)
         return
 
 
@@ -123,26 +118,26 @@ class sequence():
         else:
             positionVerre=self.vision()
             print(positionVerre)
-            time.sleep(2)
             if(positionVerre[0]==0 and positionVerre[1]==0):
                 return "Aucun verre détecté, placez vos verres "
             else:
-                self.moveTo(0.36,0.10,wait)
-                self.servo(170,wait)
-                self.moveTo(0.34,-0.03,wait)
+
+                #self.moveTo(0.36,0.10,wait)
+                self.servo(175,wait)
+                #self.moveTo(0.34,-0.03,wait)
                 if (self.pompe(recette,livreIngredient,wait) is False):
                     return "Quantité insuffisante d'un ingrédient"
                 else:
-                    time.sleep(6)
+                    time.sleep(5)
                     #self.moveTo(0.49,0,wait)
-                    self.moveTo(0.36,0.14,wait)
+                    self.moveTo(0.49,0,wait)
                     self.servo(5,wait)
                     self.moveUpDown(210,wait)
                     self.shake(wait)
                     #positionVerre=[-0.15, 0.4]
                     pos = self.r.tangentAuVerre(positionVerre)
                     self.moveTo(pos[0],pos[1],wait)
-                    self.servo(150,wait)
+                    self.servo(40,wait)
 
                     sens = self.r.getSensVersement()
                     if(sens=="gauche"):
@@ -195,7 +190,7 @@ class sequence():
         if( list_pompe_quantite is False):
             return False
         else:
-            self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],wait)
+            self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],livreIngredient,wait)
             return True
 
     def shake(self,wait):

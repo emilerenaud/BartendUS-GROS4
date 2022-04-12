@@ -131,7 +131,7 @@ class scaraRobot():
         return [diffPrec,anglefinal]
 
     def tangent(self,positionVerre):
-            rayon = 0.05
+            rayon = 0.025 #0.05
             i=4
             k=2
             prec = self.angleTangentAuVerre(positionVerre, 4, 0, 2 * math.pi)
