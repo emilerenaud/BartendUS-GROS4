@@ -22,14 +22,14 @@ livreIngredient=gestion_ingredient_dispo()
 calib = Calibration_cam()
 max_Bouteille=6
 sequence=sequence()
-commande_en_cours=False
+commandeActive=-1
 
 
 # Step 1: Create a worker class
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(object)
-    enCours = pyqtSignal(bool)
+    enCours = pyqtSignal(object)
     erreur = pyqtSignal(object)
     success = pyqtSignal()
 
@@ -38,15 +38,15 @@ class Worker(QObject):
 
     def run(self):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
-        self.enCours.emit(True)
+        self.enCours.emit(1)
         mess_seq=sequence.sequence(self.recette,livreIngredient)
         if(mess_seq !=""):
             self.erreur.emit(mess_seq)
         else:
             #self.recalibration()
-            self.success.emit()
+            self.success.emit(-1)
 
-        self.enCours.emit(False)
+        self.enCours.emit(object)
         self.finished.emit()
 
 
@@ -215,7 +215,7 @@ class boire_screen3(QDialog):
     def go_to_commander_screen6(self):
 
         row = self.recettes_disponibles.currentRow()
-        if (commande_en_cours is not True):
+        if (commandeActive == -1):
             if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
                 recette_commander = livreRecette.list_recette_dispo[row]
                 screen6=commander_screen6(recette_commander)
@@ -428,6 +428,11 @@ class commander_screen6(QDialog):
     def commande_complete(self):
         qtw.QMessageBox.critical(self, 'Success', '''Votre verre est plein, recommander à votre soif  ''')
 
+
+    def commande_state(self,state):
+        print(state)
+        commandeActive=state
+
     def commander_verre(self):
         if commande_en_cours is False:
             self.startThreadSequence(self.recette)
@@ -461,9 +466,6 @@ class commander_screen6(QDialog):
         self.worker.ajouterRecette(recette)
         self.thread.start()
 
-    def commande_state(self,state):
-        print(state)
-        commande_en_cours=state
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -502,8 +504,8 @@ class reglages_screen5(QDialog):
         self.comboBox_pompes.addItem('Pompe 2')
         self.comboBox_pompes.addItem('Pompe 3')
         self.comboBox_pompes.addItem('Pompe 4')
-        self.comboBox_pompes.addItem('Pompe 5')
-        self.comboBox_pompes.addItem('Pompe 6')
+        #self.comboBox_pompes.addItem('Pompe 5')
+        #self.comboBox_pompes.addItem('Pompe 6')
         self.comboBox_pompes.addItem('Tous les pompes')
 
         self.purge_pompes.clicked.connect(self.commande_purge_pompes)
@@ -583,8 +585,8 @@ class reglages_screen5(QDialog):
     def commande_purge_pompes(self):
         i_combo_box_pompe = self.comboBox_pompes.currentIndex()+1
 
-        if(i_combo_box_pompe==7):
-            sequence.activatePompe([1,2,3,4,5,6], [1], True)
+        if(i_combo_box_pompe==4):
+            sequence.activatePompe([1,2,3,4], [1], True)
         else:
             sequence.activatePompe([i_combo_box_pompe],[1],True)
 

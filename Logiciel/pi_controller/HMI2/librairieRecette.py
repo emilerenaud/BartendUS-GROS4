@@ -30,6 +30,9 @@ class gestion_ingredient_dispo():
     def get_list_ingredient(self):
         return self.list_ingredient
 
+    def get_list_quantite(self):
+        return self.list_quantite
+
     def get_list_position(self):
         return self.list_position
 
@@ -116,20 +119,23 @@ class gestion_ingredient_dispo():
                 return True
         return False
 
-    def update_Quantite(self,index,quantite):
-        self.supprimerLigneVide()
-        new_line = self.list_ingredient[index] + ":" + str("{:.2f}".format(self.list_quantite[index]-quantite)) + ", position : " + str(self.list_position[index])+'\n'
-        f = open(self.path, 'r', encoding="utf-8")
-        lines = f.readlines()
-        f.close()
-        f = open(self.path, 'w', encoding="utf-8")
+    def update_Quantite(self,list_pompe,list_quantite,livreIngredient):
+        for i in range (len(list_pompe)):
+            self.index=livreIngredient.index(list_pompe[i])
+            self.supprimerLigneVide()
+            new_line = self.list_ingredient[index] + ":" + str("{:.2f}".format(self.list_quantite[index]-list_quantite[i])) + ", position : " + str(self.list_position[index])+'\n'
+            f = open(self.path, 'r', encoding="utf-8")
+            lines = f.readlines()
+            f.close()
 
-        for l in range(len(lines)):
-            if l!=index:
-                f.write(lines[l])
-            else:
-                f.write(new_line)
-        f.close()
+            f = open(self.path, 'w', encoding="utf-8")
+
+            for l in range(len(lines)):
+                if l!=index:
+                    f.write(lines[l])
+                else:
+                    f.write(new_line)
+            f.close()
 
 
 
@@ -299,5 +305,3 @@ class gestion_Recette():
 
         return
 
-livreIngredient=gestion_ingredient_dispo()
-livreIngredient.update_Quantite(2,3);

@@ -177,6 +177,7 @@ class sequence():
         self.list_quant_pompe = []
 
         self.list_ingredient_dispo = livreIngredient.get_list_ingredient().copy()
+        self.list_quantite_ingredient_dispo = livreIngredient.get_list_quantite().copy()
         self.list_pos_bouteille = livreIngredient.get_list_position().copy()
 
         self.list_ingredient = recette.getlistAlcool().copy()
@@ -185,12 +186,15 @@ class sequence():
         for i in range(len(self.list_ingredient)):
             for j in range(len(self.list_ingredient_dispo)):
                 if self.list_ingredient_dispo[j] == self.list_ingredient[i]:
-                    self.list_position_pompe.append(self.list_pos_bouteille[j])
-                    self.list_quant_pompe.append(self.list_quantite[i])
-                    # remove from next search
-                    self.list_ingredient_dispo.pop(j)
-                    self.list_pos_bouteille.pop(j)
-                    break
+                    if self.list_quantite_ingredient_dispo[j]<self.list_quantite[i]:
+                        return False
+                    else:
+                        self.list_position_pompe.append(self.list_pos_bouteille[j])
+                        self.list_quant_pompe.append(self.list_quantite[i])
+                        # remove from next search
+                        self.list_ingredient_dispo.pop(j)
+                        self.list_pos_bouteille.pop(j)
+
 
         return [self.list_position_pompe, self.list_quant_pompe]
 
@@ -200,6 +204,7 @@ class sequence():
         if( list_pompe_quantite is False):
             return False
         else:
+            livreIngredient.update_Quantite(list_pompe_quantite[0],list_pompe_quantite[1],livreIngredient)
             self.activatePompe(list_pompe_quantite[0],list_pompe_quantite[1],wait)
             return True
 
