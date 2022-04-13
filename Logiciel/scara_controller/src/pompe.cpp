@@ -37,18 +37,18 @@ void Pompe::vol_pompe_oz(float volume)
 {
     // Serial.print("test fuck");
     // Serial.println(vit);
-    if (delais_pompe > 300000)
-    {
-        delais_pompe = 300000;
-    }
-    time_pompe = (volume * 1000) / oz_par_sec + delais_pompe * oz_des / 1000;
-
+    // if (delais_pompe > 300000)
+    // {
+    //     delais_pompe = 300000;
+    // }
+    // time_pompe = (volume * 1000) / oz_par_sec + delais_pompe * oz_des / 1000;    
+    time_pompe = (volume * 1000) / oz_par_sec;
     // while (millis() - t_deb <= t_pompe)
     // {
     //     digitalWrite(vit,1);
     // }s
     // digitalWrite(vit, 0);
-    delais_pompe = millis() - delais_pompe;
+    // delais_pompe = millis() - delais_pompe;
     start_time = millis();
     message_done = false;
 };

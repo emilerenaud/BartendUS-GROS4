@@ -29,7 +29,7 @@
 #define stepPinP_pin 12
 #define dirPinP_pin 13
 
-#define offset_A 177
+#define offset_A 180
 #define offset_B -137.5
 #define homingDirA 1
 #define homingDirB 1

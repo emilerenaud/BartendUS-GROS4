@@ -127,7 +127,7 @@ bool cncShield::homing()
     switch(_homingSequence)
     {
         case 0: // prepare homing B joint
-            motorZ->moveTo(-200);
+            motorZ->moveTo(-250);
             // motorZ->setSpeed(60);
             motorB->setDirection(homingDirB);
             motorB->moveTo(-300);
@@ -140,7 +140,7 @@ bool cncShield::homing()
             // motorZ->update(0);
             if(this->getLimitSwitchZ())
             {
-                motorZ->setCurrentPosition(0);
+                motorZ->setCurrentPosition(0.0);
             }
             else
             {
@@ -278,7 +278,7 @@ void cncShield::verser(void)
             motorP->moveTo(115 * _sensVerser);
             motorZ->setSpeed(70);
             // motorZ->setMaxSpeed(60);
-            motorZ->moveTo(170);
+            motorZ->moveTo(200);
             _compteurVerser ++;
             break;
         case 5:
