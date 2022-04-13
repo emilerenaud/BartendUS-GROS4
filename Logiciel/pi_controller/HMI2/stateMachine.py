@@ -133,6 +133,8 @@ class sequence():
                 self.moveTo(0.47, 0.04, wait)
                 self.moveTo(0.285,-0.03,wait)
                 if (self.pompe(recette,livreIngredient,wait) is False):
+                    self.moveTo(0.47, 0.04, wait)
+                    self.servo(5, wait)
                     return "Quantité insuffisante d'un ingrédient"
                 else:
                     time.sleep(5)
@@ -186,14 +188,14 @@ class sequence():
         for i in range(len(self.list_ingredient)):
             for j in range(len(self.list_ingredient_dispo)):
                 if self.list_ingredient_dispo[j] == self.list_ingredient[i]:
-                    if self.list_quantite_ingredient_dispo[j]<self.list_quantite[i]:
+                    if float(self.list_quantite_ingredient_dispo[j])<float(self.list_quantite[i]):
                         return False
                     else:
                         self.list_position_pompe.append(self.list_pos_bouteille[j])
                         self.list_quant_pompe.append(self.list_quantite[i])
                         # remove from next search
-                        self.list_ingredient_dispo.pop(j)
-                        self.list_pos_bouteille.pop(j)
+                        #self.list_ingredient_dispo.pop(j)
+                        #self.list_pos_bouteille.pop(j)
 
 
         return [self.list_position_pompe, self.list_quant_pompe]

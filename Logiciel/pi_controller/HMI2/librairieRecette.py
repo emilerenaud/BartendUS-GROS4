@@ -121,11 +121,11 @@ class gestion_ingredient_dispo():
 
     def update_Quantite(self,list_pompe,list_quantite,livreIngredient):
         for i in range (len(list_pompe)):
-            self.index=livreIngredient.index(list_pompe[i])
-            self.list_quantite[index]="{:.2f}".format(self.list_quantite[index]-list_quantite[i])
+            self.index=livreIngredient.list_position.index(list_pompe[i])
+            self.list_quantite[self.index]=float("{:.2f}".format(self.list_quantite[self.index]-list_quantite[i]))
 
             self.supprimerLigneVide()
-            new_line = self.list_ingredient[index] + ":" + str(self.list_quantite[index]) + ", position : " + str(self.list_position[index])+'\n'
+            new_line = self.list_ingredient[self.index] + ":" + str(self.list_quantite[self.index]) + ", position : " + str(self.list_position[self.index])+'\n'
             f = open(self.path, 'r', encoding="utf-8")
             lines = f.readlines()
             f.close()
@@ -133,7 +133,7 @@ class gestion_ingredient_dispo():
             f = open(self.path, 'w', encoding="utf-8")
 
             for l in range(len(lines)):
-                if l!=index:
+                if l!=self.index:
                     f.write(lines[l])
                 else:
                     f.write(new_line)

@@ -1,4 +1,3 @@
-baileys:10.76, position : 3
-cafe:386.36, position : 4
-canneberge:42.03, position : 5
-jus de lime:424.24, position : 1
+tabasco:5.58, position : 2
+lime:3.58, position : 3
+vodka:0.58, position : 1

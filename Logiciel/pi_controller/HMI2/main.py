@@ -22,7 +22,7 @@ livreIngredient=gestion_ingredient_dispo()
 calib = Calibration_cam()
 max_Bouteille=6
 sequence=sequence()
-commandeActive=-1
+commande_en_cours=-1
 
 
 # Step 1: Create a worker class
@@ -44,9 +44,9 @@ class Worker(QObject):
             self.erreur.emit(mess_seq)
         else:
             #self.recalibration()
-            self.success.emit(-1)
+            self.success.emit()
 
-        self.enCours.emit(object)
+        self.enCours.emit(-1)
         self.finished.emit()
 
 
@@ -215,7 +215,7 @@ class boire_screen3(QDialog):
     def go_to_commander_screen6(self):
 
         row = self.recettes_disponibles.currentRow()
-        if (commandeActive == -1):
+        if (commande_en_cours == -1):
             if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
                 recette_commander = livreRecette.list_recette_dispo[row]
                 screen6=commander_screen6(recette_commander)
@@ -434,7 +434,7 @@ class commander_screen6(QDialog):
         commandeActive=state
 
     def commander_verre(self):
-        if commande_en_cours is False:
+        if commande_en_cours ==-1:
             self.startThreadSequence(self.recette)
         # self.startThread()
         # sequence.pompe(recette_commander,livreIngredient))
@@ -585,8 +585,8 @@ class reglages_screen5(QDialog):
     def commande_purge_pompes(self):
         i_combo_box_pompe = self.comboBox_pompes.currentIndex()+1
 
-        if(i_combo_box_pompe==4):
-            sequence.activatePompe([1,2,3,4], [1], True)
+        if(i_combo_box_pompe==5):
+            sequence.activatePompe([1,2,3,4], [1,1,1,1], True)
         else:
             sequence.activatePompe([i_combo_box_pompe],[1],True)
 

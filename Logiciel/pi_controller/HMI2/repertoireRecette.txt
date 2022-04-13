@@ -11,3 +11,4 @@ moins de lime,jus de lime:0.01
 paradise,diasarronno:2.0
 Fête foraine,bonbon:2.0,barbe à papa:3.0
 fete foraine,Bonbon:2.0,Barbe a papa:1.0
+PLUS DE LIME,jus de lime:3.0
