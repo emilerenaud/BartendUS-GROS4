@@ -157,10 +157,88 @@ class PresentationWindow(qtw.QWidget, Ui_MainWindow):
     #     coord = [x, y]
     #     return coord
 
-if __name__ == '__main__':
-    app = qtw.QApplication([])
+def wait_for_done():
+    time.sleep(0.5)
+    messageIn = arduino.readline()
+    if(messageIn)
 
-    w = PresentationWindow()
-    w.show()
+    return data
 
-    app.exec_()
+def send_message(x):
+    arduino.write(bytes(x, 'utf-8'))
+    time.sleep(0.5)
+    data = arduino.readline()
+    return data
+
+# en deg
+def poignet(angle):
+    position = "G4:A" + str(angle) + "\r\n"
+    value = send_message(position)
+    if wait_for_done()is False:
+        wait_for_done()
+
+
+    return
+
+def servo(angle):
+    position = "G5:A" + str(angle) + "\r\n"
+    value = send_message(position)
+    return
+
+def electro(activate):
+    if activate:
+        position = "M1" + "\r\n"
+        value = send_message(position)
+    else:
+        position = "M0" + "\r\n"
+        value = send_message(position)
+    return
+
+    # z est en mm
+
+def moveUpDown(z):
+    position = "G3:Z" + str(z) + "\r\n"
+    value = send_message(position)
+    return
+
+def moveTo(x, y):
+    r.inverseKinematic(x, y)
+    angles = r.getAngleDeg()
+    position = "G0:A" + str(angles[0]) + ":B" + str(angles[1]) + "\r\n"
+    value = send_message(position)
+    return
+
+
+
+def homing():
+    # caller la fonction HOME
+    homing = "G2\r\n"
+    send_message(homing)
+    return
+
+def versement():
+    poignet(120)
+    moveUpDown(20)
+
+# if __name__ == '__main__':
+#
+#     r=scaraRobot()
+#     arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+#
+#     homing()
+#     moveUpDown(45)
+#     moveTo(0.45,0)
+#     servo(150)
+#     time.sleep(2)
+#     servo(5)
+#     moveTo(0,0.45)
+#     servo(150)
+#     versement()
+
+
+
+
+
+
+
+

@@ -6,7 +6,8 @@ shooter rhum,rhum:2.0
 Bloody Ceasar,vodka:2.0,tabasco:0.5,lime:1.0
 martin becile,triplesec:1.0,vodka:1.0,canneberge:1.0,lime:1.0
 Amarreto Sour,amaretto:4.0,Lime:1.0,Sirop:1.0
-bizzare,rhum:3.0,vodka:2.0
 lime bin straight,jus de lime:1.0
 moins de lime,jus de lime:0.01
 paradise,diasarronno:2.0
+Fête foraine,bonbon:2.0,barbe à papa:3.0
+fete foraine,Bonbon:2.0,Barbe a papa:1.0

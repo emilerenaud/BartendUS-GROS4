@@ -1,6 +1,4 @@
 baileys:10.76, position : 3
 cafe:386.36, position : 4
-canneberge:87.03, position : 5
-rhum:303.03, position : 2
-jus de lime:303.03, position : 6
-
+canneberge:42.03, position : 5
+jus de lime:424.24, position : 1

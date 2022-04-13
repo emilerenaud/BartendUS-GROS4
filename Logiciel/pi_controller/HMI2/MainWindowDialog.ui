@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>1278</width>
+    <height>713</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>3000</width>
+    <height>3000</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -69,6 +81,12 @@
        <height>0</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>1280</width>
+       <height>720</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -80,15 +98,20 @@
        <widget class="QPushButton" name="boire">
         <property name="minimumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>23</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Boire</string>
@@ -99,15 +122,20 @@
        <widget class="QPushButton" name="bouteilles">
         <property name="minimumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>150</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>23</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Bouteille d'alcools</string>
@@ -118,15 +146,20 @@
        <widget class="QPushButton" name="recettes">
         <property name="minimumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>23</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Recettes</string>
@@ -137,18 +170,47 @@
        <widget class="QPushButton" name="reglages">
         <property name="minimumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>100</width>
-          <height>30</height>
+          <width>400</width>
+          <height>70</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>23</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Réglages</string>
+        </property>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignHCenter">
+       <widget class="QPushButton" name="exit">
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>400</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>23</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>EXIT</string>
         </property>
        </widget>
       </item>
