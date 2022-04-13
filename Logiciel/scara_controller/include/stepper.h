@@ -17,11 +17,10 @@ class Stepper
         void setMicroStep(int microStep);
         void setDirection(int direction);
         void setMaxSpeed(int speed);
-        void setSpeed(float speed);
+        void setSpeed(int speed);
     private:
         
         void updateAccel(void);
-        void updateAccelV2(void);
         int _dirPin;
         int _direction;
         int _stepPin;
@@ -29,12 +28,10 @@ class Stepper
         float _gearRatio;
         int _microstep;
         float _currentPosition;
-        float _speed;
+        int _speed;
         int _maxSpeed;
         int _delaySpeed;
         long _timeAcc;
-        long _lastTimeAcc;
-        bool _setupAcc;
         long _stepAccel;
         int _calculStepAccel;
         int _accelStep = 0;

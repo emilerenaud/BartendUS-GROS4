@@ -6,21 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>720</height>
+    <width>270</width>
+    <height>300</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>1280</width>
-    <height>720</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>3000</width>
-    <height>3000</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -31,7 +19,7 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>60</height>
+       <height>50</height>
       </size>
      </property>
      <property name="frameShape">
@@ -40,19 +28,25 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout"/>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <pointsize>30</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Création de recettes</string>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Recettes</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -82,81 +76,47 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="font">
-               <font>
-                <pointsize>23</pointsize>
-               </font>
-              </property>
+            <item row="4" column="1">
+             <widget class="QPushButton" name="ajouter_recette">
               <property name="text">
-               <string>Quantité (oz) :</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="font">
-               <font>
-                <pointsize>23</pointsize>
-               </font>
-              </property>
-              <property name="text">
-               <string>Ingrédients :</string>
+               <string>Ajouter Recette</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QLineEdit" name="quantite_ligne">
-              <property name="maximumSize">
-               <size>
-                <width>400</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>20</pointsize>
-               </font>
-              </property>
-             </widget>
+             <widget class="QLineEdit" name="quantite_ligne"/>
             </item>
             <item row="1" column="1">
-             <widget class="QLineEdit" name="alcool_ligne">
-              <property name="maximumSize">
-               <size>
-                <width>400</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>20</pointsize>
-               </font>
+             <widget class="QLineEdit" name="alcool_ligne"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>Titre</string>
               </property>
              </widget>
             </item>
             <item row="3" column="1">
              <widget class="QPushButton" name="ajouter_alcool">
-              <property name="minimumSize">
-               <size>
-                <width>400</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>400</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>23</pointsize>
-               </font>
-              </property>
               <property name="text">
-               <string>Ajouter Ingrédients</string>
+               <string>Ajouter Alcool</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Alcool</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="titre_ligne"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Quantité</string>
               </property>
              </widget>
             </item>
@@ -173,64 +133,7 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QFrame" name="frame_7">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>60</height>
-               </size>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_4">
-               <item>
-                <widget class="QLabel" name="label_4">
-                 <property name="maximumSize">
-                  <size>
-                   <width>100</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>23</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Titre :</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="titre_ligne">
-                 <property name="maximumSize">
-                  <size>
-                   <width>400</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>20</pointsize>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QListWidget" name="listWidget">
-              <property name="font">
-               <font>
-                <pointsize>20</pointsize>
-               </font>
-              </property>
-             </widget>
+             <widget class="QListWidget" name="listWidget"/>
             </item>
             <item>
              <widget class="QFrame" name="frame_6">
@@ -241,51 +144,24 @@
                <enum>QFrame::Raised</enum>
               </property>
               <layout class="QGridLayout" name="gridLayout_3">
-               <item row="0" column="2">
-                <widget class="QPushButton" name="ajouter_recette">
-                 <property name="minimumSize">
-                  <size>
-                   <width>400</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>400</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>23</pointsize>
-                  </font>
-                 </property>
+               <item row="3" column="2">
+                <widget class="QPushButton" name="edit">
                  <property name="text">
-                  <string>Ajouter Recette</string>
+                  <string>Edit</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="2">
                 <widget class="QPushButton" name="supprimer">
-                 <property name="minimumSize">
-                  <size>
-                   <width>400</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>400</width>
-                   <height>100</height>
-                  </size>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <pointsize>23</pointsize>
-                  </font>
-                 </property>
                  <property name="text">
                   <string>Delete</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QPushButton" name="delete_all">
+                 <property name="text">
+                  <string>Delete all</string>
                  </property>
                 </widget>
                </item>
@@ -300,16 +176,10 @@
       </item>
       <item>
        <widget class="QFrame" name="bas_2">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>140</height>
-         </size>
-        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>100</height>
+          <height>90</height>
          </size>
         </property>
         <property name="frameShape">
@@ -321,19 +191,21 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QFrame" name="frame_2">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>90</height>
-            </size>
-           </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
            </property>
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QGridLayout" name="gridLayout"/>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="precedent">
+              <property name="text">
+               <string>Précédent</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
@@ -345,27 +217,10 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="precedent">
-              <property name="minimumSize">
-               <size>
-                <width>400</width>
-                <height>50</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>400</width>
-                <height>100</height>
-               </size>
-              </property>
-              <property name="font">
-               <font>
-                <pointsize>23</pointsize>
-               </font>
-              </property>
+            <item>
+             <widget class="QLabel" name="labelTest">
               <property name="text">
-               <string>Précédent</string>
+               <string/>
               </property>
              </widget>
             </item>

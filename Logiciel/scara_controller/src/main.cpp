@@ -16,7 +16,7 @@ void setup() {
   // Serial.println("Code start here");
   setupSerial();
   shield = new cncShield;
-  shield->disableMotor();
+  shield->enableMotor();
 }
 
 void loop() {
@@ -59,9 +59,9 @@ void readSerial()
       Serial.flush();
     int indexOperator = tempString.indexOf(':');
     operatorString = tempString.substring(0,indexOperator);
-    // Serial.print(tempString);
-    // Serial.print("  ");
-    if(operatorString[0] == 'G') 
+    Serial.print(tempString);
+    Serial.print("  ");
+    if(operatorString[0] == 'G')
     {
       aIndex = tempString.indexOf(':A');
       bIndex = tempString.indexOf(':B',indexOperator+1);
@@ -72,25 +72,18 @@ void readSerial()
         bValue = tempString.substring(bIndex+1,zIndex-1);
       if(zIndex != -1)
         zValue = tempString.substring(zIndex+1);
-      int gNumber = operatorString.substring(1).toInt();
-
-      if(gNumber > 100) // Control pompe
+//
+      switch(operatorString.substring(1).toInt())
       {
-        int pompeNumber = gNumber - 100;
-        shield->controlPompe(pompeNumber,aValue.toFloat());
-      }
-      switch(gNumber)
-      {
-        case 0: //G0 Move to
+        case 0:
           shield->motorA->moveTo(aValue.toFloat());
           shield->motorB->moveTo(bValue.toFloat());
           shield->setNewMouvement();
           // shield->motorZ->moveTo(zValue.toFloat());
           serialString = "Angle set to : A=" + aValue + " B=" + bValue; // + " Z=" + zValue;
-          // Serial.println(serialString);
+          Serial.println(serialString);
           break;
-
-        case 1: //G1 Set Speed
+        case 1:
           // int speedA = aValue.toInt();
           if(aValue.toInt() <= 100 || aValue.toInt() >= 0)
             shield->motorA->setMaxSpeed(aValue.toInt());
@@ -103,37 +96,30 @@ void readSerial()
             shield->motorB->setMaxSpeed(75);
           // int speedZ = zValue.toInt();
           if(zValue.toInt() <= 100 || zValue.toInt() >= 0)
-          {
             shield->motorZ->setMaxSpeed(zValue.toInt());
-            shield->motorZ->setSpeed(zValue.toInt());
-          }
-            
           else
             shield->motorZ->setMaxSpeed(75);
           serialString = "Speed set to : A=" + aValue + " B=" + bValue + " Z=" + zValue;
-          // Serial.println(serialString);
+          Serial.println(serialString);
           break;
-
-        case 2: //G2 Home
+          
+        case 2:
           shield->startHoming();
-          // Serial.println("Done");
+          // Serial.println("Homing");
           break;
 
-        case 3: //G3 Control Z
+        case 3:
             shield->motorZ->moveTo(zValue.toFloat());
             shield->setNewMouvement();
             // Serial.println(zValue.toFloat());
             // G3:Z40
           break;
-
-        case 4: //G4 Control poignet
-          shield->motorP->setSpeed(8);
+        case 4:
           shield->motorP->moveTo(aValue.toFloat());
           shield->setNewMouvement();
           // G4:A40
           break;
-          
-        case 5: //G5 Control Servo
+        case 5:
           if(aValue.toInt() <= 180 || aValue.toInt() >= 0)
           {
             shield->moveServo(aValue.toInt());
@@ -141,42 +127,24 @@ void readSerial()
             // Serial.println("servo Write" + String(aValue));
           }
           break;
-        case 6:
-          shield->controlPompe(1,aValue.toFloat());
-          break;
-        
+
       }
     }
     else if(operatorString[0] == 'M')
     {
       switch(operatorString.substring(1).toInt())
       {
-        case 0: // M0 open electro
+        case 0:
           // Serial.println("Move servo 0");
           // shield->moveServo(0);
           shield->openElectro();
           answerSerial();
           break;
-        case 1: // M1 close electro
+        case 1:
         // Serial.println("Move servo 150");
           shield->closeElectro();
           answerSerial();
           // code
-          break;
-        case 3: 
-          shield->startShake();
-          break;
-        case 4:
-          shield->startVerser(1);
-          break;
-        case 5:
-          shield->startVerser(-1);
-          break;
-        case 10:
-          shield->disableMotor();
-          break;
-        case 11:
-          shield->enableMotor();
           break;
       }
     }

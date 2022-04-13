@@ -2,21 +2,16 @@
 
 cncShield::cncShield()
 {
-    motorA = new Stepper(dirPinX_pin,stepPinX_pin,8,11.2);
-    motorB = new Stepper(dirPinY_pin,stepPinY_pin,8,5.6);
+    motorA = new Stepper(dirPinX_pin,stepPinX_pin,16,11.2);
+    motorB = new Stepper(dirPinY_pin,stepPinY_pin,16,5.6);
     // motorB = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
-    motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,2,20);
+    motorZ = new Stepper(dirPinZ_pin,stepPinZ_pin,16,20);
     motorP = new Stepper(dirPinP_pin,stepPinP_pin,16,1);
     motorP->setSpeed(50);
     motorP->setMaxSpeed(50);
-    motorZ->setSpeed(70);
-    motorZ->setMaxSpeed(70);
-    
-    for(int i=0; i<6; i++)
-    {
-        pompeTab[i] = new Pompe(pompe_pin[i]);
-    }
-    // pompe1 = new Pompe(pompe_pin_1);
+    motorZ->setSpeed(100);
+    motorZ->setMaxSpeed(100);
+    // tableau[0] = new Stepper();
     servoShaker = new Servo();
     servoShaker->attach(SpnEn);
     servoShaker->write(10);
@@ -27,6 +22,7 @@ cncShield::cncShield()
     pinMode(endStopY_pin,INPUT_PULLUP);
     pinMode(endStopZ_pin,INPUT_PULLUP);
 };
+
 
 
 void cncShield::enableMotor()
@@ -53,18 +49,12 @@ void cncShield::closeElectro()
 
 void cncShield::update()
 {
-    // pompe1->update();
-    for(int i =0; i<6; i++)
-    {
-        pompeTab[i]->update();
-    }
-    // int test = 0;
+    int test = 0;
     if(_homing)
     {
         if(homing())
         {
             _homing = 0;
-            _homingSequence = 0;
             Serial.println("Done");
         }
     }
@@ -83,42 +73,6 @@ void cncShield::update()
             _newMouvement = 0;
         }
     }
-    else if(_shake)
-    {
-
-        if(motorP->isMoving())
-        {
-            motorP->update(0);
-        }
-        else if(!_shakeDone)
-        {
-            shake();
-        }
-        else
-        {
-            Serial.println("Done");
-            _shake = 0;
-            _shakeDone = 0;
-        }
-    }
-    else if(_verser)
-    {
-        if(motorZ->isMoving() || motorP->isMoving())
-        {
-            motorZ->update(0);
-            motorP->update(0);
-        }
-        else if(!_verserDone)
-        {
-            verser();
-        }
-        else
-        {
-            Serial.println("Done");
-            _verser = 0;
-            _verserDone = 0;
-        }
-    }
     
 };
 
@@ -127,8 +81,8 @@ bool cncShield::homing()
     switch(_homingSequence)
     {
         case 0: // prepare homing B joint
-            motorZ->moveTo(-250);
-            // motorZ->setSpeed(60);
+            motorZ->moveTo(-200);
+            motorZ->setSpeed(80);
             motorB->setDirection(homingDirB);
             motorB->moveTo(-300);
             motorB->setSpeed(60);
@@ -140,7 +94,7 @@ bool cncShield::homing()
             // motorZ->update(0);
             if(this->getLimitSwitchZ())
             {
-                motorZ->setCurrentPosition(0.0);
+                motorZ->setCurrentPosition(0);
             }
             else
             {
@@ -196,101 +150,13 @@ bool cncShield::homing()
             if(!motorA->isMoving())
             {
                 // Serial.println("Step 5 last");
-                // _homing = 0;
+                _homing = 0;
                 _homingSequence = 0;
-                // Serial.println("Done");
                 return 1;
             }
             break;
     }
     return 0;
-};
-
-void cncShield::startVerser(int sens)
-{
-    _verser = 1;
-    _sensVerser = sens;
-};
-
-void cncShield::startShake()
-{
-    _shake = 1;
-};
-
-void cncShield::shake()
-{
-    if(!_initShake)
-    {
-        moveServo(0);
-        motorP->setMaxSpeed(50);
-        motorP->setSpeed(50);
-        _compteurShake = 0;
-        _initShake = 1;
-    }
-    if(_compteurShake >= 6)
-    {
-        motorP->moveTo(0);
-        _compteurShake = 0;
-        _initShake = 0;
-        _shakeDone = 1;
-    }
-    else if(_compteurShake&0x01)
-    {
-        motorP->moveTo(36);
-    }
-    else
-    {
-        motorP->moveTo(-36);
-    }
-    _compteurShake ++;
-    
-};
-
-void cncShield::verser(void)
-{   
-
-    switch(_compteurVerser)
-    {
-        case 0:
-            motorZ->setSpeed(70);
-            motorZ->moveTo(80);
-            _compteurVerser ++;
-            break;
-        case 1:
-            // motorP->setSpeed(1);
-            // motorP->moveTo(-80);
-            _compteurVerser ++;
-            break;
-        case 2:
-            motorP->setSpeed(0);
-            motorP->moveTo(90 * _sensVerser);
-            _compteurVerser ++;
-            break; 
-        case 3:
-            delay(250);
-            motorP->setSpeed(0);
-            motorP->moveTo(100 * _sensVerser);
-            _compteurVerser ++;
-            break;
-        case 4:
-            delay(100);
-            motorP->setSpeed(0);
-            motorP->moveTo(115 * _sensVerser);
-            motorZ->setSpeed(70);
-            // motorZ->setMaxSpeed(60);
-            motorZ->moveTo(200);
-            _compteurVerser ++;
-            break;
-        case 5:
-            _compteurVerser ++;
-            break;
-        case 6:
-            motorP->setSpeed(2);
-            motorP->moveTo(0);
-            _compteurVerser = 0;
-            _verserDone = 1;
-            break;
-    }
 };
 
 void cncShield::moveServo(int angle)
@@ -332,15 +198,5 @@ float cncShield::convertionForMM(float mm)
 void cncShield::setNewMouvement(void)
 {
     _newMouvement = 1;
-};
-
-void cncShield::controlPompe(int pompe,float volume)
-{
-    if(pompe <0)
-        pompe =0;
-    if(pompe>=6)
-        pompe = 6;
-    int pompeNum = pompe - 1;
-    pompeTab[pompeNum]->vol_pompe_oz(volume);
-};
+}
 
