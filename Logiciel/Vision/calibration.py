@@ -14,10 +14,15 @@ class Calibration_cam():
 
 
     def get_data_from_reference(self):
-        # Recherche des centres des cercles sur l'image de référence:
+        """
+        Fonction permettant d'aller chercher les centres des points de référence sur l'image de référence.
+        L'image de référence doit être prise avant, lorsque la position de la caméra est parfaite (un bout de code
+        dans le main permet de prendre une photo et la sauvegarder dans le même dossier).
+        """
 
+        print("Commencement get_data_from_reference()")
         # path = "Vision/img_reference_calib.png"               # Si on roule avec le HMI
-        #path = "img_reference_calib.png"                    # Si on roule juste calibration.py
+        #path = "img_reference_calib.png"                       # Si on roule juste calibration.py
         # path = "/home/pi/Pictures/img_reference_calib.png"  # Pour le Pi
         # path = "pic_8.jpeg"
         path = "Vision/pic_8.jpeg"
@@ -38,7 +43,7 @@ class Calibration_cam():
 
         # plt.imshow(image_binaire, cmap="gray")
         # plt.show()
-        #
+
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
@@ -92,10 +97,18 @@ class Calibration_cam():
 
 
     def calib_vision_init(self):
-        # Afficher les centre des 3 points sur l'image en temps réel:
-        # Prendre une photo:
-        cv2.namedWindow("Calibration")
-        cap = cv2.VideoCapture(0)       # Identifier le bon port de caméra -> 0 ou 1 normallement
+        """
+        Fonction permettant d'ouvrir une fenêtre affichant ce que la caméra voit en temps réel. De plus
+        elle affiche 3 points sur cette fenêtre correspondant à la position des centres des trois repères.
+
+        De cette façon, l'utilisateur peut bouger physiquement la caméra pour superposer ces 3 points aux centres
+        des points de références réel sur la plateforme pour recalibrer la caméra.
+        """
+
+        print("Commencement calib_vision_init()")
+
+        cv2.namedWindow("Calibration - Appuyer sur ESC pour fermer la fenêtre", 1)   #cv2.WINDOW_NORMAL
+        cap = cv2.VideoCapture(0)       # Identifier le bon port de caméra -> 0 si pas d'autres caméra (plupart des cas) et 1 sinon
 
         # Vérifier que l'ouverture de la caméra se fait correctement:
         if cap.isOpened():
@@ -104,6 +117,7 @@ class Calibration_cam():
             rval = False
             print("ERREUR - Ne peut pas ouvrir la caméra!")
 
+        # Affichage des 3 points sur l'HMI (Fermeture de la fenêtre avec la touche "ESC" (Raspberry Pi et Windows) ou le "X" de la fenêtre qui s'ouvre (Windows seulement))
         while rval and cv2.getWindowProperty("Calibration", cv2.WND_PROP_VISIBLE):
             for center in self.liste_coord_centres_ref:
                 cv2.circle(img_reel_time, (center[0], center[1]), radius = 3, color = (0, 0, 255), thickness = -1)
@@ -114,7 +128,7 @@ class Calibration_cam():
             rval, img_reel_time = cap.read()
 
             k = cv2.waitKey(1) & 0xFF
-            if k == 27:  # Fermeture de la fenêtre avec la touche "ESC" ou le "X" du GUI
+            if k == 27:
                 break
 
         cv2.destroyAllWindows()
@@ -123,7 +137,13 @@ class Calibration_cam():
 
 
     def calib_vision_seuil(self):
-        print("Commencement calib_vision_seuil")
+        '''
+        Fonction permettant de vérifier si la caméra est décalibré par rapport aux trois points de référence et d'un seuil défini.
+        Return True si la caméra est bien calibrée
+        Return False si la caméra est décalibrée
+        '''
+
+        print("Commencement calib_vision_seuil()")
 
         # Prendre une photo:
         # cv2.namedWindow("Calibration_seuil")
@@ -198,15 +218,18 @@ class Calibration_cam():
         # Vérification si les centre respectent le seuil ou non par rapport à l'image de référence
         for point in range(len(self.liste_points_coord_centre)):
 
+            # Détecter si le seuil est bon selon X:
             if not (self.liste_coord_centres_ref[point][0] - self.seuil <= self.liste_points_coord_centre[point][0] <= self.liste_coord_centres_ref[point][0] + self.seuil):
                 print("CALIBRATION NÉCESSAIRE: Coordonnée en X ne respecte pas le seuil")
                 return False
 
+            # Détecter si le seuil est bon selon Y:
             elif not (self.liste_coord_centres_ref[point][1] - self.seuil <= self.liste_points_coord_centre[point][1] <= self.liste_coord_centres_ref[point][1] + self.seuil):
                 print("CALIBRATION NÉCESSAIRE: Coordonnée en Y ne respecte pas le seuil")
                 return False
 
         return True
+
 
 
 if __name__ == '__main__':
@@ -216,8 +239,8 @@ if __name__ == '__main__':
     # # Check if the webcam is opened correctly
     # if not cap.isOpened():
     #     raise IOError("Cannot open webcam")
-    # ret, frame = cap.read()
-    # cv2.imwrite(path, frame)
+    # ret, img = cap.read()
+    # cv2.imwrite(path, img)
 
     calib = Calibration_cam()
     # calib.calib_vision_init()
