@@ -1,11 +1,11 @@
-## Explication des différents sous-dossiers:
+# Explication des différents sous-dossiers:
 
-# Vision: 
+## Vision: 
 - Calibration de la caméra 
 - Détection du seuil
 - 
 
-# pi_controller:
+## pi_controller:
 - Gestion de l'HMI ("front-end" et "back-end")
 - Main du robot
 - state machine
@@ -13,7 +13,7 @@
 - Gestion des ingéridents et quantités
 
 
-# scara_controller:
+## scara_controller:
 - Gestion des moteurs
 - Gestion des pompes
 - Algorithme de versement
