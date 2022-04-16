@@ -29,7 +29,7 @@ https://www.youtube.com/watch?v=95p3Jdjmmvk
 ## Requis matériel
 - Un bras robotisé SCARA et sa plateforme. Les instructions d'assemblage sont disponibles dans [le répertoire « Mécanique »](https://github.com/mimil2014/BartendUS-GROS4/tree/main/M%C3%A9canique).
 - Distributeur d'alcool et le support sur mesure. Les plans sont disponibles dans [le répertoire « Mécanique »](https://github.com/mimil2014/BartendUS-GROS4/tree/main/M%C3%A9canique).
-- Éléments présentés dans la liste de matériel [BOM](https://github.com/mimil2014/BartendUS-GROS4/blob/main/BOM/liste_pieces.pdf).
+- Éléments présentés dans le [BOM](https://github.com/mimil2014/BartendUS-GROS4/blob/main/BOM/liste_pieces.pdf).
 
 ## Installation 
 ### Installation des librairies sur le RaspberryPi:
