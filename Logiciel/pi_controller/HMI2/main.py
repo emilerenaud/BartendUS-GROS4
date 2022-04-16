@@ -10,7 +10,7 @@ from PyQt5.uic.properties import QtGui
 
 from Logiciel.pi_controller.HMI2.librairieRecette import gestion_Recette,gestion_ingredient_dispo,recette
 from Logiciel.pi_controller.HMI2.stateMachine import sequence
-from Logiciel.Vision.calibration import Calibration_cam
+from Vision.calibration import Calibration_cam
 import serial.tools.list_ports
 from PyQt5.QtWidgets import QDialog, QApplication, QGraphicsScene, QGraphicsPixmapItem
 from PyQt5.QtGui import QPixmap
@@ -19,17 +19,16 @@ from PyQt5.QtGui import QPixmap
 #init des variables globales
 livreRecette=gestion_Recette()
 livreIngredient=gestion_ingredient_dispo()
-calib = Calibration_cam()
+#calib = Calibration_cam()
 max_Bouteille=6
 sequence=sequence()
-commande_en_cours=-1
 
 
 # Step 1: Create a worker class
 class Worker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(object)
-    enCours = pyqtSignal(object)
+    enCours = pyqtSignal(bool)
     erreur = pyqtSignal(object)
     success = pyqtSignal()
 
@@ -38,7 +37,7 @@ class Worker(QObject):
 
     def run(self):
         #TODO gestion erreur calibration camera, position impossible a atteindre ou aucun verre
-        self.enCours.emit(1)
+
         mess_seq=sequence.sequence(self.recette,livreIngredient)
         if(mess_seq !=""):
             self.erreur.emit(mess_seq)
@@ -46,7 +45,6 @@ class Worker(QObject):
             #self.recalibration()
             self.success.emit()
 
-        self.enCours.emit(-1)
         self.finished.emit()
 
 
@@ -204,10 +202,12 @@ class boire_screen3(QDialog):
         mainwindow=MainWindow()
         widget.addWidget(mainwindow)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        print(self.recettes_disponibles.currentRow())
 
     def voir_liste_ingredient(self):
         # afficher la liste d'ingrédients avec l'indice de la liste des recettes disponibles
         row = self.recettes_disponibles.currentRow()
+        print(self.recettes_disponibles.currentRow())
         if row>=0 and len(livreRecette.list_recette_dispo_string())>0:
             self.ingredients.clear()
             self.ingredients.addItem(livreRecette.list_recette_dispo[row].afficherIngredient())
@@ -215,18 +215,14 @@ class boire_screen3(QDialog):
     def go_to_commander_screen6(self):
 
         row = self.recettes_disponibles.currentRow()
-        if (commande_en_cours == -1):
-            if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
-                recette_commander = livreRecette.list_recette_dispo[row]
-                screen6=commander_screen6(recette_commander)
-                widget.addWidget(screen6)
-                widget.setCurrentIndex(widget.currentIndex()+1)
-            else:
-                qtw.QMessageBox.information(self, 'Erreur', '''Aucune recette selectionnée''' + "\n" + '''Sélectionnez ou ajouter une recette puis réessayez...''')
-                return
+        print(self.recettes_disponibles.currentRow())
+        if row >= 0 and len(livreRecette.list_recette_dispo_string()) > 0:
+            recette_commander = livreRecette.list_recette_dispo[row]
+            screen6=commander_screen6(recette_commander)
+            widget.addWidget(screen6)
+            widget.setCurrentIndex(widget.currentIndex()+1)
         else:
-            qtw.QMessageBox.information(self, 'Erreur',
-                                        '''Commande en cours d'exécution, soyez patient ''')
+            qtw.QMessageBox.information(self, 'Erreur', '''Aucune recette selectionnée''' + "\n" + '''Sélectionnez ou ajouter une recette puis réessayez...''')
             return
 
 
@@ -399,7 +395,6 @@ class commander_screen6(QDialog):
         windowBoire=boire_screen3()
         widget.addWidget(windowBoire)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        windowBoire.recettes_disponibles.setCurrentRow(-1)
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -428,14 +423,9 @@ class commander_screen6(QDialog):
     def commande_complete(self):
         qtw.QMessageBox.critical(self, 'Success', '''Votre verre est plein, recommander à votre soif  ''')
 
-
-    def commande_state(self,state):
-        print(state)
-        commandeActive=state
-
     def commander_verre(self):
-        if commande_en_cours ==-1:
-            self.startThreadSequence(self.recette)
+
+        self.startThreadSequence(self.recette)
         # self.startThread()
         # sequence.pompe(recette_commander,livreIngredient))
 
@@ -462,10 +452,12 @@ class commander_screen6(QDialog):
         self.thread.finished.connect(self.thread.deleteLater)
         self.worker.erreur.connect(self.erreur_commande)
         self.worker.success.connect(self.commande_complete)
-        self.worker.enCours.connect(self.commande_state)
         self.worker.ajouterRecette(recette)
         self.thread.start()
 
+    def afficherState(self,state):
+        self.state=state
+        print(state)
 
     def go_to_MainWindowDialog(self):
         mainwindow=MainWindow()
@@ -504,8 +496,8 @@ class reglages_screen5(QDialog):
         self.comboBox_pompes.addItem('Pompe 2')
         self.comboBox_pompes.addItem('Pompe 3')
         self.comboBox_pompes.addItem('Pompe 4')
-        #self.comboBox_pompes.addItem('Pompe 5')
-        #self.comboBox_pompes.addItem('Pompe 6')
+        self.comboBox_pompes.addItem('Pompe 5')
+        self.comboBox_pompes.addItem('Pompe 6')
         self.comboBox_pompes.addItem('Tous les pompes')
 
         self.purge_pompes.clicked.connect(self.commande_purge_pompes)
@@ -585,8 +577,8 @@ class reglages_screen5(QDialog):
     def commande_purge_pompes(self):
         i_combo_box_pompe = self.comboBox_pompes.currentIndex()+1
 
-        if(i_combo_box_pompe==5):
-            sequence.activatePompe([1,2,3,4], [1,1,1,1], True)
+        if(i_combo_box_pompe==7):
+            sequence.activatePompe([1,2,3,4,5,6], [1], True)
         else:
             sequence.activatePompe([i_combo_box_pompe],[1],True)
 
