@@ -7,7 +7,6 @@ BartendUS est une plateforme surmontée d'un bras robotisé de type SCARA qui pe
 
 <img src="https://user-images.githubusercontent.com/73348957/163657518-e04d23d6-ec03-403d-bd4a-50c1b9cfee96.png" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png">
 
-
 ## Table des matières
 * Présentation de l'équipe
 * Vidéo promotionnelle du projet
@@ -16,7 +15,7 @@ BartendUS est une plateforme surmontée d'un bras robotisé de type SCARA qui pe
 * Licence
 
 ## Présentation de l'équipe
-
+<img src="https://user-images.githubusercontent.com/73348957/163736948-6ae795f1-d733-4994-94a4-7764ba0fbbad.jpg" data-canonical-src="https://gyazo.com/eb5c5741b6a9a16c692170a41a49c858.png" width = 600>
 
 *De gauche à droite: Simon Chayer, Émile Renaud, Antoine Landry, Hugues Dupuis et Thomas Landry*
 
